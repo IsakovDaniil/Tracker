@@ -1,17 +1,10 @@
-//
-//  ViewController.swift
-//  Tracker
-//
-//  Created by Даниил on 17.08.2025.
-//
-
 import UIKit
 
 final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .red
     }
 
 
