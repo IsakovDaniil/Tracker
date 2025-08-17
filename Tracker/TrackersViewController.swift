@@ -31,7 +31,18 @@ final class TrackersViewController: UIViewController {
         button.backgroundColor = UIColor.ypBackgroundLight
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(dataButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Трекеры"
+        label.textColor = UIColor.ypBlack
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     // MARK: - Lifecycle
@@ -47,14 +58,18 @@ final class TrackersViewController: UIViewController {
         view.addSubview(topStack)
         topStack.addArrangedSubview(addButton)
         topStack.addArrangedSubview(dataButton)
+        view.addSubview(titleLabel)
     }
     
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 3),
+            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            titleLabel.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 5),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
     }
     
