@@ -1,8 +1,8 @@
-import Foundation
+import UIKit
 
 final class StatisticsViewController: UIViewController {
     
-    override viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .blue
     }
