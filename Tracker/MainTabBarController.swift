@@ -1,9 +1,18 @@
 import UIKit
 
 final class MainTabBarController: UITabBarController {
+    
+    private lazy var topLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.ypWhite
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
+        setupConstraints()
         setupViewControllers()
     }
     
@@ -11,6 +20,16 @@ final class MainTabBarController: UITabBarController {
         tabBar.backgroundColor = UIColor.ypWhite
         tabBar.tintColor = UIColor.ypBlue
         tabBar.unselectedItemTintColor = UIColor.ypGray
+        tabBar.addSubview(topLine)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: tabBar.topAnchor),
+            view.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: tabBar.trailingAnchor),
+            view.heightAnchor.constraint(equalToConstant: 1)
+        ])
     }
     
     private func setupViewControllers() {
