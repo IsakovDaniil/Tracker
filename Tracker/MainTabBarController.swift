@@ -2,6 +2,15 @@ import UIKit
 
 final class MainTabBarController: UITabBarController {
     
+    // MARK: - Constants
+    private enum TabBarConstants {
+        static let topLineHeight: CGFloat = 1
+        static let trackersTitle = "Трекеры"
+        static let statisticsTitle = "Статистика"
+        static let trackersTag = 0
+        static let statisticsTag = 1
+    }
+    
     // MARK: - UI Elements
     private lazy var topLine: UIView = {
         let view = UIView()
@@ -31,16 +40,16 @@ final class MainTabBarController: UITabBarController {
             topLine.topAnchor.constraint(equalTo: tabBar.topAnchor),
             topLine.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor),
             topLine.trailingAnchor.constraint(equalTo: tabBar.trailingAnchor),
-            topLine.heightAnchor.constraint(equalToConstant: 1)
+            topLine.heightAnchor.constraint(equalToConstant: TabBarConstants.topLineHeight)
         ])
     }
     
     private func setupViewControllers() {
         let firstVC = UINavigationController(rootViewController: TrackersViewController())
-        firstVC.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage.trakers, tag: 0)
+        firstVC.tabBarItem = UITabBarItem(title: TabBarConstants.trackersTitle, image: UIImage.trakers, tag: TabBarConstants.trackersTag)
         
         let secondVC = UINavigationController(rootViewController: StatisticsViewController())
-        secondVC.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage.stats, tag: 1)
+        secondVC.tabBarItem = UITabBarItem(title: TabBarConstants.statisticsTitle, image: UIImage.stats, tag: TabBarConstants.statisticsTag)
         
         viewControllers = [firstVC, secondVC]
     }
