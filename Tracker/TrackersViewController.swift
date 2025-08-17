@@ -54,6 +54,31 @@ final class TrackersViewController: UIViewController {
         return bar
     }()
     
+    private lazy var stubStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 8
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    private lazy var stubImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.dizzyStar
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private lazy var stubLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Что будем отслеживать?"
+        label.textColor = UIColor.ypBlack
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        return label
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +94,9 @@ final class TrackersViewController: UIViewController {
         topStack.addArrangedSubview(dataButton)
         view.addSubview(titleLabel)
         view.addSubview(searchBar)
+        view.addSubview(stubStack)
+        stubStack.addArrangedSubview(stubImageView)
+        stubStack.addArrangedSubview(stubLabel)
     }
     
     // MARK: - Constraints
@@ -84,7 +112,10 @@ final class TrackersViewController: UIViewController {
             searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            searchBar.heightAnchor.constraint(equalToConstant: 36)
+            searchBar.heightAnchor.constraint(equalToConstant: 36),
+            
+            stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 230)
         ])
     }
     
