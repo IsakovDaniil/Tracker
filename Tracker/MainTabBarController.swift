@@ -11,5 +11,12 @@ final class MainTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.ypBlue
         tabBar.unselectedItemTintColor = UIColor.ypGray
     }
+    
+    private func setupViewCЙontrollers() {
+        let firstVC = UINavigationController(rootViewController: TrackersViewController())
+        firstVC.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage.trakers, tag: 0)
+        
+        let secondVC = UINavigationController(rootViewController: )
+    }
 }
 
