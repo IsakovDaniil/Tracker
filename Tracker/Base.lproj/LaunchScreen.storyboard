@@ -16,15 +16,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Np5-rs-lAk">
-                                <rect key="frame" x="151" y="404" width="91" height="94"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="JSj-pn-6gq">
+                                <rect key="frame" x="151" y="379" width="91" height="94"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YPBlue"/>
                         <constraints>
-                            <constraint firstItem="Np5-rs-lAk" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="25" id="13V-Vt-rFw"/>
-                            <constraint firstItem="Np5-rs-lAk" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="t8j-Oy-FGv"/>
+                            <constraint firstItem="JSj-pn-6gq" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="AG5-Fh-6aE"/>
+                            <constraint firstItem="JSj-pn-6gq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="GN5-00-8Vd"/>
                         </constraints>
                     </view>
                 </viewController>
