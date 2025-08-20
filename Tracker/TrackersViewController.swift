@@ -124,6 +124,19 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    // MARK: - Tracker Management
+    private func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
+        var updatedCategories = categories
+        if let index = updatedCategories.firstIndex(where: { $0.title == title }) {
+            var updatedTrackers = updatedCategories[index].trackers
+            updatedTrackers.append(tracker)
+            updatedCategories[index] = TrackerCategory(title: title, trackers: updatedTrackers)
+        } else {
+            updatedCategories.append((TrackerCategory(title: title, trackers: [tracker])))
+        }
+        categories = updatedCategories
+    }
+    
     // MARK: - Actions
     @objc private func addButtonTapped() {
         print("Нажал на +")
@@ -132,6 +145,7 @@ final class TrackersViewController: UIViewController {
     @objc private func dataButtonTapped() {
         print("Нажал на Data")
     }
+    
     
 }
 
