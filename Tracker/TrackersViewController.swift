@@ -2,6 +2,11 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    
+    // MARK: - Property
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     // MARK: - UI Elements
     private lazy var topStack: UIStackView = {
         let stack = UIStackView()
