@@ -137,6 +137,17 @@ final class TrackersViewController: UIViewController {
         categories = updatedCategories
     }
     
+    private func markTrackerComplited(_ trackerID: UUID, on date: Date) {
+        let newRecord = TrackerRecord(trackerID: trackerID, date: date)
+        completedTrackers.append(newRecord)
+    }
+    
+    private func unmarkTrackerComplited(_ trackerID: UUID, on date: Date) {
+        completedTrackers = completedTrackers.filter { record in
+            !(record.trackerID == trackerID && Calendar.current.isDate(record.date, inSameDayAs: date))
+        }
+    }
+    
     // MARK: - Actions
     @objc private func addButtonTapped() {
         print("Нажал на +")
