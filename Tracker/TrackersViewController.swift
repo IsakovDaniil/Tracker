@@ -2,8 +2,47 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
+    // MARK: - Constants
+    private enum ViewConstants {
+        struct Layout {
+            static let topStackTopInset: CGFloat = 1
+            static let topStackLeadingInset: CGFloat = 6
+            static let topStackTrailingInset: CGFloat = -16
+            
+            static let titleLabelTopInset: CGFloat = 1
+            static let titleLabelLeadingInset: CGFloat = 16
+            
+            static let searchBarTopInset: CGFloat = 7
+            static let searchBarLeadingInset: CGFloat = 10
+            static let searchBarTrailingInset: CGFloat = -10
+            static let searchBarHeight: CGFloat = 36
+            
+            static let stubStackTopInset: CGFloat = 230
+            static let stubStackSpacing: CGFloat = 8
+        }
+        
+        struct Typography {
+            static let titleLabelFontSize: CGFloat = 34
+            static let stubLabelFontSize: CGFloat = 12
+        }
+        
+        struct Button {
+            static let dataButtonCornerRadius: CGFloat = 8
+            static let dataButtonTopInset: CGFloat = 6
+            static let dataButtonLeadingInset: CGFloat = 5.5
+            static let dataButtonBottomInset: CGFloat = 6
+            static let dataButtonTrailingInset: CGFloat = 5.5
+        }
+        
+        struct Strings {
+            static let titleText = "Трекеры"
+            static let searchBarPlaceholder = "Поиск"
+            static let stubLabelText = "Что будем отслеживать?"
+            static let dataButtonTitle = "14.12.22"
+        }
+    }
     
-    // MARK: - Property
+    // MARK: - Properties
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
@@ -29,13 +68,18 @@ final class TrackersViewController: UIViewController {
     
     private lazy var dataButton: UIButton = {
         var config = UIButton.Configuration.plain()
-        config.title = "14.12.22"
+        config.title = ViewConstants.Strings.dataButtonTitle
         config.baseForegroundColor = UIColor.ypTextBlack
-        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 5.5, bottom: 6, trailing: 5.5)
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: ViewConstants.Button.dataButtonTopInset,
+            leading: ViewConstants.Button.dataButtonLeadingInset,
+            bottom: ViewConstants.Button.dataButtonBottomInset,
+            trailing: ViewConstants.Button.dataButtonTrailingInset
+        )
         
         let button = UIButton(configuration: config, primaryAction: nil)
         button.backgroundColor = UIColor.ypBackgroundLight
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = ViewConstants.Button.dataButtonCornerRadius
         button.addTarget(self, action: #selector(dataButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -43,9 +87,9 @@ final class TrackersViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = ViewConstants.Strings.titleText
         label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: ViewConstants.Typography.titleLabelFontSize, weight: .bold)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,7 +97,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.placeholder = "Поиск"
+        bar.placeholder = ViewConstants.Strings.searchBarPlaceholder
         bar.searchBarStyle = .minimal
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
@@ -62,7 +106,7 @@ final class TrackersViewController: UIViewController {
     private lazy var stubStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 8
+        stack.spacing = ViewConstants.Layout.stubStackSpacing
         stack.alignment = .center
         stack.distribution = .equalCentering
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -78,9 +122,9 @@ final class TrackersViewController: UIViewController {
     
     private lazy var stubLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = ViewConstants.Strings.stubLabelText
         label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: ViewConstants.Typography.stubLabelFontSize, weight: .medium)
         return label
     }()
     
@@ -107,20 +151,20 @@ final class TrackersViewController: UIViewController {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
-            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6),
-            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ViewConstants.Layout.topStackTopInset),
+            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.topStackLeadingInset),
+            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ViewConstants.Layout.topStackTrailingInset),
             
-            titleLabel.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 1),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: ViewConstants.Layout.titleLabelTopInset),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.titleLabelLeadingInset),
             
-            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            searchBar.heightAnchor.constraint(equalToConstant: 36),
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewConstants.Layout.searchBarTopInset),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.searchBarLeadingInset),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ViewConstants.Layout.searchBarTrailingInset),
+            searchBar.heightAnchor.constraint(equalToConstant: ViewConstants.Layout.searchBarHeight),
             
             stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 230)
+            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: ViewConstants.Layout.stubStackTopInset)
         ])
     }
     
@@ -132,7 +176,7 @@ final class TrackersViewController: UIViewController {
             updatedTrackers.append(tracker)
             updatedCategories[index] = TrackerCategory(title: title, trackers: updatedTrackers)
         } else {
-            updatedCategories.append((TrackerCategory(title: title, trackers: [tracker])))
+            updatedCategories.append(TrackerCategory(title: title, trackers: [tracker]))
         }
         categories = updatedCategories
     }
@@ -156,7 +200,4 @@ final class TrackersViewController: UIViewController {
     @objc private func dataButtonTapped() {
         print("Нажал на Data")
     }
-    
-    
 }
-
