@@ -38,6 +38,8 @@ final class AddModalViewController: UIViewController {
         view.layer.cornerRadius = 12
         view.addSubview(titleLabel)
         view.addSubview(buttonsStackView)
+        buttonsStackView.addArrangedSubview(addHabitButton)
+        buttonsStackView.addArrangedSubview(addEventButton)
     }
     
     // MARK: - Setup Constraints
@@ -46,8 +48,12 @@ final class AddModalViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            buttonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonsStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            buttonsStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            addHabitButton.heightAnchor.constraint(equalToConstant: 60),
+            addEventButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
