@@ -1,6 +1,6 @@
 import UIKit
 
-final class AddModalViewController: UIViewController {
+final class AddTrackersModalViewController: UIViewController {
     //MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Создание трекера")
     
