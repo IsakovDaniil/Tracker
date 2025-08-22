@@ -179,7 +179,7 @@ final class TrackersViewController: UIViewController {
     @objc private func addButtonTapped() {
         let modalVC = AddModalViewController()
             modalVC.modalPresentationStyle = .pageSheet
-            modalVC.modalTransitionStyle = .crossDissolve
+            modalVC.modalTransitionStyle = .coverVertical
             present(modalVC, animated: true)
     }
     
