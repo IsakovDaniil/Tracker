@@ -13,6 +13,15 @@ final class AddModalViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+    
+    private lazy var addHabitButton = UIButton.ypAddModalButton(title: "Привычка",
+                                                                target: self,
+                                                                action: #selector(addHabitButtonTapped))
+    
+    private lazy var addEventButton = UIButton.ypAddModalButton(title: "Нерегулярное событие",
+                                                                target: self,
+                                                                action: #selector(addEventButtonTapped))
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,4 +51,12 @@ final class AddModalViewController: UIViewController {
         ])
     }
     
+    // MARK: - Action
+    @objc private func addHabitButtonTapped() {
+        
+    }
+    
+    @objc private func addEventButtonTapped() {
+        
+    }
 }
