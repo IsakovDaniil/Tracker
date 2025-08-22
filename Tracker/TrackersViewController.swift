@@ -38,7 +38,6 @@ final class TrackersViewController: UIViewController {
             static let titleText = "Трекеры"
             static let searchBarPlaceholder = "Поиск"
             static let stubLabelText = "Что будем отслеживать?"
-            static let dataButtonTitle = "14.12.22"
         }
     }
     
@@ -47,42 +46,10 @@ final class TrackersViewController: UIViewController {
     private var completedTrackers: [TrackerRecord] = []
     
     // MARK: - UI Elements
-    private lazy var topStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.distribution = .equalCentering
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
-    private lazy var addButton: UIButton = {
-        let button = UIButton(type: .custom)
-        let image = UIImage.addTracker.withRenderingMode(.alwaysTemplate)
-        button.setImage(image, for: .normal)
-        button.tintColor = UIColor.ypBlack
-        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private lazy var dataButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.title = ViewConstants.Strings.dataButtonTitle
-        config.baseForegroundColor = UIColor.ypTextBlack
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: ViewConstants.Button.dataButtonTopInset,
-            leading: ViewConstants.Button.dataButtonLeadingInset,
-            bottom: ViewConstants.Button.dataButtonBottomInset,
-            trailing: ViewConstants.Button.dataButtonTrailingInset
-        )
-        
-        let button = UIButton(configuration: config, primaryAction: nil)
-        button.backgroundColor = UIColor.ypBackgroundLight
-        button.layer.cornerRadius = ViewConstants.Button.dataButtonCornerRadius
-        button.addTarget(self, action: #selector(dataButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private lazy var datePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        return picker
     }()
     
     private lazy var titleLabel: UILabel = {
@@ -134,13 +101,11 @@ final class TrackersViewController: UIViewController {
         view.backgroundColor = UIColor.ypWhite
         setupView()
         setupConstraints()
+        setupNavigation()
     }
     
     // MARK: - Setup Methods
     private func setupView() {
-        view.addSubview(topStack)
-        topStack.addArrangedSubview(addButton)
-        topStack.addArrangedSubview(dataButton)
         view.addSubview(titleLabel)
         view.addSubview(searchBar)
         view.addSubview(stubStack)
@@ -151,11 +116,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ViewConstants.Layout.topStackTopInset),
-            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.topStackLeadingInset),
-            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ViewConstants.Layout.topStackTrailingInset),
-            
-            titleLabel.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: ViewConstants.Layout.titleLabelTopInset),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.titleLabelLeadingInset),
             
             searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewConstants.Layout.searchBarTopInset),
@@ -166,6 +127,21 @@ final class TrackersViewController: UIViewController {
             stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: ViewConstants.Layout.stubStackTopInset)
         ])
+    }
+    
+    private func setupNavigation() {
+        let addButton = UIBarButtonItem(image: UIImage.addTracker,
+                                        style: .plain,
+                                        target: self,
+                                        action: #selector(addButtonTapped))
+        addButton.tintColor = UIColor.ypBlack
+        
+        let dateButton = UIBarButtonItem(customView: datePicker)
+        dateButton.tintColor = UIColor.ypBlack
+        
+        navigationItem.leftBarButtonItem = addButton
+        navigationItem.rightBarButtonItem = dateButton
+        
     }
     
     // MARK: - Tracker Management
