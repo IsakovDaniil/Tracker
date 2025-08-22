@@ -1,19 +1,26 @@
 import UIKit
 
 final class AddPopupViewController: UIViewController {
+    //MARK: - UI Elements
+    private lazy var titleLabel = UILabel.ypTitle("Создание трекера")
     
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Создание трекра"
-        label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        setupConstraints()
+        
+        
+    }
+    
+    // MARK: - Setup View
+    private func setupView() {
+        view.backgroundColor = UIColor.ypWhite
+        view.addSubview(titleLabel)
+    }
+    
+    // MARK: - Setup Constraints
+    private func setupConstraints() {
+        
     }
 }
