@@ -5,11 +5,6 @@ final class TrackersViewController: UIViewController {
     // MARK: - Constants
     private enum ViewConstants {
         struct Layout {
-            static let topStackTopInset: CGFloat = 1
-            static let topStackLeadingInset: CGFloat = 6
-            static let topStackTrailingInset: CGFloat = -16
-            
-            static let titleLabelTopInset: CGFloat = 1
             static let titleLabelLeadingInset: CGFloat = 16
             
             static let searchBarTopInset: CGFloat = 7
@@ -24,14 +19,6 @@ final class TrackersViewController: UIViewController {
         struct Typography {
             static let titleLabelFontSize: CGFloat = 34
             static let stubLabelFontSize: CGFloat = 12
-        }
-        
-        struct Button {
-            static let dataButtonCornerRadius: CGFloat = 8
-            static let dataButtonTopInset: CGFloat = 6
-            static let dataButtonLeadingInset: CGFloat = 5.5
-            static let dataButtonBottomInset: CGFloat = 6
-            static let dataButtonTrailingInset: CGFloat = 5.5
         }
         
         struct Strings {
@@ -49,6 +36,8 @@ final class TrackersViewController: UIViewController {
     private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .compact
+        picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         return picker
     }()
     
@@ -141,7 +130,6 @@ final class TrackersViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = dateButton
-        
     }
     
     // MARK: - Tracker Management
@@ -173,7 +161,11 @@ final class TrackersViewController: UIViewController {
         print("Нажал на +")
     }
     
-    @objc private func dataButtonTapped() {
-        print("Нажал на Data")
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yy"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
     }
 }
