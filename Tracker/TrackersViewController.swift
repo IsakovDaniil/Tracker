@@ -177,7 +177,10 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func addButtonTapped() {
-        print("Нажал на +")
+        let modalVC = AddModalViewController()
+            modalVC.modalPresentationStyle = .pageSheet
+            modalVC.modalTransitionStyle = .crossDissolve
+            present(modalVC, animated: true)
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
