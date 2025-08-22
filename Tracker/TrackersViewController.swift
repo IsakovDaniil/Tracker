@@ -84,6 +84,18 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.backgroundColor = UIColor.ypWhite
+        collection.delegate = self
+        collection.dataSource = self
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        return collection
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,6 +109,7 @@ final class TrackersViewController: UIViewController {
     private func setupView() {
         view.addSubview(titleLabel)
         view.addSubview(searchBar)
+        view.addSubview(collectionView)
         view.addSubview(stubStack)
         stubStack.addArrangedSubview(stubImageView)
         stubStack.addArrangedSubview(stubLabel)
@@ -114,7 +127,12 @@ final class TrackersViewController: UIViewController {
             searchBar.heightAnchor.constraint(equalToConstant: ViewConstants.Layout.searchBarHeight),
             
             stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: ViewConstants.Layout.stubStackTopInset)
+            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: ViewConstants.Layout.stubStackTopInset),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            
         ])
     }
     
@@ -168,4 +186,24 @@ final class TrackersViewController: UIViewController {
         let formattedDate = dateFormatter.string(from: selectedDate)
         print("Выбранная дата: \(formattedDate)")
     }
+}
+
+extension TrackersViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        <#code#>
+    }
+    
+    
+}
+
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    
+}
+
+extension TrackersViewController: UICollectionViewDelegate {
+    
 }
