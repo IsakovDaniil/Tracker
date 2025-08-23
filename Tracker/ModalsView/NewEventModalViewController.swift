@@ -2,7 +2,9 @@ import UIKit
 
 final class NewEventModalViewController: UIViewController {
     //MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Создание трекера")
+    private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
+    
+
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -17,7 +19,6 @@ final class NewEventModalViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
-        view.layer.cornerRadius = 12
         view.addSubview(titleLabel)
     }
     

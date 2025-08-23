@@ -1,26 +1,48 @@
 import UIKit
 
 final class AddTrackersModalViewController: UIViewController {
-    //MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Создание трекера")
+    // MARK: - Constants
+    private enum AddTrackersConstants {
+        struct Layout {
+            static let cornerRadius: CGFloat = 10
+            static let titleTopInset: CGFloat = 27
+            static let stackSpacing: CGFloat = 16
+            static let stackLeadingInset: CGFloat = 16
+            static let stackTrailingInset: CGFloat = -16
+            static let buttonHeight: CGFloat = 60
+        }
+        
+        struct Strings {
+            static let titleText = "Создание трекера"
+            static let habitButtonTitle = "Привычка"
+            static let eventButtonTitle = "Нерегулярное событие"
+        }
+    }
+    
+    // MARK: - UI Elements
+    private lazy var titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
     
     private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 16
+        stackView.spacing = AddTrackersConstants.Layout.stackSpacing
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private lazy var addHabitButton = UIButton.ypAddModalButton(title: "Привычка",
-                                                                target: self,
-                                                                action: #selector(addHabitButtonTapped))
+    private lazy var addHabitButton = UIButton.ypAddModalButton(
+        title: AddTrackersConstants.Strings.habitButtonTitle,
+        target: self,
+        action: #selector(addHabitButtonTapped)
+    )
     
-    private lazy var addEventButton = UIButton.ypAddModalButton(title: "Нерегулярное событие",
-                                                                target: self,
-                                                                action: #selector(addEventButtonTapped))
+    private lazy var addEventButton = UIButton.ypAddModalButton(
+        title: AddTrackersConstants.Strings.eventButtonTitle,
+        target: self,
+        action: #selector(addEventButtonTapped)
+    )
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -32,10 +54,9 @@ final class AddTrackersModalViewController: UIViewController {
     // MARK: - Setup View
     private func setupView() {
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = AddTrackersConstants.Layout.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
-        view.layer.cornerRadius = 12
         view.addSubview(titleLabel)
         view.addSubview(buttonsStackView)
         buttonsStackView.addArrangedSubview(addHabitButton)
@@ -45,19 +66,19 @@ final class AddTrackersModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: AddTrackersConstants.Layout.titleTopInset),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             buttonsStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: AddTrackersConstants.Layout.stackLeadingInset),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: AddTrackersConstants.Layout.stackTrailingInset),
             
-            addHabitButton.heightAnchor.constraint(equalToConstant: 60),
-            addEventButton.heightAnchor.constraint(equalToConstant: 60)
+            addHabitButton.heightAnchor.constraint(equalToConstant: AddTrackersConstants.Layout.buttonHeight),
+            addEventButton.heightAnchor.constraint(equalToConstant: AddTrackersConstants.Layout.buttonHeight)
         ])
     }
     
-    // MARK: - Action
+    // MARK: - Actions
     @objc private func addHabitButtonTapped() {
         
     }
