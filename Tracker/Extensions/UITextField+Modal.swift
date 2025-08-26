@@ -4,7 +4,7 @@ extension UITextField {
     static func ypAddModalTextField() -> UITextField {
         let textField = UITextField()
         textField.textColor = UIColor.ypBlack
-        textField.backgroundColor = UIColor.ypBackground
+        textField.backgroundColor = .clear
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.placeholder = "Введите название трекера"
         textField.layer.cornerRadius = 15
