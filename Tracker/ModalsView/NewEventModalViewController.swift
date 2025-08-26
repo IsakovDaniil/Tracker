@@ -4,21 +4,7 @@ final class NewEventModalViewController: UIViewController {
     //MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
-    private lazy var nameTextField: UITextField = {
-        let textField = UITextField()
-        textField.textColor = UIColor.ypBlack
-        textField.backgroundColor = UIColor.ypBackground
-        textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        textField.placeholder = "Введите название трекера"
-        textField.layer.cornerRadius = 15
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.clearButtonMode = .whileEditing
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 17, height: 0))
-        textField.leftView = paddingView
-        textField.leftViewMode = .always
-        return textField
-    }()
-    
+    private lazy var nameTextField = UITextField.ypAddModalTextField()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
