@@ -4,7 +4,11 @@ final class NewEventModalViewController: UIViewController {
     //MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
-    private lazy var nameTextField = UITextField.ypAddModalTextField()
+    private lazy var tableView: UITableView = {
+        let table = UITableView()
+        
+        return table
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -20,7 +24,6 @@ final class NewEventModalViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
-        view.addSubview(nameTextField)
     }
     
     // MARK: - Setup Constraints
@@ -29,10 +32,6 @@ final class NewEventModalViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            nameTextField.heightAnchor.constraint(equalToConstant: 75)
         ])
     }
     
