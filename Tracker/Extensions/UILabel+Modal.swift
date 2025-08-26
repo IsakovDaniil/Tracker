@@ -10,4 +10,24 @@ extension UILabel {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
+    
+    static func ypTitleCell(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textColor = UIColor.ypBlack
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }
+    
+    static func ypSubtitleCell(_ text: String? = nil, isHidden: Bool = true) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textColor = UIColor.ypGray
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 1
+        label.isHidden = isHidden
+        return label
+    }
 }

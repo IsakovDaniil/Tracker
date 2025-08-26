@@ -1,9 +1,9 @@
 import UIKit
 
-final class CategoryCell: UITableViewCell {
+final class ScheduleCell: UITableViewCell {
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Категория")
+    private lazy var titleLabel = UILabel.ypTitle("Расписание")
     
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
