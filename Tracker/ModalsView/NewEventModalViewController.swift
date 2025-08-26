@@ -18,6 +18,15 @@ final class NewEventModalViewController: UIViewController {
         return table
     }()
     
+    private lazy var buttonsStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
+        stack.axis = .horizontal
+        stack.spacing = 8
+        stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
         title: "Отменить",
         titleColor: .ypRed,
@@ -26,7 +35,7 @@ final class NewEventModalViewController: UIViewController {
     ) { [weak self] in
         self?.handler.cancel()
     }
-
+    
     private lazy var createButton = UIButton.ypModalSecondaryButton(
         title: "Создать",
         titleColor: .ypWhite,
@@ -50,7 +59,7 @@ final class NewEventModalViewController: UIViewController {
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
         view.addSubview(tableView)
-        view.addSubview(cancelButton)
+        view.addSubview(buttonsStackView)
     }
     
     // MARK: - Setup Constraints
@@ -62,8 +71,11 @@ final class NewEventModalViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            cancelButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
 }
