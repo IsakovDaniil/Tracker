@@ -23,7 +23,7 @@ final class CategoryCell: UITableViewCell {
     }()
     
     private lazy var arrowImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        let imageView = UIImageView(image: UIImage.arrow)
         imageView.tintColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
