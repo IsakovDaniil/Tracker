@@ -25,7 +25,7 @@ final class ScheduleCell: UITableViewCell {
         backgroundColor = UIColor.ypBackground
         layer.cornerRadius = 16
         contentView.addSubview(titleLabel)
-        contentView.addSubview(categoryLabel)
+        contentView.addSubview(ScheduleLabel)
         contentView.addSubview(arrowImageView)
         selectionStyle = .default
     }
@@ -37,9 +37,9 @@ final class ScheduleCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             // categoryLabel
-            categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            categoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
+            ScheduleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            ScheduleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            ScheduleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
             
             // arrowImageView
             arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -51,11 +51,11 @@ final class ScheduleCell: UITableViewCell {
     // MARK: - Configure
     func configureCategory(_ text: String?) {
         if let text = text, !text.isEmpty {
-            categoryLabel.text = text
-            categoryLabel.isHidden = false
+            ScheduleLabel.text = text
+            ScheduleLabel.isHidden = false
         } else {
-            categoryLabel.text = nil
-            categoryLabel.isHidden = true
+            ScheduleLabel.text = nil
+            ScheduleLabel.isHidden = true
         }
     }
 }
