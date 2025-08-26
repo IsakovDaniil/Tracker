@@ -5,22 +5,9 @@ final class CategoryCell: UITableViewCell {
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Категория")
     
-    private lazy var categoryLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.ypGray
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 1
-        label.isHidden = true
-        return label
-    }()
+    private lazy var categoryLabel = UILabel.ypSubtitleCell()
     
-    private lazy var arrowImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage.arrow)
-        imageView.tintColor = .gray
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    private lazy var arrowImageView = UIImageView.ypArrow()
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
