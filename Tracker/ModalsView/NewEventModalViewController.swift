@@ -1,7 +1,9 @@
 import UIKit
 
 final class NewEventModalViewController: UIViewController {
-
+    
+    let handler = ModalHandler()
+    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
@@ -16,17 +18,22 @@ final class NewEventModalViewController: UIViewController {
         return table
     }()
     
-    private lazy var cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(UIColor.ypRed, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypRed.cgColor
-        button.layer.cornerRadius = 16
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private lazy var cancelButton = UIButton.ypModalSecondaryButton(
+        title: "Отменить",
+        titleColor: .ypRed,
+        backgroundColor: .clear,
+        hasBorder: true
+    ) { [weak self] in
+        self?.handler.cancel()
+    }
+
+    private lazy var createButton = UIButton.ypModalSecondaryButton(
+        title: "Создать",
+        titleColor: .ypWhite,
+        backgroundColor: .ypBlack
+    ) { [weak self] in
+        self?.handler.create()
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -66,7 +73,7 @@ extension NewEventModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:

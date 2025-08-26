@@ -18,8 +18,7 @@ extension UIButton {
         titleColor: UIColor,
         backgroundColor: UIColor,
         hasBorder: Bool = false,
-        target: Any? = nil,
-        action: Selector? = nil
+        action: @escaping () -> Void
     ) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
@@ -35,9 +34,9 @@ extension UIButton {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        if let target = target, let action = action {
-            button.addTarget(target, action: action, for: .touchUpInside)
-        }
+        button.addAction(UIAction { _ in
+            action()
+        }, for: .touchUpInside)
         
         return button
     }
