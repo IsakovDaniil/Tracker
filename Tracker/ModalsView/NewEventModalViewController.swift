@@ -39,9 +39,16 @@ final class NewEventModalViewController: UIViewController {
     private lazy var createButton = UIButton.ypModalSecondaryButton(
         title: "Создать",
         titleColor: .ypWhite,
-        backgroundColor: .ypBlack
+        backgroundColor: .gray
     ) { [weak self] in
         self?.handler.create()
+    }
+    
+    // MARK: - Data
+    private var nameInput: String? {
+        didSet {
+            updateCreateButtonState()
+        }
     }
     
     // MARK: - Lifecycle
@@ -78,6 +85,13 @@ final class NewEventModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Private Methods
+    private func updateCreateButtonState() {
+        let hasText = nameInput?.isEmpty == false
+        createButton.isEnabled = hasText
+        createButton.backgroundColor = hasText ? .ypBlack : .gray
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -90,6 +104,7 @@ extension NewEventModalViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "NameInputCell", for: indexPath) as! NameInputCell
+            cell.textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
             return cell
         case 1:
             let cell = UITableViewCell()
@@ -116,5 +131,12 @@ extension NewEventModalViewController: UITableViewDelegate {
         default:
             return UITableView.automaticDimension
         }
+    }
+}
+
+// MARK: - Actions
+extension NewEventModalViewController {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        nameInput = textField.text
     }
 }

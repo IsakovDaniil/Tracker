@@ -1,7 +1,7 @@
 import UIKit
 
 final class NameInputCell: UITableViewCell {
-    private lazy var textField = UITextField.ypAddModalTextField()
+    lazy var textField = UITextField.ypAddModalTextField()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

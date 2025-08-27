@@ -80,10 +80,16 @@ final class AddTrackersModalViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func addHabitButtonTapped() {
-        
+        let newHabitVC = NewHabitModalViewController()
+        newHabitVC.modalPresentationStyle = .pageSheet
+        newHabitVC.modalTransitionStyle = .coverVertical
+        present(newHabitVC, animated: true)
     }
     
     @objc private func addEventButtonTapped() {
-        
+        let newEventVC = NewEventModalViewController()
+        newEventVC.modalPresentationStyle = .pageSheet
+        newEventVC.modalTransitionStyle = .coverVertical
+        present(newEventVC, animated: true)
     }
 }
