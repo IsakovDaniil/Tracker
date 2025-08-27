@@ -111,6 +111,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryScheduleCell", for: indexPath) as! CategoryScheduleCell
+            cell.delegate = self
             return cell
         default:
             return UITableViewCell()
@@ -123,7 +124,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
 extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0: return 75  // NameInputCell
+        case 0: return 75
         case 1: return 150
         default: return UITableView.automaticDimension
         }
@@ -137,5 +138,15 @@ extension NewHabitModalViewController: UITableViewDelegate {
         let headerView = UIView()
         headerView.backgroundColor = .clear
         return headerView
+    }
+}
+
+extension NewHabitModalViewController: CategoryScheduleCellDelegate {
+    func didTapCategory() {
+        print("Открываем экран выбора категории")
+    }
+    
+    func didTapSchedule() {
+        print("Открываем экран выбора расписания")
     }
 }
