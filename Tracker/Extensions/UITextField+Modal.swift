@@ -10,11 +10,6 @@ extension UITextField {
         textField.layer.cornerRadius = 15
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.clearButtonMode = .whileEditing
-
-//        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 17, height: 0))
-//        textField.leftView = paddingView
-//        textField.leftViewMode = .always
-
         return textField
     }
 }
