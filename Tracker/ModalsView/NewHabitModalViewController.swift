@@ -45,6 +45,7 @@ final class NewHabitModalViewController: UIViewController {
     }
     
     private var selectedDays: [String] = []
+    private var selectedCategory: String? = nil
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -85,7 +86,7 @@ final class NewHabitModalViewController: UIViewController {
     private func updateScheduleCell() {
         let scheduleText = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? CategoryScheduleCell {
-            cell.configure(category: nil, schedule: scheduleText)
+            cell.configure(category: selectedCategory, schedule: scheduleText)
         }
     }
 }
@@ -108,7 +109,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryScheduleCell", for: indexPath) as! CategoryScheduleCell
             cell.delegate = self
-            cell.configure(category: nil, schedule: selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", "))
+            cell.configure(category: selectedCategory, schedule: selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", "))
             return cell
         default:
             return UITableViewCell()
@@ -140,7 +141,8 @@ extension NewHabitModalViewController: UITableViewDelegate {
 // MARK: - CategoryScheduleCellDelegate
 extension NewHabitModalViewController: CategoryScheduleCellDelegate {
     func didTapCategory() {
-        print("Открываем экран выбора категории")
+        selectedCategory = "Важное"
+        updateScheduleCell()
     }
     
     func didTapSchedule() {
@@ -154,6 +156,8 @@ extension NewHabitModalViewController: CategoryScheduleCellDelegate {
 
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {
+   
+    
     func didSelectDays(_ days: [String]) {
         selectedDays = days
         updateScheduleCell()
