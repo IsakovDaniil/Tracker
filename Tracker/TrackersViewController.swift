@@ -177,7 +177,7 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func addButtonTapped() {
-        let modalVC = NewEventModalViewController()
+        let modalVC = SelectScheduleModalViewController()
             modalVC.modalPresentationStyle = .pageSheet
             modalVC.modalTransitionStyle = .coverVertical
             present(modalVC, animated: true)

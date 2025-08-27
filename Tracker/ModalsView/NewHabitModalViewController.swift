@@ -11,6 +11,7 @@ final class NewHabitModalViewController: UIViewController {
         let table = UITableView()
         table.register(NameInputCell.self, forCellReuseIdentifier: "NameInputCell")
         table.register(CategoryCell.self, forCellReuseIdentifier: "CategoryCell")
+        table.register(ScheduleCell.self, forCellReuseIdentifier: "ScheduleCell")
         table.separatorStyle = .none
         table.delegate = self
         table.dataSource = self
@@ -83,7 +84,7 @@ final class NewHabitModalViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension NewHabitModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -99,6 +100,9 @@ extension NewHabitModalViewController: UITableViewDataSource {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
             return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! ScheduleCell
+            return cell
         default:
             return UITableViewCell()
         }
@@ -109,7 +113,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
 extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
-        case 0, 2:
+        case 0, 2, 3:
             return 75
         case 1:
             return 24
