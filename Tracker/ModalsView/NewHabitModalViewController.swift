@@ -4,9 +4,6 @@ final class NewHabitModalViewController: UIViewController {
     
     let handler = ModalHandler()
     
-    private var selectedCategory: String?
-    private var selectedSchedule: String?
-    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
     
@@ -81,16 +78,6 @@ final class NewHabitModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    
-    private func categoryTapped() {
-        // Здесь будет логика открытия экрана выбора категории
-        print("Category tapped")
-    }
-    
-    private func scheduleTapped() {
-        // Здесь будет логика открытия экрана выбора расписания
-        print("Schedule tapped")
-    }
 }
 
 
@@ -147,6 +134,9 @@ extension NewHabitModalViewController: CategoryScheduleCellDelegate {
     }
     
     func didTapSchedule() {
-        print("Открываем экран выбора расписания")
+        let selectScheduleVC = SelectScheduleModalViewController()
+        selectScheduleVC.modalPresentationStyle = .pageSheet
+        selectScheduleVC.modalTransitionStyle = .coverVertical
+        present(selectScheduleVC, animated: true)
     }
 }
