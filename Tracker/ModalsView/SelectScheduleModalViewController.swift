@@ -1,5 +1,9 @@
 import UIKit
 
+protocol SelectScheduleDelegate: AnyObject {
+    func didSelectDays(_ days: [String])
+}
+
 final class SelectScheduleModalViewController: UIViewController {
     
     // MARK: - UI Elements
@@ -27,7 +31,10 @@ final class SelectScheduleModalViewController: UIViewController {
     
     // MARK: - Data
     private let days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let shortDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     private var switchStates = [Bool](repeating: false, count: 7)
+    
+    weak var delegate: SelectScheduleDelegate?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -68,8 +75,10 @@ final class SelectScheduleModalViewController: UIViewController {
     
     // MARK: - Action
     @objc private func doneButtonTapped() {
-        dismiss(animated: true)
-    }
+           let selectedDays = days.enumerated().filter { switchStates[$0.offset] }.map { shortDays[$0.offset] }
+           delegate?.didSelectDays(selectedDays)
+           dismiss(animated: true)
+       }
 }
 
 // MARK: - UITableView DataSource & Delegate

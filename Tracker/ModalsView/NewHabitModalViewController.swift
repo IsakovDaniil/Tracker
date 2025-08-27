@@ -44,6 +44,8 @@ final class NewHabitModalViewController: UIViewController {
         self?.handler.create()
     }
     
+    private var selectedDays: [String] = []
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,8 +80,15 @@ final class NewHabitModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Helper Methods
+    private func updateScheduleCell() {
+        let scheduleText = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? CategoryScheduleCell {
+            cell.configure(category: nil, schedule: scheduleText)
+        }
+    }
 }
-
 
 // MARK: - UITableViewDataSource
 extension NewHabitModalViewController: UITableViewDataSource {
@@ -99,13 +108,13 @@ extension NewHabitModalViewController: UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryScheduleCell", for: indexPath) as! CategoryScheduleCell
             cell.delegate = self
+            cell.configure(category: nil, schedule: selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", "))
             return cell
         default:
             return UITableViewCell()
         }
     }
 }
-
 
 // MARK: - UITableViewDelegate
 extension NewHabitModalViewController: UITableViewDelegate {
@@ -128,6 +137,7 @@ extension NewHabitModalViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - CategoryScheduleCellDelegate
 extension NewHabitModalViewController: CategoryScheduleCellDelegate {
     func didTapCategory() {
         print("Открываем экран выбора категории")
@@ -135,8 +145,17 @@ extension NewHabitModalViewController: CategoryScheduleCellDelegate {
     
     func didTapSchedule() {
         let selectScheduleVC = SelectScheduleModalViewController()
+        selectScheduleVC.delegate = self
         selectScheduleVC.modalPresentationStyle = .pageSheet
         selectScheduleVC.modalTransitionStyle = .coverVertical
         present(selectScheduleVC, animated: true)
+    }
+}
+
+// MARK: - SelectScheduleDelegate
+extension NewHabitModalViewController: SelectScheduleDelegate {
+    func didSelectDays(_ days: [String]) {
+        selectedDays = days
+        updateScheduleCell()
     }
 }
