@@ -23,52 +23,8 @@ final class CategoryScheduleCell: UITableViewCell {
         return view
     }()
     
-    private lazy var categoryStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [categoryTitleLabel, categoryValueLabel])
-        stack.axis = .vertical
-        stack.spacing = 2
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
     
-    private lazy var scheduleStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [scheduleTitleLabel, scheduleValueLabel])
-        stack.axis = .vertical
-        stack.spacing = 2
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
-    private lazy var categoryHorizontalStack: UIStackView = {
-        let spacer = UIView()
-        spacer.translatesAutoresizingMaskIntoConstraints = false
-        let stack = UIStackView(arrangedSubviews: [categoryStack, spacer, categoryArrowImageView])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
-    private lazy var scheduleHorizontalStack: UIStackView = {
-        let spacer = UIView()
-        spacer.translatesAutoresizingMaskIntoConstraints = false
-        let stack = UIStackView(arrangedSubviews: [scheduleStack, spacer, scheduleArrowImageView])
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
-    private lazy var mainStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [categoryHorizontalStack, separatorLine, scheduleHorizontalStack])
-        stack.axis = .vertical
-        stack.spacing = 25
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
+    // --- SCHEDULE ---
     private lazy var categoryButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(categoryTapped), for: .touchUpInside)
@@ -101,7 +57,13 @@ final class CategoryScheduleCell: UITableViewCell {
         backgroundColor = UIColor.ypBackground
         layer.cornerRadius = 16
         selectionStyle = .none
-        contentView.addSubview(mainStack)
+        contentView.addSubview(categoryTitleLabel)
+        contentView.addSubview(categoryValueLabel)
+        contentView.addSubview(categoryArrowImageView)
+        contentView.addSubview(separatorLine)
+        contentView.addSubview(scheduleTitleLabel)
+        contentView.addSubview(scheduleValueLabel)
+        contentView.addSubview(scheduleArrowImageView)
         contentView.addSubview(categoryButton)
         contentView.addSubview(scheduleButton)
         categoryValueLabel.isHidden = true
@@ -111,25 +73,49 @@ final class CategoryScheduleCell: UITableViewCell {
     // MARK: - Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 26),
-            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25),
+            // --- CATEGORY ---
+            categoryTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            categoryTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
+            categoryValueLabel.topAnchor.constraint(equalTo: categoryTitleLabel.bottomAnchor, constant: 2),
+            categoryValueLabel.leadingAnchor.constraint(equalTo: categoryTitleLabel.leadingAnchor),
+            categoryValueLabel.trailingAnchor.constraint(lessThanOrEqualTo: categoryArrowImageView.leadingAnchor, constant: -8),
+            
+            categoryArrowImageView.centerYAnchor.constraint(equalTo: categoryTitleLabel.centerYAnchor),
+            categoryArrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            // --- SEPARATOR ---
+            separatorLine.topAnchor.constraint(equalTo: categoryValueLabel.bottomAnchor, constant: 16),
+            separatorLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            separatorLine.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
             
-            categoryButton.topAnchor.constraint(equalTo: categoryHorizontalStack.topAnchor),
-            categoryButton.leadingAnchor.constraint(equalTo: categoryHorizontalStack.leadingAnchor),
-            categoryButton.trailingAnchor.constraint(equalTo: categoryHorizontalStack.trailingAnchor),
-            categoryButton.bottomAnchor.constraint(equalTo: categoryHorizontalStack.bottomAnchor),
+            // --- SCHEDULE ---
+            scheduleTitleLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 16),
+            scheduleTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
-            scheduleButton.topAnchor.constraint(equalTo: scheduleHorizontalStack.topAnchor),
-            scheduleButton.leadingAnchor.constraint(equalTo: scheduleHorizontalStack.leadingAnchor),
-            scheduleButton.trailingAnchor.constraint(equalTo: scheduleHorizontalStack.trailingAnchor),
-            scheduleButton.bottomAnchor.constraint(equalTo: scheduleHorizontalStack.bottomAnchor)
+            scheduleValueLabel.topAnchor.constraint(equalTo: scheduleTitleLabel.bottomAnchor, constant: 2),
+            scheduleValueLabel.leadingAnchor.constraint(equalTo: scheduleTitleLabel.leadingAnchor),
+            scheduleValueLabel.trailingAnchor.constraint(lessThanOrEqualTo: scheduleArrowImageView.leadingAnchor, constant: -8),
+            
+            scheduleArrowImageView.centerYAnchor.constraint(equalTo: scheduleTitleLabel.centerYAnchor),
+            scheduleArrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            // --- BOTTOM ---
+            scheduleValueLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            
+            categoryButton.topAnchor.constraint(equalTo: categoryTitleLabel.topAnchor),
+            categoryButton.leadingAnchor.constraint(equalTo: categoryTitleLabel.leadingAnchor),
+            categoryButton.trailingAnchor.constraint(equalTo: categoryArrowImageView.trailingAnchor),
+            categoryButton.bottomAnchor.constraint(equalTo: categoryValueLabel.bottomAnchor),
+            
+            // Кнопка расписания
+            scheduleButton.topAnchor.constraint(equalTo: scheduleTitleLabel.topAnchor),
+            scheduleButton.leadingAnchor.constraint(equalTo: scheduleTitleLabel.leadingAnchor),
+            scheduleButton.trailingAnchor.constraint(equalTo: scheduleArrowImageView.trailingAnchor),
+            scheduleButton.bottomAnchor.constraint(equalTo: scheduleValueLabel.bottomAnchor)
         ])
     }
-    
     
     // MARK: - Configure
     func configure(category: String?, schedule: String?) {
@@ -150,7 +136,7 @@ final class CategoryScheduleCell: UITableViewCell {
         }
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
     @objc private func categoryTapped() {
         delegate?.didTapCategory()
     }
@@ -159,4 +145,3 @@ final class CategoryScheduleCell: UITableViewCell {
         delegate?.didTapSchedule()
     }
 }
-
