@@ -163,11 +163,29 @@ final class TrackerCell: UICollectionViewCell {
         counterButton.backgroundColor = buttonColor
         
         let buttonImage = isCompletedToday ?
-            UIImage(systemName: "checkmark") :
-            UIImage(systemName: "plus")
+        UIImage(systemName: "checkmark") :
+        UIImage(systemName: "plus")
         
         counterButton.setImage(buttonImage, for: .normal)
         counterButton.tintColor = .white
+    }
+    
+    private func updateButtonAvailability() {
+        guard let selectedDate else { return }
+        
+        let today = Date()
+        let calendar = Calendar.current
+        
+        let selectedDateOnly = calendar.startOfDay(for: selectedDate)
+        let todayOnly = calendar.startOfDay(for: today)
+        
+        if selectedDateOnly > todayOnly {
+            counterButton.isEnabled = false
+            counterButton.alpha = 0.5
+        } else {
+            counterButton.isEnabled = true
+            counterButton.alpha = 1.0
+        }
     }
     
     //MARK: - Action
