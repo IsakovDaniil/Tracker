@@ -1,5 +1,4 @@
 import UIKit
-import SwiftUI
 
 final class TrackerCell: UICollectionViewCell {
     // MARK: - UI Elements
@@ -75,11 +74,6 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(counterView)
         counterView.addSubview(counterLabel)
         counterView.addSubview(counterButton)
-        titleLabel.text = "Хахахахаха"
-        emojiLabel.text = "🔥"
-        cardView.backgroundColor = .green
-        counterView.backgroundColor = .red
-        counterLabel.text = "0 дней"
     }
     
     // MARK: - Setup Constraints
@@ -121,22 +115,3 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
-#Preview {
-    UIViewPreview {
-        TrackerCell(frame: .init(x: 0, y: 0, width: 200, height: 150))
-    }
-}
-
-struct UIViewPreview<View: UIView>: UIViewRepresentable {
-    let builder: () -> View
-    
-    init(_ builder: @escaping () -> View) {
-        self.builder = builder
-    }
-    
-    func makeUIView(context: Context) -> View {
-        builder()
-    }
-    
-    func updateUIView(_ uiView: View, context: Context) {}
-}
