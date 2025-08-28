@@ -153,6 +153,23 @@ final class TrackerCell: UICollectionViewCell {
         counterLabel.text = "\(count) \(daysText)"
     }
     
+    private func updateCounterButton() {
+        guard let tracker else { return }
+        
+        let buttonColor = isCompletedToday ?
+        tracker.color.withAlphaComponent(0.3) :
+        tracker.color
+        
+        counterButton.backgroundColor = buttonColor
+        
+        let buttonImage = isCompletedToday ?
+            UIImage(systemName: "checkmark") :
+            UIImage(systemName: "plus")
+        
+        counterButton.setImage(buttonImage, for: .normal)
+        counterButton.tintColor = .white
+    }
+    
     //MARK: - Action
     @objc private func counterButtonTapped() {
         
