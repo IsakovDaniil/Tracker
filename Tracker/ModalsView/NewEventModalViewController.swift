@@ -7,17 +7,14 @@ final class NewEventModalViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
-    private lazy var tableView: UITableView = {
-        let table = UITableView()
-//        table.register(NameInputCell.self, forCellReuseIdentifier: "NameInputCell")
-        table.register(CategoryCell.self, forCellReuseIdentifier: "CategoryCell")
-        table.separatorStyle = .none
-        table.delegate = self
-        table.dataSource = self
-        table.translatesAutoresizingMaskIntoConstraints = false
-        return table
-    }()
+    private lazy var titleTextField = UITextField.ypTitleTextField()
     
+    private lazy var optionsTableView = UITableView.makeOptionsTableView(
+        dataSource: self,
+        delegate: self,
+        separatorStyle: .none
+    )
+        
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
         stack.axis = .horizontal
@@ -58,7 +55,8 @@ final class NewEventModalViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
-        view.addSubview(tableView)
+        view.addSubview(titleTextField)
+        view.addSubview(optionsTableView)
         view.addSubview(buttonsStackView)
     }
     
@@ -67,10 +65,16 @@ final class NewEventModalViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleTextField.heightAnchor.constraint(equalToConstant: 75),
+            
+            optionsTableView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 24),
+            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            optionsTableView.heightAnchor.constraint(equalToConstant: 75),
             
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -83,38 +87,22 @@ final class NewEventModalViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension NewEventModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NameInputCell", for: indexPath) as! NameInputCell
-            return cell
-        case 1:
-            let cell = UITableViewCell()
-            cell.backgroundColor = .clear
-            cell.selectionStyle = .none
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
-            return cell
-        default:
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionCell else {
             return UITableViewCell()
         }
+        
+        cell.configure(title: "Категория", subtitle: nil)
+        return cell
     }
 }
 
 // MARK: - UITableViewDelegate
 extension NewEventModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0, 2:
-            return 75
-        case 1:
-            return 24
-        default:
-            return UITableView.automaticDimension
-        }
+        return 75
     }
 }

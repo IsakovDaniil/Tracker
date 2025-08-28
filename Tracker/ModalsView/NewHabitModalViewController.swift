@@ -9,20 +9,11 @@ final class NewHabitModalViewController: UIViewController {
     
     private lazy var titleTextField = UITextField.ypTitleTextField()
     
-    private lazy var optionsTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.layer.cornerRadius = 16
-        tableView.isScrollEnabled = false
-        tableView.separatorStyle = .singleLine
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.separatorColor = UIColor(white: 0.0, alpha: 0.3)
-        tableView.register(OptionCell.self, forCellReuseIdentifier: "OptionCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    
+    private lazy var optionsTableView = UITableView.makeOptionsTableView(
+        dataSource: self,
+        delegate: self,
+        separatorStyle: .singleLine
+    )
     
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
