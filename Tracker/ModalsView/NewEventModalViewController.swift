@@ -9,7 +9,7 @@ final class NewEventModalViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
-        table.register(NameInputCell.self, forCellReuseIdentifier: "NameInputCell")
+//        table.register(NameInputCell.self, forCellReuseIdentifier: "NameInputCell")
         table.register(CategoryCell.self, forCellReuseIdentifier: "CategoryCell")
         table.separatorStyle = .none
         table.delegate = self

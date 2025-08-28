@@ -7,16 +7,22 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
     
-    private lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.register(NameInputCell.self, forCellReuseIdentifier: "NameInputCell")
-        table.register(CategoryScheduleCell.self, forCellReuseIdentifier: "CategoryScheduleCell")
-        table.separatorStyle = .none
-        table.delegate = self
-        table.dataSource = self
-        table.translatesAutoresizingMaskIntoConstraints = false
-        return table
+    private lazy var titleTextField = UITextField.ypTitleTextField()
+    
+    private lazy var optionsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.layer.cornerRadius = 16
+        tableView.isScrollEnabled = false
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.separatorColor = UIColor(white: 0.0, alpha: 0.3)
+        tableView.register(OptionCell.self, forCellReuseIdentifier: "OptionCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
+    
     
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
@@ -61,7 +67,8 @@ final class NewHabitModalViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
-        view.addSubview(tableView)
+        view.addSubview(titleTextField)
+        view.addSubview(optionsTableView)
         view.addSubview(buttonsStackView)
     }
     
@@ -70,10 +77,16 @@ final class NewHabitModalViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            titleTextField.heightAnchor.constraint(equalToConstant: 75),
+            
+            optionsTableView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 24),
+            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            optionsTableView.heightAnchor.constraint(equalToConstant: 150),
             
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -81,85 +94,39 @@ final class NewHabitModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
-    
-    // MARK: - Helper Methods
-    private func updateScheduleCell() {
-        let scheduleText = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
-        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? CategoryScheduleCell {
-            cell.configure(category: selectedCategory, schedule: scheduleText)
-        }
-    }
 }
 
-// MARK: - UITableViewDataSource
 extension NewHabitModalViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NameInputCell", for: indexPath) as! NameInputCell
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryScheduleCell", for: indexPath) as! CategoryScheduleCell
-            cell.delegate = self
-            cell.configure(category: selectedCategory, schedule: selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", "))
-            return cell
-        default:
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionCell else {
             return UITableViewCell()
         }
+        
+        if indexPath.row == 0 {
+            cell.configure(title: "Категория", subtitle: nil)
+        } else {
+            cell.configure(title: "Расписание", subtitle: nil)
+        }
+        
+        return cell
     }
 }
 
 // MARK: - UITableViewDelegate
 extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0: return 75
-        case 1: return 150
-        default: return UITableView.automaticDimension
+        return 75
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.width, bottom: 0, right: 0)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 24
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
-    }
-}
-
-// MARK: - CategoryScheduleCellDelegate
-extension NewHabitModalViewController: CategoryScheduleCellDelegate {
-    func didTapCategory() {
-        selectedCategory = "Важное"
-        updateScheduleCell()
-    }
-    
-    func didTapSchedule() {
-        let selectScheduleVC = SelectScheduleModalViewController()
-        selectScheduleVC.delegate = self
-        selectScheduleVC.modalPresentationStyle = .pageSheet
-        selectScheduleVC.modalTransitionStyle = .coverVertical
-        present(selectScheduleVC, animated: true)
-    }
-}
-
-// MARK: - SelectScheduleDelegate
-extension NewHabitModalViewController: SelectScheduleDelegate {
-   
-    
-    func didSelectDays(_ days: [String]) {
-        selectedDays = days
-        updateScheduleCell()
     }
 }
