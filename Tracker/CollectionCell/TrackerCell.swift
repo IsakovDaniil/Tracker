@@ -133,6 +133,9 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.name
         cardView.backgroundColor = tracker.color
+        
+        updateCounterLabel()
+        updateCounterButton()
     }
     
     private func updateCounterLabel() {
@@ -168,6 +171,8 @@ final class TrackerCell: UICollectionViewCell {
         
         counterButton.setImage(buttonImage, for: .normal)
         counterButton.tintColor = .white
+        
+        updateButtonAvailability()
     }
     
     private func updateButtonAvailability() {
@@ -190,7 +195,24 @@ final class TrackerCell: UICollectionViewCell {
     
     //MARK: - Action
     @objc private func counterButtonTapped() {
+        guard let tracker,
+              let selectedDate,
+              let completionHandler else { return }
         
+        let newCompletionState = !isCompletedToday
+        
+        completionHandler(tracker.id, selectedDate, newCompletionState)
+        
+        isCompletedToday = newCompletionState
+        
+        if newCompletionState {
+            completionCount += 1
+        } else {
+            completionCount = max(0, completionCount - 1)
+        }
+        
+        updateCounterLabel()
+        updateCounterButton()
     }
 }
 
