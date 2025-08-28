@@ -134,9 +134,10 @@ extension NewHabitModalViewController: UITableViewDataSource {
         }
         
         if indexPath.row == 0 {
-            cell.configure(title: "Категория", subtitle: nil)
+            cell.configure(title: "Категория", subtitle: selectedCategory)
         } else {
-            cell.configure(title: "Расписание", subtitle: nil)
+            let subtitle = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
+            cell.configure(title: "Расписание", subtitle: subtitle)
         }
         
         return cell
@@ -155,5 +156,24 @@ extension NewHabitModalViewController: UITableViewDelegate {
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.row == 1 {
+            let scheduleVC = SelectScheduleModalViewController()
+            scheduleVC.delegate = self
+            scheduleVC.modalPresentationStyle = .formSheet
+            present(scheduleVC, animated: true, completion: nil)
+        }
+    }
+}
+
+// MARK: - SelectScheduleDelegate
+extension NewHabitModalViewController: SelectScheduleDelegate {
+    func didSelectDays(_ days: [String]) {
+        selectedDays = days
+        optionsTableView.reloadData()
     }
 }
