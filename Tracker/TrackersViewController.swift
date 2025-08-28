@@ -31,6 +31,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - Properties
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    private var filteredCategories: [TrackerCategory] = []
+    private var selectedDate: Date = Date()
     
     
     // MARK: - UI Elements
