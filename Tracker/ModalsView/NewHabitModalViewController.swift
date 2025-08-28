@@ -7,7 +7,12 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
     
-    private lazy var titleTextField = UITextField.ypTitleTextField()
+    private lazy var titleTextField: UITextField = .makeTitleTextField(
+        delegate: self,
+        action: #selector(textFieldDidChange)
+    )
+    
+    private lazy var characterLimitLabel = UILabel.makeCharacterLimitLabel()
     
     private lazy var optionsTableView = UITableView.makeOptionsTableView(
         dataSource: self,
@@ -59,6 +64,7 @@ final class NewHabitModalViewController: UIViewController {
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
         view.addSubview(titleTextField)
+        view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
         view.addSubview(buttonsStackView)
     }
@@ -74,10 +80,15 @@ final class NewHabitModalViewController: UIViewController {
             titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             titleTextField.heightAnchor.constraint(equalToConstant: 75),
             
-            optionsTableView.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 24),
+            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
+            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            characterLimitLabel.heightAnchor.constraint(equalToConstant: 22),
+            
+            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: 8),
             optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            optionsTableView.heightAnchor.constraint(equalToConstant: 150),
+            optionsTableView.heightAnchor.constraint(equalToConstant: 75 * 2),
             
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -85,8 +96,33 @@ final class NewHabitModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Actions
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
+        if text.count >= 38 {
+            if text.count > 38 {
+                textField.text = String(text.prefix(38))
+            }
+            characterLimitLabel.isHidden = false
+        } else {
+            characterLimitLabel.isHidden = true
+        }
+    }
 }
 
+
+// MARK: - UITextFieldDelegate
+extension NewHabitModalViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
+
+// MARK: - UITableViewDataSource
 extension NewHabitModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2

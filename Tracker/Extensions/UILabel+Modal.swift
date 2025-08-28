@@ -30,4 +30,15 @@ extension UILabel {
         label.isHidden = isHidden
         return label
     }
+    
+    static func makeCharacterLimitLabel() -> UILabel {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = UIColor.ypRed
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }
 }
