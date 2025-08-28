@@ -117,7 +117,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     // MARK: - Configuration
-    private func configuration(
+    private func configure(
         with tracker: Tracker,
         selectedDate: Date,
         isCompleted: Bool,
