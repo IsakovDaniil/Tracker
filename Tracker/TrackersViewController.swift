@@ -32,6 +32,7 @@ final class TrackersViewController: UIViewController {
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
+    
     // MARK: - UI Elements
     private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
@@ -205,8 +206,13 @@ extension TrackersViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
-    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availableWidth = max(0, collectionView.frame.width - 16)
+        let cellWidth = availableWidth / 2
+        return CGSize(width: max(0, cellWidth), height: max(0, 148))
+    }
 }
 
 extension TrackersViewController: UICollectionViewDelegate {
