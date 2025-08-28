@@ -1,6 +1,10 @@
 import UIKit
 
 final class NewHabitModalViewController: UIViewController {
+    // MARK: - Property
+    private var selectedDays: [Weekday] = []
+    private var selectedCategory: String? = nil
+    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
     
@@ -42,9 +46,6 @@ final class NewHabitModalViewController: UIViewController {
         target: self,
         action: #selector(createButtonTapped)
     )
-    
-    private var selectedDays: [String] = []
-    private var selectedCategory: String? = nil
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -145,7 +146,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
             if selectedDays.count == 7 {
                 subtitle = "Каждый день"
             } else {
-                subtitle = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
+                subtitle = selectedDays.isEmpty ? nil : selectedDays.map { $0.shortName }.joined(separator: ", ")
             }
             cell.configure(title: "Расписание", subtitle: subtitle)
         }
@@ -182,7 +183,7 @@ extension NewHabitModalViewController: UITableViewDelegate {
 
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {
-    func didSelectDays(_ days: [String]) {
+    func didSelectDays(_ days: [Weekday]) {
         selectedDays = days
         optionsTableView.reloadData()
     }

@@ -1,10 +1,13 @@
 import UIKit
 
 protocol SelectScheduleDelegate: AnyObject {
-    func didSelectDays(_ days: [String])
+    func didSelectDays(_ days: [Weekday])
 }
 
 final class SelectScheduleModalViewController: UIViewController {
+    // MARK: - Property
+    private var switchStates = [Bool](repeating: false, count: Weekday.allCases.count)
+    weak var delegate: SelectScheduleDelegate?
     
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Расписание")
@@ -28,13 +31,6 @@ final class SelectScheduleModalViewController: UIViewController {
         target: self,
         action: #selector(doneButtonTapped)
     )
-    
-    // MARK: - Data
-    private let days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    private let shortDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-    private var switchStates = [Bool](repeating: false, count: 7)
-    
-    weak var delegate: SelectScheduleDelegate?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -75,34 +71,35 @@ final class SelectScheduleModalViewController: UIViewController {
     
     // MARK: - Action
     @objc private func doneButtonTapped() {
-           let selectedDays = days.enumerated().filter { switchStates[$0.offset] }.map { shortDays[$0.offset] }
-           delegate?.didSelectDays(selectedDays)
-           dismiss(animated: true)
-       }
+        let selectedDays = Weekday.allCases.enumerated().filter { switchStates[$0.offset] }.map { $0.element }
+        delegate?.didSelectDays(selectedDays)
+        dismiss(animated: true)
+    }
 }
 
 // MARK: - UITableView DataSource & Delegate
 extension SelectScheduleModalViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return days.count
+        return Weekday.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WeekdaysCell.identifier, for: indexPath) as? WeekdaysCell else {
             return UITableViewCell()
         }
-        cell.configure(with: days[indexPath.row], isOn: switchStates[indexPath.row])
+        let weekday = Weekday.allCases[indexPath.row]
+        cell.configure(with: weekday.localizedName, isOn: switchStates[indexPath.row])
         cell.toggleSwitch.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
         cell.toggleSwitch.tag = indexPath.row
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.frame.height / CGFloat(days.count)
+        return tableView.frame.height / CGFloat(Weekday.allCases.count)
     }
     
     @objc private func switchToggled(_ sender: UISwitch) {
         switchStates[sender.tag] = sender.isOn
-        print("Day \(days[sender.tag]) switched to \(sender.isOn)")
+        let weekday = Weekday.allCases[sender.tag]
     }
 }

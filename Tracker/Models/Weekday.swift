@@ -15,7 +15,7 @@ enum Weekday: Int, CaseIterable {
         }
     }
     
-    var sortName: String {
+    var shortName: String {
         switch self {
         case .monday: return "Пн"
         case .tuesday: return "Вт"
