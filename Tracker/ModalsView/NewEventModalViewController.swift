@@ -1,9 +1,6 @@
 import UIKit
 
-final class NewEventModalViewController: UIViewController {
-    
-    let handler = ModalHandler()
-    
+final class NewEventModalViewController: UIViewController {    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
@@ -33,18 +30,18 @@ final class NewEventModalViewController: UIViewController {
         title: "Отменить",
         titleColor: .ypRed,
         backgroundColor: .clear,
-        hasBorder: true
-    ) { [weak self] in
-        self?.handler.cancel()
-    }
+        hasBorder: true,
+        target: self,
+        action: #selector(cancelButtonTapped)
+    )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
         title: "Создать",
         titleColor: .ypWhite,
-        backgroundColor: .ypBlack
-    ) { [weak self] in
-        self?.handler.create()
-    }
+        backgroundColor: .ypBlack,
+        target: self,
+        action: #selector(createButtonTapped)
+    )
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -105,6 +102,14 @@ final class NewEventModalViewController: UIViewController {
         } else {
             characterLimitLabel.isHidden = true
         }
+    }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc private func createButtonTapped() {
+        
     }
 }
 // MARK: - UITextFieldDelegate

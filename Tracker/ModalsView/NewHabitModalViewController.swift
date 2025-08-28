@@ -1,9 +1,6 @@
 import UIKit
 
 final class NewHabitModalViewController: UIViewController {
-    
-    let handler = ModalHandler()
-    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
     
@@ -33,18 +30,18 @@ final class NewHabitModalViewController: UIViewController {
         title: "Отменить",
         titleColor: .ypRed,
         backgroundColor: .clear,
-        hasBorder: true
-    ) { [weak self] in
-        self?.handler.cancel()
-    }
+        hasBorder: true,
+        target: self,
+        action: #selector(cancelButtonTapped)
+    )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
         title: "Создать",
         titleColor: .ypWhite,
-        backgroundColor: .ypBlack
-    ) { [weak self] in
-        self?.handler.create()
-    }
+        backgroundColor: .ypBlack,
+        target: self,
+        action: #selector(createButtonTapped)
+    )
     
     private var selectedDays: [String] = []
     private var selectedCategory: String? = nil
@@ -110,6 +107,14 @@ final class NewHabitModalViewController: UIViewController {
             characterLimitLabel.isHidden = true
         }
     }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc private func createButtonTapped() {
+        
+    }
 }
 
 
@@ -136,7 +141,12 @@ extension NewHabitModalViewController: UITableViewDataSource {
         if indexPath.row == 0 {
             cell.configure(title: "Категория", subtitle: selectedCategory)
         } else {
-            let subtitle = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
+            let subtitle: String?
+            if selectedDays.count == 7 {
+                subtitle = "Каждый день"
+            } else {
+                subtitle = selectedDays.isEmpty ? nil : selectedDays.joined(separator: ", ")
+            }
             cell.configure(title: "Расписание", subtitle: subtitle)
         }
         

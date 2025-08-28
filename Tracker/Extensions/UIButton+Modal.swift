@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIButton {
-   static func ypAddModalButton(title: String, target: Any?, action: Selector) -> UIButton {
+    static func ypAddModalButton(title: String, target: Any?, action: Selector) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
         button.setTitleColor(UIColor.ypWhite, for: .normal)
@@ -18,7 +18,8 @@ extension UIButton {
         titleColor: UIColor,
         backgroundColor: UIColor,
         hasBorder: Bool = false,
-        action: @escaping () -> Void
+        target: Any?,
+        action: Selector
     ) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
@@ -34,10 +35,9 @@ extension UIButton {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.addAction(UIAction { _ in
-            action()
-        }, for: .touchUpInside)
+        button.addTarget(target, action: action, for: .touchUpInside)
         
         return button
     }
 }
+
