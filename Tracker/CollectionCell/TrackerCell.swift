@@ -135,6 +135,24 @@ final class TrackerCell: UICollectionViewCell {
         cardView.backgroundColor = tracker.color
     }
     
+    private func updateCounterLabel() {
+        let daysText: String
+        let count = completionCount
+        
+        switch count {
+        case 0:
+            daysText = "дней"
+        case 1:
+            daysText = "день"
+        case 2...4:
+            daysText = "дня"
+        default:
+            daysText = "дней"
+        }
+        
+        counterLabel.text = "\(count) \(daysText)"
+    }
+    
     //MARK: - Action
     @objc private func counterButtonTapped() {
         
