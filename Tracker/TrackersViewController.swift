@@ -89,7 +89,7 @@ final class TrackersViewController: UIViewController {
         layout.scrollDirection = .vertical
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: "CastomCell")
+        collection.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
         collection.backgroundColor = UIColor.ypWhite
         collection.delegate = self
         collection.dataSource = self
@@ -198,7 +198,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CastomCell", for: indexPath) as? TrackersCollectionViewCell ?? TrackersCollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell ?? TrackerCell()
         return cell
     }
     
