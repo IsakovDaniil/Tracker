@@ -1,6 +1,13 @@
 import UIKit
 
 final class TrackerCell: UICollectionViewCell {
+    // MARK: - Properties
+    private var tracker: Tracker?
+    private var selectedDate: Date?
+    private var isCompletedToday: Bool = false
+    private var completionCount: Int = 0
+    private var completionHandler: ((UUID, Date, Bool) -> Void)?
+    
     // MARK: - UI Elements
     private lazy var cardView: UIView = {
         let view = UIView()

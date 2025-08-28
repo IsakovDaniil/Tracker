@@ -100,6 +100,5 @@ extension SelectScheduleModalViewController: UITableViewDataSource, UITableViewD
     
     @objc private func switchToggled(_ sender: UISwitch) {
         switchStates[sender.tag] = sender.isOn
-        let weekday = Weekday.allCases[sender.tag]
     }
 }
