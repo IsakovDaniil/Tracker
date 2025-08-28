@@ -116,6 +116,25 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
+    // MARK: - Configuration
+    private func configuration(
+        with tracker: Tracker,
+        selectedDate: Date,
+        isCompleted: Bool,
+        completionCount: Int,
+        completionHandler: @escaping (UUID, Date, Bool) -> Void
+    ) {
+        self.tracker = tracker
+        self.selectedDate = selectedDate
+        self.isCompletedToday = isCompleted
+        self.completionCount = completionCount
+        self.completionHandler = completionHandler
+        
+        emojiLabel.text = tracker.emoji
+        titleLabel.text = tracker.name
+        cardView.backgroundColor = tracker.color
+    }
+    
     //MARK: - Action
     @objc private func counterButtonTapped() {
         
