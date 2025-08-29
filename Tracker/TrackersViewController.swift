@@ -93,6 +93,7 @@ final class TrackersViewController: UIViewController {
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
+        collection.register(TrackerHeaderView.self, forCellWithReuseIdentifier: "TrackerHeaderView")
         collection.backgroundColor = UIColor.ypWhite
         collection.delegate = self
         collection.dataSource = self
@@ -181,9 +182,9 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let modalVC = AddTrackersModalViewController()
-            modalVC.modalPresentationStyle = .pageSheet
-            modalVC.modalTransitionStyle = .coverVertical
-            present(modalVC, animated: true)
+        modalVC.modalPresentationStyle = .pageSheet
+        modalVC.modalTransitionStyle = .coverVertical
+        present(modalVC, animated: true)
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -194,7 +195,7 @@ final class TrackersViewController: UIViewController {
         print("Выбранная дата: \(formattedDate)")
     }
 }
-
+// MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -203,6 +204,19 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell ?? TrackerCell()
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "TrackerHeaderView",
+                for: indexPath
+              ) as? TrackerHeaderView else {
+            return UICollectionReusableView()
+        }
+        header.configure(with: filteredCategories[indexPath.section].title)
+        return header
     }
     
     
