@@ -10,8 +10,8 @@ final class NewHabitModalViewController: UIViewController {
     private var selectedDays: [Weekday] = []
     private var selectedCategory: String? = nil
     
-    private let defaultColor: UIColor = .systemBlue
-    private let defaultEmoji: String = "😊"
+    private let defaultColor: UIColor = .ypSelection5
+    private let defaultEmoji: String = "😪"
     
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
@@ -50,7 +50,7 @@ final class NewHabitModalViewController: UIViewController {
     private lazy var createButton = UIButton.ypModalSecondaryButton(
         title: "Создать",
         titleColor: .ypWhite,
-        backgroundColor: .ypBlack,
+        backgroundColor: .ypGray,
         target: self,
         action: #selector(createButtonTapped)
     )
@@ -101,6 +101,24 @@ final class NewHabitModalViewController: UIViewController {
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    // MARK: - Validation
+    private func updateButtonState() {
+        let isValid = isFromValid()
+        
+        createButton.isEnabled = isValid
+        createButton.backgroundColor = isValid ? .ypBlack : .ypGray
+    }
+    
+    private func isFromValid() -> Bool {
+        guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
+        
+        guard selectedCategory != nil else { return false }
+        
+        guard !selectedDays.isEmpty else { return false }
+
+        return true
     }
     
     // MARK: - Actions
