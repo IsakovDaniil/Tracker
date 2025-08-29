@@ -216,7 +216,12 @@ extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.row == 1 {
+        if indexPath.row == 0 {
+            selectedCategory = "Важные дела"
+            optionsTableView.reloadData()
+            updateCreateButtonState()
+            
+        } else if indexPath.row == 1 {
             let scheduleVC = SelectScheduleModalViewController()
             scheduleVC.delegate = self
             scheduleVC.modalPresentationStyle = .formSheet
