@@ -1,9 +1,17 @@
 import UIKit
 
+protocol NewHabitDelegate: AnyObject {
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String)
+}
+
 final class NewHabitModalViewController: UIViewController {
     // MARK: - Property
+    weak var delegate: NewHabitDelegate?
     private var selectedDays: [Weekday] = []
     private var selectedCategory: String? = nil
+    
+    private let defaultColor: UIColor = .systemBlue
+    private let defaultEmoji: String = "😊"
     
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
