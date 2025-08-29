@@ -104,20 +104,20 @@ final class NewHabitModalViewController: UIViewController {
     }
     
     // MARK: - Validation
-    private func updateButtonState() {
-        let isValid = isFromValid()
+    private func updateCreateButtonState() {
+        let isValid = isFormValid()
         
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? .ypBlack : .ypGray
     }
     
-    private func isFromValid() -> Bool {
+    private func isFormValid() -> Bool {
         guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
         
         guard selectedCategory != nil else { return false }
         
         guard !selectedDays.isEmpty else { return false }
-
+        
         return true
     }
     
@@ -133,6 +133,7 @@ final class NewHabitModalViewController: UIViewController {
         } else {
             characterLimitLabel.isHidden = true
         }
+        updateCreateButtonState()
     }
     
     @objc private func cancelButtonTapped() {
@@ -140,7 +141,24 @@ final class NewHabitModalViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
+        guard isFormValid(),
+              let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
+              let category = selectedCategory else {
+            return
+        }
         
+        let newTracker = Tracker(
+            id: UUID(),
+            name: title,
+            color: defaultColor,
+            emoji: defaultEmoji,
+            schedule: selectedDays,
+            isHabit: true
+        )
+        
+        delegate?.didCreateTracker(newTracker, categoryTitle: category)
+        
+        dismiss(animated: true)
     }
 }
 
@@ -212,5 +230,6 @@ extension NewHabitModalViewController: SelectScheduleDelegate {
     func didSelectDays(_ days: [Weekday]) {
         selectedDays = days
         optionsTableView.reloadData()
+        updateCreateButtonState()
     }
 }
