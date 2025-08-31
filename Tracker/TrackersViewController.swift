@@ -136,11 +136,13 @@ final class TrackersViewController: UIViewController {
             
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             
         ])
     }
     
+    // MARK: - Navigation
     private func setupNavigation() {
         let addButton = UIBarButtonItem(image: UIImage.addTracker,
                                         style: .plain,
@@ -153,6 +155,11 @@ final class TrackersViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = dateButton
+    }
+    
+    // MARK: - Data Setup
+    private func setupInitialData() {
+        categories = []
     }
     
     // MARK: - Tracker Management
@@ -197,12 +204,19 @@ final class TrackersViewController: UIViewController {
 }
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return filteredCategories.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return filteredCategories[section].trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell ?? TrackerCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell else {
+            return UICollectionViewCell()
+        }
+        
         return cell
     }
     

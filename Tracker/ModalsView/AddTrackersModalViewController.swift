@@ -1,5 +1,9 @@
 import UIKit
 
+protocol AddTrackersModalDelegate: AnyObject {
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String)
+}
+
 final class AddTrackersModalViewController: UIViewController {
     // MARK: - Constants
     private enum AddTrackersConstants {
@@ -19,6 +23,8 @@ final class AddTrackersModalViewController: UIViewController {
         }
     }
     
+    // MARK: - Properties
+    weak var delegate: AddTrackersModalDelegate?
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
     
@@ -81,6 +87,7 @@ final class AddTrackersModalViewController: UIViewController {
     // MARK: - Actions
     @objc private func addHabitButtonTapped() {
         let newHabitVC = NewHabitModalViewController()
+        newHabitVC.delegate = self
         newHabitVC.modalPresentationStyle = .pageSheet
         newHabitVC.modalTransitionStyle = .coverVertical
         present(newHabitVC, animated: true)
@@ -91,5 +98,14 @@ final class AddTrackersModalViewController: UIViewController {
         newEventVC.modalPresentationStyle = .pageSheet
         newEventVC.modalTransitionStyle = .coverVertical
         present(newEventVC, animated: true)
+    }
+}
+
+// MARK: - NewHabitDelegate
+extension AddTrackersModalViewController: NewHabitDelegate {
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
+        delegate?.didCreateTracker(tracker, categoryTitle: categoryTitle)
+        
+        dismiss(animated: true)
     }
 }
