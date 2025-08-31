@@ -162,6 +162,20 @@ final class TrackersViewController: UIViewController {
         categories = []
     }
     
+    // MARK: - Filtering and Data Management
+    private func updateFilteredCategoties() {
+        
+    }
+    
+    private func updateStubVisibility() {
+        let hasData = !filteredCategories.isEmpty
+        stubStack.isHidden = hasData
+        collectionView.isHidden = !hasData
+    }
+    
+    
+
+    
     // MARK: - Tracker Management
     private func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
         var updatedCategories = categories
