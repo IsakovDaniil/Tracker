@@ -173,8 +173,25 @@ final class TrackersViewController: UIViewController {
         collectionView.isHidden = !hasData
     }
     
+    private func getWeekdayFromDate(_ date: Date) -> Weekday {
+        let calendar = Calendar.current
+        let weekdayComponent = calendar.component(.weekday, from: date)
+        
+        
+        switch weekdayComponent {
+        case 1: return .sunday
+        case 2: return .monday
+        case 3: return .tuesday
+        case 4: return .wednesday
+        case 5: return .thursday
+        case 6: return .friday
+        case 7: return .saturday
+        default: return .monday
+        }
+    }
     
-
+    
+    
     
     // MARK: - Tracker Management
     private func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
