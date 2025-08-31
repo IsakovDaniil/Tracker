@@ -163,7 +163,7 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Filtering and Data Management
-    private func updateFilteredCategoties() {
+    private func updateFilteredCategories() {
         let selectedWeekday = getWeekdayFromDate(selectedDate)
         let searchText = searchBar.text?.lowercased() ?? ""
         
@@ -178,7 +178,7 @@ final class TrackersViewController: UIViewController {
             return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
         collectionView.reloadData()
-        updateStubVisibility
+        updateStubVisibility()
     }
     
     private func updateStubVisibility() {
@@ -203,9 +203,6 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    
-    
-    
     // MARK: - Tracker Management
     private func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
         var updatedCategories = categories
@@ -217,16 +214,26 @@ final class TrackersViewController: UIViewController {
             updatedCategories.append(TrackerCategory(title: title, trackers: [tracker]))
         }
         categories = updatedCategories
+        updateFilteredCategories()
+        
     }
     
-    private func markTrackerComplited(_ trackerID: UUID, on date: Date) {
+    private func markTrackerCompleted(_ trackerID: UUID, on date: Date) {
         let newRecord = TrackerRecord(trackerID: trackerID, date: date)
         completedTrackers.append(newRecord)
+        collectionView.reloadData()
     }
     
-    private func unmarkTrackerComplited(_ trackerID: UUID, on date: Date) {
+    private func unmarkTrackerCompleted(_ trackerID: UUID, on date: Date) {
         completedTrackers = completedTrackers.filter { record in
             !(record.trackerID == trackerID && Calendar.current.isDate(record.date, inSameDayAs: date))
+        }
+        collectionView.reloadData()
+    }
+    
+    private func isTrackerCompleted(_ trackerID: UUID, on date: Date) -> Bool {
+        return completedTrackers.contains { record in
+            record.trackerID == trackerID && Calendar.current.isDate(record.date, inSameDayAs: date)
         }
     }
     
