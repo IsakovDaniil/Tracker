@@ -276,6 +276,23 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
+        let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
+        let isCompleted = isTrackerCompleted(tracker.id, on: selectedDate)
+        let completionCount = getCompletionCount(for: tracker.id)
+        
+        cell.configure(
+            with: tracker,
+            selectedDate: selectedDate,
+            isCompleted: isCompleted,
+            completionCount: completionCount
+        ) { [weak self] trackerID, date, isCompleted in
+            if isCompleted {
+                self?.markTrackerCompleted(trackerID, on: date)
+            } else {
+                self?.unmarkTrackerCompleted(trackerID, on: date)
+            }
+        }
+        
         return cell
     }
     
