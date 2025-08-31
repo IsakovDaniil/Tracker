@@ -317,3 +317,10 @@ extension TrackersViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - AddTrackersModalDelegate
+extension TrackersViewController: AddTrackersModalDelegate {
+    func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
+        addTracker(tracker, toCategoryWithTitle: categoryTitle)
+    }
+}
+
