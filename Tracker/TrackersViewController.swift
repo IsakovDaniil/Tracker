@@ -164,7 +164,21 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Filtering and Data Management
     private func updateFilteredCategoties() {
+        let selectedWeekday = getWeekdayFromDate(selectedDate)
+        let searchText = searchBar.text?.lowercased() ?? ""
         
+        filteredCategories = categories.compactMap { category in
+            let filteredTrackers = category.trackers.filter { tracker in
+                let isDayMatched = tracker.isHabit ? tracker.schedule.contains(selectedWeekday) : true
+                let isSearchMatched = searchText.isEmpty || tracker.name.lowercased().contains(searchText)
+                
+                return isDayMatched && isSearchMatched
+            }
+            
+            return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }
+        collectionView.reloadData()
+        updateStubVisibility
     }
     
     private func updateStubVisibility() {
@@ -176,7 +190,6 @@ final class TrackersViewController: UIViewController {
     private func getWeekdayFromDate(_ date: Date) -> Weekday {
         let calendar = Calendar.current
         let weekdayComponent = calendar.component(.weekday, from: date)
-        
         
         switch weekdayComponent {
         case 1: return .sunday
