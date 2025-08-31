@@ -237,6 +237,10 @@ final class TrackersViewController: UIViewController {
         }
     }
     
+    private func getCompletionCount(for trackerID : UUID) -> Int {
+        return completedTrackers.filter { $0.trackerID == trackerID }.count
+    }
+    
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let modalVC = AddTrackersModalViewController()
