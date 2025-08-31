@@ -245,7 +245,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let modalVC = AddTrackersModalViewController()
-        
+        modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
         modalVC.modalTransitionStyle = .coverVertical
         present(modalVC, animated: true)
@@ -253,6 +253,8 @@ final class TrackersViewController: UIViewController {
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
+        updateFilteredCategories()
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
         let formattedDate = dateFormatter.string(from: selectedDate)
