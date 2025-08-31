@@ -58,6 +58,7 @@ final class TrackersViewController: UIViewController {
         let bar = UISearchBar()
         bar.placeholder = ViewConstants.Strings.searchBarPlaceholder
         bar.searchBarStyle = .minimal
+        bar.delegate = self
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
@@ -244,6 +245,7 @@ final class TrackersViewController: UIViewController {
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let modalVC = AddTrackersModalViewController()
+        
         modalVC.modalPresentationStyle = .pageSheet
         modalVC.modalTransitionStyle = .coverVertical
         present(modalVC, animated: true)
@@ -303,3 +305,15 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: UICollectionViewDelegate {
     
 }
+
+// MARK: - UISearchBarDelegate
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        updateFilteredCategories()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
