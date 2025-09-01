@@ -1,18 +1,19 @@
 import UIKit
 
 final class TrackerCell: UICollectionViewCell {
+    
     // MARK: - Properties
     private var tracker: Tracker?
     private var selectedDate: Date?
     private var isCompletedToday: Bool = false
-    private var completionCount: Int = 0
+    private var completionCount: Int = .zero
     private var completionHandler: ((UUID, Date, Bool) -> Void)?
     
     // MARK: - UI Elements
     private lazy var cardView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 16
-        view.layer.borderWidth = 1
+        view.layer.cornerRadius = TrackerCellConstants.Layout.cardCornerRadius
+        view.layer.borderWidth = TrackerCellConstants.Layout.cardBorderWidth
         view.layer.borderColor = UIColor.ypBorderCard.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -20,10 +21,13 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.systemFont(
+            ofSize: TrackerCellConstants.Typography.emojiLabelFontSize,
+            weight: TrackerCellConstants.Typography.emojiLabelWeight
+        )
         label.textAlignment = .center
-        label.backgroundColor = .white.withAlphaComponent(0.3)
-        label.layer.cornerRadius = 12
+        label.backgroundColor = UIColor.white.withAlphaComponent(TrackerCellConstants.Layout.emojiLabelBackgroundAlpha)
+        label.layer.cornerRadius = TrackerCellConstants.Layout.counterButtonCornerRadius
         label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -31,9 +35,12 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = UIColor.ypWhite
-        label.numberOfLines = 2
+        label.font = UIFont.systemFont(
+            ofSize: TrackerCellConstants.Typography.titleLabelFontSize,
+            weight: TrackerCellConstants.Typography.titleLabelWeight
+        )
+        label.textColor = .ypWhite
+        label.numberOfLines = TrackerCellConstants.Layout.titleLabelNumberOfLines
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -47,22 +54,25 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var counterLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = UIColor.ypBlack
+        label.font = UIFont.systemFont(
+            ofSize: TrackerCellConstants.Typography.counterLabelFontSize,
+            weight: TrackerCellConstants.Typography.counterLabelWeight
+        )
+        label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var counterButton: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 17
+        button.layer.cornerRadius = TrackerCellConstants.Layout.counterButtonCornerRadius
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(counterButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    //MARK: - Init
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -89,30 +99,29 @@ final class TrackerCell: UICollectionViewCell {
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: 90),
+            cardView.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.cardHeight),
             
-            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            emojiLabel.widthAnchor.constraint(equalToConstant: 24),
-            emojiLabel.heightAnchor.constraint(equalToConstant: 24),
+            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: TrackerCellConstants.Layout.emojiLabelTopInset),
+            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.emojiLabelLeadingInset),
+            emojiLabel.widthAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiLabelSize),
+            emojiLabel.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiLabelSize),
             
-            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.titleLabelLeadingInset),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: TrackerCellConstants.Layout.titleLabelTrailingInset),
+            titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: TrackerCellConstants.Layout.titleLabelBottomInset),
             
             counterView.topAnchor.constraint(equalTo: cardView.bottomAnchor),
             counterView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor),
             counterView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor),
-            counterView.heightAnchor.constraint(equalToConstant: 58),
+            counterView.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.counterViewHeight),
             
-            counterLabel.topAnchor.constraint(equalTo: counterView.topAnchor, constant: 16),
-            counterLabel.leadingAnchor.constraint(equalTo: counterView.leadingAnchor, constant: 12),
+            counterLabel.topAnchor.constraint(equalTo: counterView.topAnchor, constant: TrackerCellConstants.Layout.counterLabelTopInset),
+            counterLabel.leadingAnchor.constraint(equalTo: counterView.leadingAnchor, constant: TrackerCellConstants.Layout.counterLabelLeadingInset),
             
-            
-            counterButton.trailingAnchor.constraint(equalTo: counterView.trailingAnchor, constant: -12),
-            counterButton.topAnchor.constraint(equalTo: counterView.topAnchor, constant: 8),
-            counterButton.widthAnchor.constraint(equalToConstant: 34),
-            counterButton.heightAnchor.constraint(equalToConstant: 34)
+            counterButton.trailingAnchor.constraint(equalTo: counterView.trailingAnchor, constant: TrackerCellConstants.Layout.counterButtonTrailingInset),
+            counterButton.topAnchor.constraint(equalTo: counterView.topAnchor, constant: TrackerCellConstants.Layout.counterButtonTopInset),
+            counterButton.widthAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.counterButtonSize),
+            counterButton.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.counterButtonSize)
         ])
     }
     
@@ -144,13 +153,13 @@ final class TrackerCell: UICollectionViewCell {
         
         switch count {
         case 0:
-            daysText = "дней"
+            daysText = TrackerCellConstants.Strings.daysMany
         case 1:
-            daysText = "день"
+            daysText = TrackerCellConstants.Strings.daySingle
         case 2...4:
-            daysText = "дня"
+            daysText = TrackerCellConstants.Strings.daysFew
         default:
-            daysText = "дней"
+            daysText = TrackerCellConstants.Strings.daysMany
         }
         
         counterLabel.text = "\(count) \(daysText)"
@@ -166,8 +175,8 @@ final class TrackerCell: UICollectionViewCell {
         counterButton.backgroundColor = buttonColor
         
         let buttonImage = isCompletedToday ?
-        UIImage(systemName: "checkmark") :
-        UIImage(systemName: "plus")
+        UIImage(systemName: TrackerCellConstants.Strings.checkmarkSymbol) :
+        UIImage(systemName: TrackerCellConstants.Strings.plusSymbol)
         
         counterButton.setImage(buttonImage, for: .normal)
         counterButton.tintColor = .white
@@ -186,14 +195,14 @@ final class TrackerCell: UICollectionViewCell {
         
         if selectedDateOnly > todayOnly {
             counterButton.isEnabled = false
-            counterButton.alpha = 0.5
+            counterButton.alpha = TrackerCellConstants.Layout.buttonDisabledAlpha
         } else {
             counterButton.isEnabled = true
-            counterButton.alpha = 1.0
+            counterButton.alpha = TrackerCellConstants.Layout.buttonEnabledAlpha
         }
     }
     
-    //MARK: - Action
+    // MARK: - Action
     @objc private func counterButtonTapped() {
         guard let tracker,
               let selectedDate,
@@ -215,4 +224,3 @@ final class TrackerCell: UICollectionViewCell {
         updateCounterButton()
     }
 }
-
