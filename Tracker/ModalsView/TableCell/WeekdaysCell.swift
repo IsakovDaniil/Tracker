@@ -1,12 +1,13 @@
 import UIKit
 
-class WeekdaysCell: UITableViewCell {
+final class WeekdaysCell: UITableViewCell {
     static let identifier = "WeekdaysCell"
     
     private let dayLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: WeekdaysCellConstants.Typography.dayLabelFontSize,
+                                       weight: WeekdaysCellConstants.Typography.dayLabelFontWeight)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -27,10 +28,10 @@ class WeekdaysCell: UITableViewCell {
         contentView.backgroundColor = .clear
         
         NSLayoutConstraint.activate([
-            dayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            dayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: WeekdaysCellConstants.Layout.leadingInset),
             dayLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
-            toggleSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            toggleSwitch.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: WeekdaysCellConstants.Layout.trailingInset),
             toggleSwitch.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

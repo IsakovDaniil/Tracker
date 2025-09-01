@@ -3,7 +3,7 @@ import UIKit
 final class OptionCell: UITableViewCell {
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("")
+    private lazy var titleLabel = UILabel.ypTitle(OptionCellConstants.Strings.emptySubtitle)
     private lazy var subtitleLabel = UILabel.ypSubtitleCell()
     
     // MARK: - Init
@@ -30,17 +30,17 @@ final class OptionCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // titleLabel
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: OptionCellConstants.Layout.titleLabelTopInset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: OptionCellConstants.Layout.titleLabelLeadingInset),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: OptionCellConstants.Layout.titleLabelTrailingInset),
             
             // subtitleLabel
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40),
-            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: OptionCellConstants.Layout.subtitleLabelTopInset),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: OptionCellConstants.Layout.subtitleLabelLeadingInset),
+            subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: OptionCellConstants.Layout.subtitleLabelTrailingInset),
+            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: OptionCellConstants.Layout.subtitleLabelBottomInset),
             
-            contentView.heightAnchor.constraint(equalToConstant: 75)
+            contentView.heightAnchor.constraint(equalToConstant: OptionCellConstants.Layout.contentViewHeight)
         ])
     }
     
