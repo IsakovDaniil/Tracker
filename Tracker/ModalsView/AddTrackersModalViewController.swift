@@ -25,6 +25,7 @@ final class AddTrackersModalViewController: UIViewController {
     
     // MARK: - Properties
     weak var delegate: AddTrackersModalDelegate?
+    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
     
@@ -106,6 +107,12 @@ extension AddTrackersModalViewController: NewHabitDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
         delegate?.didCreateTracker(tracker, categoryTitle: categoryTitle)
         
-        dismiss(animated: true)
+        if let presentedVC = presentedViewController {
+            presentedVC.dismiss(animated: true) { [weak self] in
+                self?.dismiss(animated: true)
+            }
+        } else {
+            dismiss(animated: true)
+        }
     }
 }

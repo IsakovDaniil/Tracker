@@ -57,7 +57,7 @@ final class TrackerCell: UICollectionViewCell {
         let button = UIButton()
         button.layer.cornerRadius = 17
         button.layer.masksToBounds = true
-        button.addTarget(nil, action: #selector(counterButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(counterButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

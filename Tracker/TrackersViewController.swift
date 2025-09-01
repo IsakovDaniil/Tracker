@@ -94,7 +94,7 @@ final class TrackersViewController: UIViewController {
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
-        collection.register(TrackerHeaderView.self, forCellWithReuseIdentifier: "TrackerHeaderView")
+        collection.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackerHeaderView")
         collection.backgroundColor = UIColor.ypWhite
         collection.delegate = self
         collection.dataSource = self
@@ -109,6 +109,8 @@ final class TrackersViewController: UIViewController {
         setupView()
         setupConstraints()
         setupNavigation()
+        setupInitialData()
+        updateFilteredCategories()
     }
     
     // MARK: - Setup Methods
@@ -205,7 +207,7 @@ final class TrackersViewController: UIViewController {
     }
     
     // MARK: - Tracker Management
-    private func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
+    func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
         var updatedCategories = categories
         if let index = updatedCategories.firstIndex(where: { $0.title == title }) {
             var updatedTrackers = updatedCategories[index].trackers
@@ -252,7 +254,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
+        selectedDate = sender.date
         updateFilteredCategories()
         
         let dateFormatter = DateFormatter()
@@ -305,11 +307,10 @@ extension TrackersViewController: UICollectionViewDataSource {
               ) as? TrackerHeaderView else {
             return UICollectionReusableView()
         }
+        
         header.configure(with: filteredCategories[indexPath.section].title)
         return header
     }
-    
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -318,6 +319,22 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = max(0, collectionView.frame.width - 16)
         let cellWidth = availableWidth / 2
         return CGSize(width: max(0, cellWidth), height: max(0, 148))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 12, left: 0, bottom: 16, right: 0)
     }
 }
 

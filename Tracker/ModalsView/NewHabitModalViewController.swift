@@ -60,6 +60,7 @@ final class NewHabitModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        updateCreateButtonState()
     }
     
     // MARK: - Setup View
