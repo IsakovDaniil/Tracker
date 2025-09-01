@@ -110,7 +110,7 @@ final class TrackerCell: UICollectionViewCell {
             
             
             counterButton.trailingAnchor.constraint(equalTo: counterView.trailingAnchor, constant: -12),
-            counterButton.centerYAnchor.constraint(equalTo: counterView.centerYAnchor),
+            counterButton.topAnchor.constraint(equalTo: counterView.topAnchor, constant: 8),
             counterButton.widthAnchor.constraint(equalToConstant: 34),
             counterButton.heightAnchor.constraint(equalToConstant: 34)
         ])

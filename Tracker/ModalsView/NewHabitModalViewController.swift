@@ -74,6 +74,10 @@ final class NewHabitModalViewController: UIViewController {
         view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
         view.addSubview(buttonsStackView)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Setup Constraints
@@ -160,6 +164,10 @@ final class NewHabitModalViewController: UIViewController {
         delegate?.didCreateTracker(newTracker, categoryTitle: category)
         
         dismiss(animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
