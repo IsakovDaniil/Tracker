@@ -1,6 +1,17 @@
 import UIKit
 
-final class NewEventModalViewController: UIViewController {    
+protocol EventDelegate: AnyObject {
+    func didCreateEvent(_ tracker: Tracker, categoryTitle: String)
+}
+
+final class NewEventModalViewController: UIViewController {
+    // MARK: - Properties
+    weak var delegate: EventDelegate?
+    private var selectedCategory: String? = nil
+    private let defaultColor: UIColor = .ypSelection5
+    private let defaultEmoji: String = "😪"
+    
+    
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
     
@@ -61,6 +72,10 @@ final class NewEventModalViewController: UIViewController {
         view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
         view.addSubview(buttonsStackView)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     // MARK: - Setup Constraints
@@ -90,6 +105,23 @@ final class NewEventModalViewController: UIViewController {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
+    
+    // MARK: - Validation
+    private func updateCreateButtonState() {
+        let isValid = isFormValid()
+        
+        createButton.isEnabled = isValid
+        createButton.backgroundColor = isValid ? .ypBlack : .ypGray
+    }
+    
+    private func isFormValid() -> Bool {
+        guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
+        
+        guard selectedCategory != nil else { return false }
+        
+        return true
+    }
+    
     // MARK: - Actions
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
@@ -102,6 +134,7 @@ final class NewEventModalViewController: UIViewController {
         } else {
             characterLimitLabel.isHidden = true
         }
+        updateCreateButtonState()
     }
     
     @objc private func cancelButtonTapped() {
@@ -109,7 +142,28 @@ final class NewEventModalViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
+        guard isFormValid(),
+              let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
+              let category = selectedCategory else {
+            return
+        }
         
+        let newEvent = Tracker(
+            id: UUID(),
+            name: title,
+            color: defaultColor,
+            emoji: defaultEmoji,
+            schedule: Weekday.allCases,
+            isHabit: true
+        )
+        
+        delegate?.didCreateEvent(newEvent, categoryTitle: category)
+        
+        dismiss(animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 // MARK: - UITextFieldDelegate
@@ -131,7 +185,7 @@ extension NewEventModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(title: "Категория", subtitle: nil)
+        cell.configure(title: "Категория", subtitle: selectedCategory)
         return cell
     }
 }
@@ -140,5 +194,15 @@ extension NewEventModalViewController: UITableViewDataSource {
 extension NewEventModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.row == 0 {
+            selectedCategory = "Сделать"
+            optionsTableView.reloadData()
+            updateCreateButtonState()
+        }
     }
 }

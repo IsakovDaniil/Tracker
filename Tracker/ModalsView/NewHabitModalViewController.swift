@@ -5,7 +5,7 @@ protocol NewHabitDelegate: AnyObject {
 }
 
 final class NewHabitModalViewController: UIViewController {
-    // MARK: - Property
+    // MARK: - Properties
     weak var delegate: NewHabitDelegate?
     private var selectedDays: [Weekday] = []
     private var selectedCategory: String? = nil
