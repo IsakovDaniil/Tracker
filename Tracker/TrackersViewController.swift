@@ -358,5 +358,9 @@ extension TrackersViewController: AddTrackersModalDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
         addTracker(tracker, toCategoryWithTitle: categoryTitle)
     }
+    
+    func didCreateEvent(_ event: Tracker, categoryTitle: String) {
+        addTracker(event, toCategoryWithTitle: categoryTitle)
+    }
 }
 

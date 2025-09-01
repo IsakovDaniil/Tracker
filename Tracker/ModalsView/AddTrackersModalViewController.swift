@@ -2,6 +2,7 @@ import UIKit
 
 protocol AddTrackersModalDelegate: AnyObject {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String)
+    func didCreateEvent(_ event: Tracker, categoryTitle: String)
 }
 
 final class AddTrackersModalViewController: UIViewController {
@@ -96,6 +97,7 @@ final class AddTrackersModalViewController: UIViewController {
     
     @objc private func addEventButtonTapped() {
         let newEventVC = NewEventModalViewController()
+        newEventVC.delegate = self
         newEventVC.modalPresentationStyle = .pageSheet
         newEventVC.modalTransitionStyle = .coverVertical
         present(newEventVC, animated: true)
@@ -103,9 +105,21 @@ final class AddTrackersModalViewController: UIViewController {
 }
 
 // MARK: - NewHabitDelegate
-extension AddTrackersModalViewController: NewHabitDelegate {
+extension AddTrackersModalViewController: NewHabitDelegate, EventDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
         delegate?.didCreateTracker(tracker, categoryTitle: categoryTitle)
+        
+        if let presentedVC = presentedViewController {
+            presentedVC.dismiss(animated: true) { [weak self] in
+                self?.dismiss(animated: true)
+            }
+        } else {
+            dismiss(animated: true)
+        }
+    }
+    
+    func didCreateEvent(_ event: Tracker, categoryTitle: String) {
+        delegate?.didCreateEvent(event, categoryTitle: categoryTitle)
         
         if let presentedVC = presentedViewController {
             presentedVC.dismiss(animated: true) { [weak self] in

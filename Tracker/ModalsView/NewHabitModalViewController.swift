@@ -2,6 +2,7 @@ import UIKit
 
 protocol NewHabitDelegate: AnyObject {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String)
+    func didCreateEvent(_ event: Tracker, categoryTitle: String)
 }
 
 final class NewHabitModalViewController: UIViewController {
@@ -158,7 +159,7 @@ final class NewHabitModalViewController: UIViewController {
             color: defaultColor,
             emoji: defaultEmoji,
             schedule: selectedDays,
-            isHabit: true
+            isHabit: false
         )
         
         delegate?.didCreateTracker(newTracker, categoryTitle: category)

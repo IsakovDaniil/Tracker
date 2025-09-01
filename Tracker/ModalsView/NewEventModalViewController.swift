@@ -1,16 +1,15 @@
 import UIKit
 
 protocol EventDelegate: AnyObject {
-    func didCreateEvent(_ tracker: Tracker, categoryTitle: String)
+    func didCreateEvent(_ event: Tracker, categoryTitle: String)
 }
 
 final class NewEventModalViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: EventDelegate?
     private var selectedCategory: String? = nil
-    private let defaultColor: UIColor = .ypSelection5
-    private let defaultEmoji: String = "😪"
-    
+    private let defaultColor: UIColor = .ypSelection15
+    private let defaultEmoji: String = "❤️"
     
     // MARK: - UI Elements
     private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
@@ -59,6 +58,7 @@ final class NewEventModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        updateCreateButtonState()
     }
     
     // MARK: - Setup View
