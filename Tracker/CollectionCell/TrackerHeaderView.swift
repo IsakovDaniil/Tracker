@@ -4,7 +4,7 @@ final class TrackerHeaderView: UICollectionReusableView {
     // MARK: - UI Elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: TrackerHeaderViewConstants.Typography.titleLabelFontSize, weight: TrackerHeaderViewConstants.Typography.titleLabelWeight)
         label.textColor = UIColor.ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -28,9 +28,9 @@ final class TrackerHeaderView: UICollectionReusableView {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TrackerHeaderViewConstants.Layout.titleLabelLeadingInset),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: TrackerHeaderViewConstants.Layout.titleLabelTrailingInset),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: TrackerHeaderViewConstants.Layout.titleLabelBottomInset)
         ])
     }
     

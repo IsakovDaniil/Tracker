@@ -47,3 +47,4 @@ enum TrackerCellConstants {
         static let plusSymbol = "plus"
     }
 }
+
