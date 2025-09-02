@@ -5,7 +5,7 @@ protocol SelectScheduleDelegate: AnyObject {
 }
 
 final class SelectScheduleModalViewController: UIViewController {
-    // MARK: - Property
+    // MARK: - Properties
     private var switchStates = [Bool](repeating: false, count: Weekday.allCases.count)
     weak var delegate: SelectScheduleDelegate?
     

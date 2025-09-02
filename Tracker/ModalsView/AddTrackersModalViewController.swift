@@ -6,6 +6,7 @@ protocol AddTrackersModalDelegate: AnyObject {
 }
 
 final class AddTrackersModalViewController: UIViewController {
+    
     // MARK: - Properties
     weak var delegate: AddTrackersModalDelegate?
     

@@ -1,6 +1,7 @@
 import UIKit
 
 final class TrackerHeaderView: UICollectionReusableView {
+    
     // MARK: - UI Elements
     private lazy var titleLabel: UILabel = {
         let label = UILabel()

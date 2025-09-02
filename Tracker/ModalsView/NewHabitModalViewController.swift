@@ -6,6 +6,7 @@ protocol NewHabitDelegate: AnyObject {
 }
 
 final class NewHabitModalViewController: UIViewController {
+    
     // MARK: - Properties
     weak var delegate: NewHabitDelegate?
     private var selectedDays: [Weekday] = []
@@ -15,7 +16,7 @@ final class NewHabitModalViewController: UIViewController {
     private let defaultEmoji: String = "😪"
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Новая привычка")
+    private lazy var titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -33,14 +34,14 @@ final class NewHabitModalViewController: UIViewController {
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
         stack.axis = .horizontal
-        stack.spacing = 8
+        stack.spacing = NewHabitConstants.Layout.stackSpacing
         stack.distribution = .fillEqually
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
-        title: "Отменить",
+        title: NewHabitConstants.Strings.cancelButton,
         titleColor: .ypRed,
         backgroundColor: .clear,
         hasBorder: true,
@@ -49,7 +50,7 @@ final class NewHabitModalViewController: UIViewController {
     )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: "Создать",
+        title: NewHabitConstants.Strings.createButton,
         titleColor: .ypWhite,
         backgroundColor: .ypGray,
         target: self,
@@ -67,9 +68,10 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - Setup View
     private func setupView() {
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = NewHabitConstants.Layout.viewCornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.backgroundColor = UIColor.ypWhite
+        view.backgroundColor = .ypWhite
+        
         view.addSubview(titleLabel)
         view.addSubview(titleTextField)
         view.addSubview(characterLimitLabel)
@@ -84,56 +86,51 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            titleTextField.heightAnchor.constraint(equalToConstant: 75),
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NewHabitConstants.Layout.titleTextFieldTopInset),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
+            titleTextField.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.titleTextFieldHeight),
             
-            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
-            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            characterLimitLabel.heightAnchor.constraint(equalToConstant: 22),
+            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: NewHabitConstants.Layout.characterLimitLabelTopInset),
+            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
+            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
+            characterLimitLabel.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.characterLimitLabelHeight),
             
-            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: 8),
-            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            optionsTableView.heightAnchor.constraint(equalToConstant: 75 * 2),
+            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: NewHabitConstants.Layout.optionsTableViewTopInset),
+            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.optionsTableHorizontalInset),
+            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.optionsTableHorizontalInset),
+            optionsTableView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.optionsTableViewHeight),
             
-            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
+            buttonsStackView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.buttonsStackViewHeight)
         ])
     }
     
     // MARK: - Validation
     private func updateCreateButtonState() {
         let isValid = isFormValid()
-        
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? .ypBlack : .ypGray
     }
     
     private func isFormValid() -> Bool {
         guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        
         guard selectedCategory != nil else { return false }
-        
         guard !selectedDays.isEmpty else { return false }
-        
         return true
     }
     
     // MARK: - Actions
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        
-        if text.count >= 38 {
-            if text.count > 38 {
-                textField.text = String(text.prefix(38))
+        if text.count >= NewHabitConstants.Limits.titleMaxLength {
+            if text.count > NewHabitConstants.Limits.titleMaxLength {
+                textField.text = String(text.prefix(NewHabitConstants.Limits.titleMaxLength))
             }
             characterLimitLabel.isHidden = false
         } else {
@@ -149,9 +146,7 @@ final class NewHabitModalViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard isFormValid(),
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
-              let category = selectedCategory else {
-            return
-        }
+              let category = selectedCategory else { return }
         
         let newTracker = Tracker(
             id: UUID(),
@@ -163,7 +158,6 @@ final class NewHabitModalViewController: UIViewController {
         )
         
         delegate?.didCreateTracker(newTracker, categoryTitle: category)
-        
         dismiss(animated: true)
     }
     
@@ -171,7 +165,6 @@ final class NewHabitModalViewController: UIViewController {
         view.endEditing(true)
     }
 }
-
 
 // MARK: - UITextFieldDelegate
 extension NewHabitModalViewController: UITextFieldDelegate {
@@ -181,12 +174,9 @@ extension NewHabitModalViewController: UITextFieldDelegate {
     }
 }
 
-
 // MARK: - UITableViewDataSource
 extension NewHabitModalViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 2 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionCell else {
@@ -194,15 +184,15 @@ extension NewHabitModalViewController: UITableViewDataSource {
         }
         
         if indexPath.row == 0 {
-            cell.configure(title: "Категория", subtitle: selectedCategory)
+            cell.configure(title: NewHabitConstants.Strings.categoryTitle, subtitle: selectedCategory)
         } else {
             let subtitle: String?
             if selectedDays.count == 7 {
-                subtitle = "Каждый день"
+                subtitle = NewHabitConstants.Strings.scheduleEveryday
             } else {
                 subtitle = selectedDays.isEmpty ? nil : selectedDays.map { $0.shortName }.joined(separator: ", ")
             }
-            cell.configure(title: "Расписание", subtitle: subtitle)
+            cell.configure(title: NewHabitConstants.Strings.scheduleTitle, subtitle: subtitle)
         }
         
         return cell
@@ -212,7 +202,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        NewHabitConstants.Layout.titleTextFieldHeight
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -225,17 +215,15 @@ extension NewHabitModalViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         if indexPath.row == 0 {
-            selectedCategory = "Важные дела"
+            selectedCategory = NewHabitConstants.Strings.defaultCategory
             optionsTableView.reloadData()
             updateCreateButtonState()
-            
         } else if indexPath.row == 1 {
             let scheduleVC = SelectScheduleModalViewController()
             scheduleVC.delegate = self
             scheduleVC.modalPresentationStyle = .formSheet
-            present(scheduleVC, animated: true, completion: nil)
+            present(scheduleVC, animated: true)
         }
     }
 }

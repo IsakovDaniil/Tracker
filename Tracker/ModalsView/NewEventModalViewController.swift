@@ -5,6 +5,7 @@ protocol EventDelegate: AnyObject {
 }
 
 final class NewEventModalViewController: UIViewController {
+    
     // MARK: - Properties
     weak var delegate: EventDelegate?
     private var selectedCategory: String? = nil
