@@ -5,12 +5,13 @@ protocol SelectScheduleDelegate: AnyObject {
 }
 
 final class SelectScheduleModalViewController: UIViewController {
+    
     // MARK: - Properties
     private var switchStates = [Bool](repeating: false, count: Weekday.allCases.count)
     weak var delegate: SelectScheduleDelegate?
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Расписание")
+    private lazy var titleLabel = UILabel.ypTitle(SelectScheduleConstants.Strings.titleLabel)
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -19,15 +20,14 @@ final class SelectScheduleModalViewController: UIViewController {
         table.dataSource = self
         table.delegate = self
         table.backgroundColor = UIColor.ypBackground
-        table.layer.cornerRadius = 16
+        table.layer.cornerRadius = SelectScheduleConstants.Layout.tableCornerRadius
         table.layer.masksToBounds = true
         table.translatesAutoresizingMaskIntoConstraints = false
-        
         return table
     }()
     
     private lazy var doneButton = UIButton.ypAddModalButton(
-        title: "Готово",
+        title: SelectScheduleConstants.Strings.doneButton,
         target: self,
         action: #selector(doneButtonTapped)
     )
@@ -43,9 +43,10 @@ final class SelectScheduleModalViewController: UIViewController {
     // MARK: - Setup View
     private func setupView() {
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = SelectScheduleConstants.Layout.viewCornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
+        
         view.addSubview(titleLabel)
         view.addSubview(tableView)
         view.addSubview(doneButton)
@@ -54,24 +55,26 @@ final class SelectScheduleModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: SelectScheduleConstants.Layout.titleTopInset),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            doneButton.heightAnchor.constraint(equalToConstant: 60),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: SelectScheduleConstants.Layout.tableTopInset),
+            tableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -SelectScheduleConstants.Layout.tableBottomInset),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SelectScheduleConstants.Layout.tableHorizontalInset),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SelectScheduleConstants.Layout.tableHorizontalInset),
             
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            tableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -47),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SelectScheduleConstants.Layout.doneButtonBottomInset),
+            doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SelectScheduleConstants.Layout.doneButtonHorizontalInset),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SelectScheduleConstants.Layout.doneButtonHorizontalInset),
+            doneButton.heightAnchor.constraint(equalToConstant: SelectScheduleConstants.Layout.doneButtonHeight)
         ])
     }
     
-    // MARK: - Action
+    // MARK: - Actions
     @objc private func doneButtonTapped() {
-        let selectedDays = Weekday.allCases.enumerated().filter { switchStates[$0.offset] }.map { $0.element }
+        let selectedDays = Weekday.allCases.enumerated()
+            .filter { switchStates[$0.offset] }
+            .map { $0.element }
         delegate?.didSelectDays(selectedDays)
         dismiss(animated: true)
     }
@@ -80,7 +83,7 @@ final class SelectScheduleModalViewController: UIViewController {
 // MARK: - UITableView DataSource & Delegate
 extension SelectScheduleModalViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Weekday.allCases.count
+        Weekday.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,7 +98,7 @@ extension SelectScheduleModalViewController: UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.frame.height / CGFloat(Weekday.allCases.count)
+        tableView.frame.height / CGFloat(Weekday.allCases.count)
     }
     
     @objc private func switchToggled(_ sender: UISwitch) {
