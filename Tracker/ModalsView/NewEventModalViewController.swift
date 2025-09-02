@@ -12,7 +12,7 @@ final class NewEventModalViewController: UIViewController {
     private let defaultEmoji: String = "❤️"
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle("Новое нерегулярное событие")
+    private lazy var titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -26,7 +26,7 @@ final class NewEventModalViewController: UIViewController {
         delegate: self,
         separatorStyle: .none
     )
-        
+    
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
         stack.axis = .horizontal
@@ -37,7 +37,7 @@ final class NewEventModalViewController: UIViewController {
     }()
     
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
-        title: "Отменить",
+        title: NewEventConstants.Strings.cancelButton,
         titleColor: .ypRed,
         backgroundColor: .clear,
         hasBorder: true,
@@ -46,7 +46,7 @@ final class NewEventModalViewController: UIViewController {
     )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: "Создать",
+        title: NewEventConstants.Strings.createButton,
         titleColor: .ypWhite,
         backgroundColor: .ypBlack,
         target: self,
@@ -64,7 +64,7 @@ final class NewEventModalViewController: UIViewController {
     // MARK: - Setup View
     private func setupView() {
         view.layer.masksToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = NewEventConstants.Layout.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
@@ -81,28 +81,28 @@ final class NewEventModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewEventConstants.Layout.titleTopInset),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            titleTextField.heightAnchor.constraint(equalToConstant: 75),
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NewEventConstants.Layout.textFieldTopInset),
+            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.sideInset),
+            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.sideInset),
+            titleTextField.heightAnchor.constraint(equalToConstant: NewEventConstants.Layout.textFieldHeight),
             
-            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 8),
-            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            characterLimitLabel.heightAnchor.constraint(equalToConstant: 22),
+            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: NewEventConstants.Layout.characterLimitTopInset),
+            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.sideInset),
+            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.sideInset),
+            characterLimitLabel.heightAnchor.constraint(equalToConstant: NewEventConstants.Layout.characterLimitHeight),
             
-            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: 8),
-            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            optionsTableView.heightAnchor.constraint(equalToConstant: 75),
+            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: NewEventConstants.Layout.tableTopInset),
+            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.sideInset),
+            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.sideInset),
+            optionsTableView.heightAnchor.constraint(equalToConstant: NewEventConstants.Layout.tableHeight),
             
-            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.buttonsSideInset),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.buttonsSideInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            buttonsStackView.heightAnchor.constraint(equalToConstant: 60),
+            buttonsStackView.heightAnchor.constraint(equalToConstant: NewEventConstants.Layout.buttonsHeight),
         ])
     }
     
@@ -126,9 +126,9 @@ final class NewEventModalViewController: UIViewController {
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
-        if text.count >= 38 {
-            if text.count > 38 {
-                textField.text = String(text.prefix(38))
+        if text.count >= NewEventConstants.Limits.titleCharacterLimit {
+            if text.count > NewEventConstants.Limits.titleCharacterLimit {
+                textField.text = String(text.prefix(NewEventConstants.Limits.titleCharacterLimit))
             }
             characterLimitLabel.isHidden = false
         } else {
@@ -166,6 +166,7 @@ final class NewEventModalViewController: UIViewController {
         view.endEditing(true)
     }
 }
+
 // MARK: - UITextFieldDelegate
 extension NewEventModalViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -185,7 +186,7 @@ extension NewEventModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(title: "Категория", subtitle: selectedCategory)
+        cell.configure(title: NewEventConstants.Strings.category, subtitle: selectedCategory)
         return cell
     }
 }
@@ -193,14 +194,14 @@ extension NewEventModalViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension NewEventModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return NewEventConstants.Layout.tableHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.row == 0 {
-            selectedCategory = "Сделать"
+        if indexPath.row == .zero {
+            selectedCategory = NewEventConstants.Strings.defaultCategory
             optionsTableView.reloadData()
             updateCreateButtonState()
         }
