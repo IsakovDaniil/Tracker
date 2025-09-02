@@ -3,6 +3,7 @@ import UIKit
 final class WeekdaysCell: UITableViewCell {
     static let identifier = "WeekdaysCell"
     
+    // MARK - UI Elements
     private let dayLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.ypBlack
@@ -19,6 +20,7 @@ final class WeekdaysCell: UITableViewCell {
         return switchView
     }()
 
+    // MARK: Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(dayLabel)
@@ -40,6 +42,7 @@ final class WeekdaysCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Configuration
     func configure(with title: String, isOn: Bool) {
         dayLabel.text = title
         toggleSwitch.isOn = isOn
