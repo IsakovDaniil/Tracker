@@ -16,7 +16,8 @@ final class SelectScheduleModalViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let table = UITableView()
         table.register(WeekdaysCell.self, forCellReuseIdentifier: WeekdaysCell.identifier)
-        table.separatorStyle = .none
+        table.separatorStyle = .singleLine
+        table.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         table.dataSource = self
         table.delegate = self
         table.backgroundColor = UIColor.ypBackground
