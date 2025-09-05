@@ -6,10 +6,11 @@ enum TrackerCellConstants {
         static let cardBorderWidth: CGFloat = 1
         static let cardHeight: CGFloat = 90
         
-        static let emojiLabelSize: CGFloat = 24
-        static let emojiLabelTopInset: CGFloat = 12
-        static let emojiLabelLeadingInset: CGFloat = 12
-        static let emojiLabelBackgroundAlpha: CGFloat = 0.3
+        static let emojiViewSize: CGFloat = 24
+        static let emojiViewTopInset: CGFloat = 12
+        static let emojiViewLeadingInset: CGFloat = 12
+        static let emojiViewBackgroundAlpha: CGFloat = 0.3
+        static let emojiViewCornerRadius: CGFloat = 12
         
         static let titleLabelLeadingInset: CGFloat = 12
         static let titleLabelTrailingInset: CGFloat = -12

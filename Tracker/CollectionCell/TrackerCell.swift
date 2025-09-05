@@ -19,16 +19,20 @@ final class TrackerCell: UICollectionViewCell {
         return view
     }()
     
+    private lazy var emojiView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = TrackerCellConstants.Layout.emojiViewCornerRadius
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white.withAlphaComponent(TrackerCellConstants.Layout.emojiViewBackgroundAlpha)
+        return view
+    }()
+    
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(
             ofSize: TrackerCellConstants.Typography.emojiLabelFontSize,
             weight: TrackerCellConstants.Typography.emojiLabelWeight
         )
-        label.textAlignment = .center
-        label.backgroundColor = UIColor.white.withAlphaComponent(TrackerCellConstants.Layout.emojiLabelBackgroundAlpha)
-        label.layer.cornerRadius = TrackerCellConstants.Layout.counterButtonCornerRadius
-        label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,7 +90,8 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - Setup View
     private func setupView() {
         contentView.addSubview(cardView)
-        cardView.addSubview(emojiLabel)
+        cardView.addSubview(emojiView)
+        emojiView.addSubview(emojiLabel)
         cardView.addSubview(titleLabel)
         contentView.addSubview(counterView)
         counterView.addSubview(counterLabel)
@@ -101,10 +106,13 @@ final class TrackerCell: UICollectionViewCell {
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardView.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.cardHeight),
             
-            emojiLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: TrackerCellConstants.Layout.emojiLabelTopInset),
-            emojiLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.emojiLabelLeadingInset),
-            emojiLabel.widthAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiLabelSize),
-            emojiLabel.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiLabelSize),
+            emojiView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: TrackerCellConstants.Layout.emojiViewTopInset),
+            emojiView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.emojiViewLeadingInset),
+            emojiView.widthAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiViewSize),
+            emojiView.heightAnchor.constraint(equalToConstant: TrackerCellConstants.Layout.emojiViewSize),
+            
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
             
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.titleLabelLeadingInset),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: TrackerCellConstants.Layout.titleLabelTrailingInset),
