@@ -2,38 +2,11 @@ import UIKit
 
 final class TrackersViewController: UIViewController {
     
-    // MARK: - Constants
-    private enum ViewConstants {
-        struct Layout {
-            static let titleLabelLeadingInset: CGFloat = 16
-            
-            static let searchBarTopInset: CGFloat = 7
-            static let searchBarLeadingInset: CGFloat = 10
-            static let searchBarTrailingInset: CGFloat = -10
-            static let searchBarHeight: CGFloat = 36
-            
-            static let stubStackTopInset: CGFloat = 230
-            static let stubStackSpacing: CGFloat = 8
-        }
-        
-        struct Typography {
-            static let titleLabelFontSize: CGFloat = 34
-            static let stubLabelFontSize: CGFloat = 12
-        }
-        
-        struct Strings {
-            static let titleText = "Трекеры"
-            static let searchBarPlaceholder = "Поиск"
-            static let stubLabelText = "Что будем отслеживать?"
-        }
-    }
-    
     // MARK: - Properties
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var filteredCategories: [TrackerCategory] = []
     private var selectedDate: Date = Date()
-    
     
     // MARK: - UI Elements
     private lazy var datePicker: UIDatePicker = {
@@ -46,9 +19,9 @@ final class TrackersViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = ViewConstants.Strings.titleText
+        label.text = TrackersViewConstants.Strings.titleText
         label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: ViewConstants.Typography.titleLabelFontSize, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: TrackersViewConstants.Typography.titleLabelFontSize, weight: .bold)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -56,7 +29,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.placeholder = ViewConstants.Strings.searchBarPlaceholder
+        bar.placeholder = TrackersViewConstants.Strings.searchBarPlaceholder
         bar.searchBarStyle = .minimal
         bar.delegate = self
         bar.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +39,7 @@ final class TrackersViewController: UIViewController {
     private lazy var stubStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = ViewConstants.Layout.stubStackSpacing
+        stack.spacing = TrackersViewConstants.Layout.stubStackSpacing
         stack.alignment = .center
         stack.distribution = .equalCentering
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -82,9 +55,9 @@ final class TrackersViewController: UIViewController {
     
     private lazy var stubLabel: UILabel = {
         let label = UILabel()
-        label.text = ViewConstants.Strings.stubLabelText
+        label.text = TrackersViewConstants.Strings.stubLabelText
         label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: ViewConstants.Typography.stubLabelFontSize, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: TrackersViewConstants.Typography.stubLabelFontSize, weight: .medium)
         return label
     }()
     
@@ -93,8 +66,8 @@ final class TrackersViewController: UIViewController {
         layout.scrollDirection = .vertical
         
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(TrackerCell.self, forCellWithReuseIdentifier: "TrackerCell")
-        collection.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackerHeaderView")
+        collection.register(TrackerCell.self, forCellWithReuseIdentifier: TrackersViewConstants.Strings.trackerCellIdentifier)
+        collection.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackersViewConstants.Strings.trackerHeaderViewIdentifier)
         collection.backgroundColor = UIColor.ypWhite
         collection.delegate = self
         collection.dataSource = self
@@ -127,21 +100,20 @@ final class TrackersViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.titleLabelLeadingInset),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: TrackersViewConstants.Layout.titleLabelLeadingInset),
             
-            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewConstants.Layout.searchBarTopInset),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ViewConstants.Layout.searchBarLeadingInset),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ViewConstants.Layout.searchBarTrailingInset),
-            searchBar.heightAnchor.constraint(equalToConstant: ViewConstants.Layout.searchBarHeight),
+            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: TrackersViewConstants.Layout.searchBarTopInset),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: TrackersViewConstants.Layout.searchBarLeadingInset),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: TrackersViewConstants.Layout.searchBarTrailingInset),
+            searchBar.heightAnchor.constraint(equalToConstant: TrackersViewConstants.Layout.searchBarHeight),
             
             stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: ViewConstants.Layout.stubStackTopInset),
+            stubStack.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: TrackersViewConstants.Layout.stubStackTopInset),
             
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 24),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: TrackersViewConstants.Layout.collectionViewTopInset),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: TrackersViewConstants.Layout.collectionViewHorizontalInset),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -TrackersViewConstants.Layout.collectionViewHorizontalInset),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-            
         ])
     }
     
@@ -218,7 +190,6 @@ final class TrackersViewController: UIViewController {
         }
         categories = updatedCategories
         updateFilteredCategories()
-        
     }
     
     private func markTrackerCompleted(_ trackerID: UUID, on date: Date) {
@@ -240,7 +211,7 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    private func getCompletionCount(for trackerID : UUID) -> Int {
+    private func getCompletionCount(for trackerID: UUID) -> Int {
         return completedTrackers.filter { $0.trackerID == trackerID }.count
     }
     
@@ -258,11 +229,12 @@ final class TrackersViewController: UIViewController {
         updateFilteredCategories()
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yy"
+        dateFormatter.dateFormat = TrackersViewConstants.Strings.dateFormat
         let formattedDate = dateFormatter.string(from: selectedDate)
-        print("Выбранная дата: \(formattedDate)")
+        print(String(format: TrackersViewConstants.Strings.selectedDateMessage, formattedDate))
     }
 }
+
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -274,7 +246,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCell", for: indexPath) as? TrackerCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackersViewConstants.Strings.trackerCellIdentifier, for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
         
@@ -302,7 +274,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard kind == UICollectionView.elementKindSectionHeader,
               let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: "TrackerHeaderView",
+                withReuseIdentifier: TrackersViewConstants.Strings.trackerHeaderViewIdentifier,
                 for: indexPath
               ) as? TrackerHeaderView else {
             return UICollectionReusableView()
@@ -316,21 +288,21 @@ extension TrackersViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = max(0, collectionView.frame.width - 16)
+        let availableWidth = max(TrackersViewConstants.Layout.zeroInset, collectionView.frame.width - TrackersViewConstants.Layout.collectionViewAvailableWidthOffset)
         let cellWidth = availableWidth / 2
-        return CGSize(width: max(0, cellWidth), height: max(0, 148))
+        return CGSize(width: max(TrackersViewConstants.Layout.zeroInset, cellWidth), height: max(TrackersViewConstants.Layout.zeroInset, TrackersViewConstants.Layout.collectionViewCellHeight))
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        9
+        TrackersViewConstants.Layout.collectionViewMinimumInteritemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
+        return CGSize(width: collectionView.frame.width, height: TrackersViewConstants.Layout.collectionViewHeaderHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        return UIEdgeInsets(top: TrackersViewConstants.Layout.zeroInset, left: TrackersViewConstants.Layout.zeroInset, bottom: TrackersViewConstants.Layout.collectionViewSectionBottomInset, right: TrackersViewConstants.Layout.zeroInset)
     }
 }
 
@@ -359,4 +331,3 @@ extension TrackersViewController: AddTrackersModalDelegate {
         addTracker(event, toCategoryWithTitle: categoryTitle)
     }
 }
-
