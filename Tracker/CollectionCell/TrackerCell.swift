@@ -182,12 +182,10 @@ final class TrackerCell: UICollectionViewCell {
         
         counterButton.backgroundColor = buttonColor
         
-        let buttonImage = isCompletedToday ?
-        UIImage(systemName: TrackerCellConstants.Strings.checkmarkSymbol) :
-        UIImage(systemName: TrackerCellConstants.Strings.plusSymbol)
+        let buttonImage = isCompletedToday ? UIImage.done : UIImage.plus
         
         counterButton.setImage(buttonImage, for: .normal)
-        counterButton.tintColor = .white
+        counterButton.tintColor = UIColor.ypWhite
         
         updateButtonAvailability()
     }
