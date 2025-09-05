@@ -16,14 +16,14 @@ final class NewHabitModalViewController: UIViewController {
     private let defaultEmoji: String = "😪"
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
+    private let titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
         action: #selector(textFieldDidChange)
     )
     
-    private lazy var characterLimitLabel = UILabel.makeCharacterLimitLabel()
+    private let characterLimitLabel = UILabel.makeCharacterLimitLabel()
     
     private lazy var optionsTableView = UITableView.makeOptionsTableView(
         dataSource: self,

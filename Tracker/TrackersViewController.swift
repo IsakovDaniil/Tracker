@@ -44,7 +44,7 @@ final class TrackersViewController: UIViewController {
         return picker
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = ViewConstants.Strings.titleText
         label.textColor = UIColor.ypBlack

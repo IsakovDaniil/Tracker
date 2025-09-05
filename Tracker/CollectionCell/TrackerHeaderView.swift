@@ -3,7 +3,7 @@ import UIKit
 final class TrackerHeaderView: UICollectionReusableView {
     
     // MARK: - UI Elements
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: TrackerHeaderViewConstants.Typography.titleLabelFontSize, weight: TrackerHeaderViewConstants.Typography.titleLabelWeight)
         label.textColor = UIColor.ypBlack

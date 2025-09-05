@@ -13,14 +13,14 @@ final class NewEventModalViewController: UIViewController {
     private let defaultEmoji: String = "❤️"
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
+    private let titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
         action: #selector(textFieldDidChange)
     )
     
-    private lazy var characterLimitLabel = UILabel.makeCharacterLimitLabel()
+    private let characterLimitLabel = UILabel.makeCharacterLimitLabel()
     
     private lazy var optionsTableView = UITableView.makeOptionsTableView(
         dataSource: self,

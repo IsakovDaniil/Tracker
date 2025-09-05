@@ -11,7 +11,7 @@ final class AddTrackersModalViewController: UIViewController {
     weak var delegate: AddTrackersModalDelegate?
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
+    private let titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
     
     private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView()

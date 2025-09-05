@@ -11,7 +11,7 @@ final class SelectScheduleModalViewController: UIViewController {
     weak var delegate: SelectScheduleDelegate?
     
     // MARK: - UI Elements
-    private lazy var titleLabel = UILabel.ypTitle(SelectScheduleConstants.Strings.titleLabel)
+    private let titleLabel = UILabel.ypTitle(SelectScheduleConstants.Strings.titleLabel)
     
     private lazy var tableView: UITableView = {
         let table = UITableView()

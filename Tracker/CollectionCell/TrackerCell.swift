@@ -10,7 +10,7 @@ final class TrackerCell: UICollectionViewCell {
     private var completionHandler: ((UUID, Date, Bool) -> Void)?
     
     // MARK: - UI Elements
-    private lazy var cardView: UIView = {
+    private let cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = TrackerCellConstants.Layout.cardCornerRadius
         view.layer.borderWidth = TrackerCellConstants.Layout.cardBorderWidth
@@ -19,7 +19,7 @@ final class TrackerCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var emojiView: UIView = {
+    private let emojiView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = TrackerCellConstants.Layout.emojiViewCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ final class TrackerCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var emojiLabel: UILabel = {
+    private let emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(
             ofSize: TrackerCellConstants.Typography.emojiLabelFontSize,
@@ -37,26 +37,26 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(
             ofSize: TrackerCellConstants.Typography.titleLabelFontSize,
             weight: TrackerCellConstants.Typography.titleLabelWeight
         )
-        label.textColor = .ypWhite
+        label.textColor = UIColor.ypWhite
         label.numberOfLines = TrackerCellConstants.Layout.titleLabelNumberOfLines
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private lazy var counterView: UIView = {
+    private let counterView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private lazy var counterLabel: UILabel = {
+    private let counterLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(
             ofSize: TrackerCellConstants.Typography.counterLabelFontSize,
