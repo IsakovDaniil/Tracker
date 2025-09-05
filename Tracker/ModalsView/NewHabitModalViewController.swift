@@ -154,7 +154,7 @@ final class NewHabitModalViewController: UIViewController {
             color: defaultColor,
             emoji: defaultEmoji,
             schedule: selectedDays,
-            isHabit: false
+            isHabit: true
         )
         
         delegate?.didCreateTracker(newTracker, categoryTitle: category)
