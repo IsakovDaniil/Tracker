@@ -179,7 +179,7 @@ extension NewEventModalViewController: UITextFieldDelegate {
 // MARK: - UITableViewDataSource
 extension NewEventModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -201,10 +201,10 @@ extension NewEventModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.row == .zero {
-            selectedCategory = NewEventConstants.Strings.defaultCategory
-            optionsTableView.reloadData()
-            updateCreateButtonState()
-        }
+        guard indexPath.row == .zero else { return }
+        
+        selectedCategory = NewEventConstants.Strings.defaultCategory
+        optionsTableView.reloadData()
+        updateCreateButtonState()
     }
 }
