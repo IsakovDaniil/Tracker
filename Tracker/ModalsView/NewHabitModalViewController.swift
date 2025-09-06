@@ -9,12 +9,17 @@ final class NewHabitModalViewController: UIViewController {
     
     // MARK: - Properties
     weak var delegate: NewHabitDelegate?
+    
     private var selectedDays: [Weekday] = []
     private var selectedCategory: String? = nil
+    private var selectedColor: UIColor = .white
+    private var selectedEmoji: String = ""
     
-    private let defaultColor: UIColor = .ypSelection5
-    private let defaultEmoji: String = "😪"
-    private let model = EmojiColorModel()
+    private lazy var emojiColorManager: EmojiColorCollectionManager = {
+        let manager = EmojiColorCollectionManager()
+        manager.delegate = self
+        return manager
+    }()
     
     // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
@@ -34,13 +39,9 @@ final class NewHabitModalViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 5
-        layout.minimumLineSpacing = 5
+        layout.scrollDirection = .vertical
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
-        collection.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
-        collection.delegate = self
-        collection.dataSource = self
+        emojiColorManager.configure(collectionView: collection)
         return collection
     }()
     
@@ -164,8 +165,8 @@ final class NewHabitModalViewController: UIViewController {
         let newTracker = Tracker(
             id: UUID(),
             name: title,
-            color: defaultColor,
-            emoji: defaultEmoji,
+            color: selectedColor,
+            emoji: selectedEmoji,
             schedule: selectedDays,
             isHabit: true
         )
@@ -248,6 +249,19 @@ extension NewHabitModalViewController: SelectScheduleDelegate {
     func didSelectDays(_ days: [Weekday]) {
         selectedDays = days
         optionsTableView.reloadData()
+        updateCreateButtonState()
+    }
+}
+
+// MARK: - EmojiColorSelectionDelegate
+extension NewHabitModalViewController: EmojiColorSelectionDelegate {
+    func didSelectEmoji(_ emoji: String) {
+        selectedEmoji = emoji
+        updateCreateButtonState()
+    }
+    
+    func didSelectColor(_ color: UIColor) {
+        selectedColor = color
         updateCreateButtonState()
     }
 }
