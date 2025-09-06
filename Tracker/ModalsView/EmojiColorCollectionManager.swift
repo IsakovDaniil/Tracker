@@ -1,0 +1,113 @@
+import UIKit
+
+final class EmojiColorCollectionManager: NSObject {
+    
+    // MARK: - Properties
+    private let model = EmojiColorModel()
+    
+    // MARK: - Pubilic Methods
+    func configure(collectionView: UICollectionView) {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
+        collectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
+        
+        collectionView.register(TrackerHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension EmojiColorCollectionManager: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0: return model.emojies.count
+        case 1: return model.colors.count
+        default: return .zero
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case 0:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as? EmojiCell else {
+                return UICollectionViewCell()
+            }
+            let emoji = model.emojies[indexPath.item]
+            return cell
+            
+        case 1:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as? ColorCell else {
+                return UICollectionViewCell()
+            }
+            let colors = model.colors[indexPath.item]
+            return cell
+            
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
+                for: indexPath
+              ) as? TrackerHeaderView else {
+            return UICollectionReusableView()
+        }
+        
+        switch indexPath.section {
+        case 0: header.configure(with: "Emoji")
+        case 1: header.configure(with: "Цвет")
+        default: break
+        }
+        
+        return header
+    }
+    
+    
+    
+}
+
+
+
+// MARK: - UICollectionViewDelegate
+extension EmojiColorCollectionManager: UICollectionViewDelegate {
+    
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension EmojiColorCollectionManager: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemsPerRow: CGFloat = 6
+        let spacing: CGFloat = 5
+        let totalSpacing = (itemsPerRow - 1) * spacing
+        let insets: CGFloat = 36
+        let width = (collectionView.bounds.width - totalSpacing - insets) / itemsPerRow
+        return CGSize(width: width, height: width)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 48)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 18)
+    }
+}

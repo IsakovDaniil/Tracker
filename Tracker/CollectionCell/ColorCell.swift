@@ -2,6 +2,8 @@ import UIKit
 
 final class ColorCell: UICollectionViewCell {
     
+    static let reuseIdentifier = "ColorCell"
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,7 +20,7 @@ final class ColorCell: UICollectionViewCell {
     }
     
     // MARK: - Configuration
-    private func configure(with color: UIColor, isSelected: Bool) {
+    func configure(with color: UIColor, isSelected: Bool) {
         backgroundColor = color
         
         if isSelected {

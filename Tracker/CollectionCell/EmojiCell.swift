@@ -2,6 +2,8 @@ import UIKit
 
 final class EmojiCell: UICollectionViewCell {
     
+    static let reuseIdentifier = "EmojiCell"
+    
     //MARK: - UI Element
     private let emojiLabel: UILabel = {
         let label = UILabel()
@@ -36,7 +38,7 @@ final class EmojiCell: UICollectionViewCell {
     }
     
     // MARK: - Configuration
-    private func configure(with emoji: String, isSelected: Bool) {
+    func configure(with emoji: String, isSelected: Bool) {
         emojiLabel.text = emoji
         
         if isSelected {

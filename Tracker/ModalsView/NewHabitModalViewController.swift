@@ -14,6 +14,7 @@ final class NewHabitModalViewController: UIViewController {
     
     private let defaultColor: UIColor = .ypSelection5
     private let defaultEmoji: String = "😪"
+    private let model = EmojiColorModel()
     
     // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
@@ -38,6 +39,8 @@ final class NewHabitModalViewController: UIViewController {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
         collection.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
+        collection.delegate = self
+        collection.dataSource = self
         return collection
     }()
     
@@ -237,6 +240,8 @@ extension NewHabitModalViewController: UITableViewDelegate {
         }
     }
 }
+
+
 
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {
