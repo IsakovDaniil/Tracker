@@ -9,8 +9,14 @@ final class NewEventModalViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: EventDelegate?
     private var selectedCategory: String? = nil
-    private let defaultColor: UIColor = .ypSelection15
-    private let defaultEmoji: String = "❤️"
+    private var selectedColor: UIColor = .white
+    private var selectedEmoji: String = ""
+    
+    private lazy var emojiColorManager: EmojiColorCollectionManager = {
+        let manager = EmojiColorCollectionManager()
+        manager.delegate = self
+        return manager
+    }()
     
     // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
@@ -27,6 +33,15 @@ final class NewEventModalViewController: UIViewController {
         delegate: self,
         separatorStyle: .none
     )
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        emojiColorManager.configure(collectionView: collection)
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        return collection
+    }()
     
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
@@ -72,6 +87,7 @@ final class NewEventModalViewController: UIViewController {
         view.addSubview(titleTextField)
         view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
+        view.addSubview(collectionView)
         view.addSubview(buttonsStackView)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -99,6 +115,11 @@ final class NewEventModalViewController: UIViewController {
             optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.sideInset),
             optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.sideInset),
             optionsTableView.heightAnchor.constraint(equalToConstant: NewEventConstants.Layout.tableHeight),
+            
+            collectionView.topAnchor.constraint(equalTo: optionsTableView.bottomAnchor, constant: 32),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16),
             
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewEventConstants.Layout.buttonsSideInset),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewEventConstants.Layout.buttonsSideInset),
@@ -152,8 +173,8 @@ final class NewEventModalViewController: UIViewController {
         let newEvent = Tracker(
             id: UUID(),
             name: title,
-            color: defaultColor,
-            emoji: defaultEmoji,
+            color: selectedColor,
+            emoji: selectedEmoji,
             schedule: Weekday.allCases,
             isHabit: false
         )
@@ -208,3 +229,17 @@ extension NewEventModalViewController: UITableViewDelegate {
         updateCreateButtonState()
     }
 }
+
+// MARK: - EmojiColorSelectionDelegate
+extension NewEventModalViewController: EmojiColorSelectionDelegate {
+    func didSelectEmoji(_ emoji: String) {
+        selectedEmoji = emoji
+        updateCreateButtonState()
+    }
+    
+    func didSelectColor(_ color: UIColor) {
+        selectedColor = color
+        updateCreateButtonState()
+    }
+}
+
