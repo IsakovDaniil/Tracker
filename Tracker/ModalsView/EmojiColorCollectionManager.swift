@@ -1,9 +1,16 @@
 import UIKit
 
+protocol EmojiColorSelectionDelegate: AnyObject {
+    func didSelectEmoji(_ emoji: String)
+    func didSelectColor(_ color: UIColor)
+}
+
 final class EmojiColorCollectionManager: NSObject {
     
     // MARK: - Properties
+    weak var delegate: EmojiColorSelectionDelegate?
     private let model = EmojiColorModel()
+    
     private var selectedEmojiIndex: Int?
     private var selectedColorIndex: Int?
     
@@ -60,13 +67,17 @@ extension EmojiColorCollectionManager: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             let emoji = model.emojies[indexPath.item]
+            let isSelected = selectedEmojiIndex == indexPath.item
+            cell.configure(with: emoji, isSelected: isSelected)
             return cell
             
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as? ColorCell else {
                 return UICollectionViewCell()
             }
-            let colors = model.colors[indexPath.item]
+            let color = model.colors[indexPath.item]
+            let isSelected = selectedColorIndex == indexPath.item
+            cell.configure(with: color, isSelected: isSelected)
             return cell
             
         default:
@@ -92,16 +103,41 @@ extension EmojiColorCollectionManager: UICollectionViewDataSource {
         
         return header
     }
-    
-    
-    
 }
 
 
 
 // MARK: - UICollectionViewDelegate
 extension EmojiColorCollectionManager: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            if let previousIndex = selectedEmojiIndex {
+                let previousIndexPath = IndexPath(item: previousIndex, section: .zero)
+                collectionView.reloadItems(at: [previousIndexPath])
+            }
+            
+            selectedEmojiIndex = indexPath.item
+            collectionView.reloadItems(at: [indexPath])
+            
+            let selectedEmoji = model.emojies[indexPath.item]
+            delegate?.didSelectEmoji(selectedEmoji)
+            
+        case 1:
+            if let previousIndex = selectedColorIndex {
+                let previousIndexPath = IndexPath(item: previousIndex, section: 1)
+                collectionView.reloadItems(at: [previousIndexPath])
+            }
+            
+            selectedColorIndex = indexPath.item
+            collectionView.reloadItems(at: [indexPath])
+            let selectedColor = model.colors[indexPath.item]
+            delegate?.didSelectColor(selectedColor)
+            
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
