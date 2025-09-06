@@ -109,28 +109,46 @@ extension EmojiColorCollectionManager: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 extension EmojiColorCollectionManager: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            if let previousIndex = selectedEmojiIndex {
-                let previousIndexPath = IndexPath(item: previousIndex, section: .zero)
-                collectionView.reloadItems(at: [previousIndexPath])
+            if selectedEmojiIndex == indexPath.item {
+                selectedEmojiIndex = nil
+                collectionView.reloadItems(at: [indexPath])
+                return
             }
             
+            let previousIndex = selectedEmojiIndex
+            
             selectedEmojiIndex = indexPath.item
-            collectionView.reloadItems(at: [indexPath])
+            
+            var indexPathsToReload = [indexPath]
+            if let previous = previousIndex {
+                indexPathsToReload.append(IndexPath(item: previous, section: 0))
+            }
+            collectionView.reloadItems(at: indexPathsToReload)
             
             let selectedEmoji = model.emojies[indexPath.item]
             delegate?.didSelectEmoji(selectedEmoji)
             
         case 1:
-            if let previousIndex = selectedColorIndex {
-                let previousIndexPath = IndexPath(item: previousIndex, section: 1)
-                collectionView.reloadItems(at: [previousIndexPath])
+            if selectedColorIndex == indexPath.item {
+                selectedColorIndex = nil
+                collectionView.reloadItems(at: [indexPath])
+                return
             }
             
+            let previousIndex = selectedColorIndex
+            
             selectedColorIndex = indexPath.item
-            collectionView.reloadItems(at: [indexPath])
+            
+            var indexPathsToReload = [indexPath]
+            if let previous = previousIndex {
+                indexPathsToReload.append(IndexPath(item: previous, section: 1))
+            }
+            collectionView.reloadItems(at: indexPathsToReload)
+            
             let selectedColor = model.colors[indexPath.item]
             delegate?.didSelectColor(selectedColor)
             

@@ -47,12 +47,7 @@ final class ColorCell: UICollectionViewCell {
     func configure(with color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         
-        if isSelected {
-            layer.borderWidth = 3
-            layer.borderColor = color.cgColor
-            layer.borderColor = color.withAlphaComponent(0.3).cgColor
-        } else {
-            layer.borderWidth = .zero
-        }
+        layer.borderWidth = isSelected ? 3 : 0
+        layer.borderColor = isSelected ? color.withAlphaComponent(0.3).cgColor : nil
     }
 }

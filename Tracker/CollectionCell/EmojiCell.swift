@@ -9,7 +9,6 @@ final class EmojiCell: UICollectionViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 32)
-        label.layer.cornerRadius = 16
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -17,6 +16,7 @@ final class EmojiCell: UICollectionViewCell {
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupCell()
         setupView()
         setupConstraints()
     }
@@ -26,14 +26,21 @@ final class EmojiCell: UICollectionViewCell {
     }
     
     //MARK: - Setup
+    
+    private func setupCell() {
+        contentView.layer.cornerRadius = 16
+    }
+    
     private func setupView() {
         contentView.addSubview(emojiLabel)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            emojiLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            emojiLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7),
+            emojiLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            emojiLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            emojiLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -7)
         ])
     }
     
@@ -41,10 +48,6 @@ final class EmojiCell: UICollectionViewCell {
     func configure(with emoji: String, isSelected: Bool) {
         emojiLabel.text = emoji
         
-        if isSelected {
-            backgroundColor = UIColor.ypLightGray
-        } else {
-            backgroundColor = .clear
-        }
+        contentView.backgroundColor = isSelected ? UIColor.ypLightGray : .clear
     }
 }
