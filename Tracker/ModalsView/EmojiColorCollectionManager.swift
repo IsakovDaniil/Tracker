@@ -4,6 +4,8 @@ final class EmojiColorCollectionManager: NSObject {
     
     // MARK: - Properties
     private let model = EmojiColorModel()
+    private var selectedEmojiIndex: Int?
+    private var selectedColorIndex: Int?
     
     // MARK: - Pubilic Methods
     func configure(collectionView: UICollectionView) {
@@ -16,6 +18,24 @@ final class EmojiColorCollectionManager: NSObject {
         collectionView.register(TrackerHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
+    }
+    
+    func setSelectedEmoji(_ emoji: String) {
+        selectedEmojiIndex = model.emojies.firstIndex(of: emoji)
+    }
+    
+    func getSelectedEmoji() -> String? {
+        guard let index = selectedEmojiIndex else { return nil }
+        return model.emojies[index]
+    }
+    
+    func setSelectedColor(_ color: UIColor) {
+        selectedColorIndex = model.colors.firstIndex(of: color)
+    }
+    
+    func getSelectedColor() -> UIColor? {
+        guard let index = selectedColorIndex else { return nil }
+        return model.colors[index]
     }
 }
 
