@@ -31,6 +31,16 @@ final class NewHabitModalViewController: UIViewController {
         separatorStyle: .singleLine
     )
     
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.register(EmojiCell.self, forCellWithReuseIdentifier: "EmojiCell")
+        collection.register(ColorCell.self, forCellWithReuseIdentifier: "ColorCell")
+        return collection
+    }()
+    
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
         stack.axis = .horizontal
