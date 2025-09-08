@@ -1,6 +1,6 @@
 import Foundation
 
-enum Weekday: Int, CaseIterable {
+enum Weekday: Int, CaseIterable, Codable {
     case monday, tuesday, wednesday, thursday, friday, saturday, sunday
     
     var localizedName: String {
