@@ -16,4 +16,14 @@ final class CoreDataManager {
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
     }
+    
+    func saveContext() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Ошибка при сохранении контекста: \(error)")
+            }
+        }
+    }
 }
