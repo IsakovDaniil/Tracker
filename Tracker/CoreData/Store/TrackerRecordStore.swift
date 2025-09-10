@@ -1,8 +1,42 @@
-//
-//  TrackerRecordStore.swift
-//  Tracker
-//
-//  Created by Даниил on 10.09.2025.
-//
-
 import Foundation
+import CoreData
+
+protocol TrackerRecordStoreProtocol {
+    func addRecord(_ record: TrackerRecord) throws
+    func removeRecord(for trackerId: UUID, date: Date) throws
+    func fetchAllRecords() throws -> [TrackerRecord]
+    func isTrackerCompleted(trackerId: UUID, date: Date) throws -> Bool
+    func getCompletionCount(for trackerId: UUID) throws -> Int
+}
+
+final class TrackerRecordStore: NSObject {
+    private let context: NSManagedObjectContext
+    
+    init(coreDataManager: CoreDataManager) {
+        self.context = coreDataManager.context
+    }
+}
+
+extension TrackerRecordStore: TrackerRecordStoreProtocol {
+    func addRecord(_ record: TrackerRecord) throws {
+        <#code#>
+    }
+    
+    func removeRecord(for trackerId: UUID, date: Date) throws {
+        <#code#>
+    }
+    
+    func fetchAllRecords() throws -> [TrackerRecord] {
+        <#code#>
+    }
+    
+    func isTrackerCompleted(trackerId: UUID, date: Date) throws -> Bool {
+        <#code#>
+    }
+    
+    func getCompletionCount(for trackerId: UUID) throws -> Int {
+        <#code#>
+    }
+    
+    
+}
