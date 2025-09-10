@@ -18,7 +18,10 @@ final class TrackerCategoryStore: NSObject {
 
 extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     func addCategory(_ category: TrackerCategory) throws {
-        <#code#>
+        let categoryEntity = TrackerCategoryCoreData(context: context)
+        categoryEntity.title = category.title
+        
+        try context.save()
     }
     
     func fetchAllCategories() throws -> [TrackerCategory] {
