@@ -3,6 +3,10 @@ import CoreData
 final class CoreDataManager {
     private var modelName = "TrackerModel"
     
+    init() {
+        DaysValueTransformer.register()
+    }
+    
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: modelName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
