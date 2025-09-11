@@ -25,16 +25,51 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
     
     func fetchAllCategories() throws -> [TrackerCategory] {
-        <#code#>
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        let categoryEntities = try context.fetch(request)
+        
+        return categoryEntities.map { entity in
+            let trackers = (entity.trackers as? Set<TrackerCoreData>)?.compactMap { trackerEntity in
+                return convertToTracker(from: trackerEntity)
+            } ?? []
+            
+            return TrackerCategory(title: entity.title ?? "", trackers: trackers)
+        }
     }
     
+    
     func deleteCategory(witchTitle title: String) throws {
-        <#code#>
+        
     }
     
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData {
         <#code#>
     }
     
-    
+    private func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
+        guard let id = entity.id,
+              let name = entity.name,
+              let emoji = entity.emoji,
+              let colorHex = entity.colorHex,
+              let schedule = entity.schedule as? [Weekday] else {
+            return nil
+        }
+        
+        let uiColorMarshalling = UIColorMarshalling()
+        let color = uiColorMarshalling.color(from: colorHex)
+        
+        return Tracker(
+            id: id,
+            name: name,
+            color: color,
+            emoji: emoji,
+            schedule: schedule,
+            isHabit: entity.isHabit
+        )
+    }
+}
+
+
+
+
 }
