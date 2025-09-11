@@ -39,7 +39,16 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     
     func deleteCategory(witchTitle title: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
         
+        let categories = try context.fetch(request)
+        
+        for category in categories {
+            context.delete(category)
+        }
+        
+        try context.save()
     }
     
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData {
