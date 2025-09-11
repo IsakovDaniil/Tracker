@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+// MARK: - TrackerCategoryStoreProtocol
 protocol TrackerCategoryStoreProtocol {
     func addCategory(_ category: TrackerCategory) throws
     func fetchAllCategories() throws -> [TrackerCategory]
@@ -8,16 +9,23 @@ protocol TrackerCategoryStoreProtocol {
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData
 }
 
+// MARK: - TrackerCategoryStore
 final class TrackerCategoryStore: NSObject {
+    
+    // MARK: Properties
     private let context: NSManagedObjectContext
     static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
     
+    // MARK: Init
     init(coreDataManager: CoreDataManager) {
         self.context = coreDataManager.context
     }
 }
 
+// MARK: - TrackerCategoryStoreProtocol Implementation
 extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
+    
+    // MARK: Add Category
     func addCategory(_ category: TrackerCategory) throws {
         let categoryEntity = TrackerCategoryCoreData(context: context)
         categoryEntity.title = category.title
@@ -25,6 +33,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         try context.save()
     }
     
+    // MARK: Fetch All Categories
     func fetchAllCategories() throws -> [TrackerCategory] {
         let request = TrackerCategoryStore.fetchRequestSimple
         let categoryEntities = try context.fetch(request)
@@ -38,7 +47,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         }
     }
     
-    
+    // MARK: Delete Category
     func deleteCategory(witchTitle title: String) throws {
         let request = TrackerCategoryStore.fetchRequestSimple
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
@@ -52,6 +61,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         try context.save()
     }
     
+    // MARK: Find or Create Category
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData {
         let request = TrackerCategoryStore.fetchRequestSimple
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
@@ -66,6 +76,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         return newCategory
     }
     
+    // MARK: - Helpers
     private func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
         guard let id = entity.id,
               let name = entity.name,
