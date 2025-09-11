@@ -14,7 +14,7 @@ final class TrackerCategoryStore: NSObject {
     
     // MARK: Properties
     private let context: NSManagedObjectContext
-    static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+    private static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
     
     // MARK: Init
     init(coreDataManager: CoreDataManager) {
