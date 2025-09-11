@@ -10,6 +10,7 @@ protocol TrackerCategoryStoreProtocol {
 
 final class TrackerCategoryStore: NSObject {
     private let context: NSManagedObjectContext
+    static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
     
     init(coreDataManager: CoreDataManager) {
         self.context = coreDataManager.context
@@ -25,7 +26,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
     
     func fetchAllCategories() throws -> [TrackerCategory] {
-        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        let request = TrackerCategoryStore.fetchRequestSimple
         let categoryEntities = try context.fetch(request)
         
         return categoryEntities.map { entity in
@@ -39,7 +40,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     
     func deleteCategory(witchTitle title: String) throws {
-        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        let request = TrackerCategoryStore.fetchRequestSimple
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
         
         let categories = try context.fetch(request)
@@ -52,7 +53,17 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
     
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData {
-        <#code#>
+        let request = TrackerCategoryStore.fetchRequestSimple
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
+        
+        if let existingCategory = try context.fetch(request).first {
+            return existingCategory
+        }
+        
+        let newCategory = TrackerCategoryCoreData(context: context)
+        newCategory.title = title
+        
+        return newCategory
     }
     
     private func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
@@ -76,9 +87,4 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
             isHabit: entity.isHabit
         )
     }
-}
-
-
-
-
 }
