@@ -11,7 +11,7 @@ protocol TrackerStoreProtocol {
 final class TrackerStore: NSObject {
     private let context: NSManagedObjectContext
     private let uiColorMarshalling = UIColorMarshalling()
-    private static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+    private static let fetchRequestSimple: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
     
     init(coreDataManager: CoreDataManager) {
         self.context = coreDataManager.context
@@ -36,7 +36,7 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     func fetchAllTrackers() throws -> [Tracker] {
-        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        let request = TrackerStore.fetchRequestSimple
         let trackerEntities = try context.fetch(request)
         
         return trackerEntities.compactMap { entity in
@@ -45,11 +45,34 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     func deleteTracker(withId id: UUID) throws {
-        <#code#>
+        let request = TrackerStore.fetchRequestSimple
+        
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+              
+              let trackers = try context.fetch(request)
+              for tracker in trackers {
+                  context.delete(tracker)
+              }
+              
+              try context.save()
     }
     
     func updateTracker(_ tracker: Tracker) throws {
-        <#code#>
+        let request = TrackerStore.fetchRequestSimple
+        
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        guard let trackerEntity = try context.fetch(request).first else {
+            throw NSError(domain: "TrackerStore", code: 404, userInfo: [NSLocalizedDescriptionKey: "Трекер не найден"])
+        }
+        
+        trackerEntity.name = tracker.name
+        trackerEntity.emoji = tracker.emoji
+        trackerEntity.colorHex = uiColorMarshalling.hexString(from: tracker.color)
+        trackerEntity.isHabit = tracker.isHabit
+        trackerEntity.schedule = tracker.schedule as NSObject
+        
+        try context.save()
     }
     
     private func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
