@@ -19,7 +19,11 @@ final class TrackerRecordStore: NSObject {
 
 extension TrackerRecordStore: TrackerRecordStoreProtocol {
     func addRecord(_ record: TrackerRecord) throws {
-        <#code#>
+        let recordEntity = TrackerRecordCoreData(context: context)
+        recordEntity.trackerID = record.trackerID
+        recordEntity.date = record.date
+        
+        try context.save()
     }
     
     func removeRecord(for trackerId: UUID, date: Date) throws {
