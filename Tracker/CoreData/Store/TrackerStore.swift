@@ -8,19 +8,46 @@ protocol TrackerStoreProtocol {
     func updateTracker(_ tracker: Tracker) throws
 }
 
+protocol TrackerStoreDelegate: AnyObject {
+    func didUpdateTrackers()
+}
+
 final class TrackerStore: NSObject {
+    weak var delegate: TrackerStoreDelegate?
     private let context: NSManagedObjectContext
     private let uiColorMarshalling = UIColorMarshalling()
     private static let fetchRequestSimple: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>?
     
-    init(coreDataManager: CoreDataManager) {
-        self.context = coreDataManager.context
+    init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
+        self.context = context
+        super.init()
+        setupFetchedResultsController()
+    }
+    
+    private func setupFetchedResultsController() {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController?.delegate = self
+        
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print("Error performing fetch: \(error)")
+        }
     }
 }
 
 extension TrackerStore: TrackerStoreProtocol {
     func addTracker(_ tracker: Tracker, to categoryTitle: String) throws {
-        let categoryStore = TrackerCategoryStore(coreDataManager: CoreDataManager())
+        let categoryStore = TrackerCategoryStore(context: context)
         let categoryEntity = try categoryStore.findOrCreateCategory(with: categoryTitle)
         
         let trackerEntity = TrackerCoreData(context: context)
@@ -32,11 +59,11 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.schedule = tracker.schedule as NSObject
         trackerEntity.category = categoryEntity
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     func fetchAllTrackers() throws -> [Tracker] {
-        let request = TrackerStore.fetchRequestSimple
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         let trackerEntities = try context.fetch(request)
         
         return trackerEntities.compactMap { entity in
@@ -45,21 +72,19 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     func deleteTracker(withId id: UUID) throws {
-        let request = TrackerStore.fetchRequestSimple
-        
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
               
-              let trackers = try context.fetch(request)
-              for tracker in trackers {
-                  context.delete(tracker)
-              }
+        let trackers = try context.fetch(request)
+        for tracker in trackers {
+            context.delete(tracker)
+        }
               
-              try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     func updateTracker(_ tracker: Tracker) throws {
-        let request = TrackerStore.fetchRequestSimple
-        
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
         
         guard let trackerEntity = try context.fetch(request).first else {
@@ -72,30 +97,33 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.isHabit = tracker.isHabit
         trackerEntity.schedule = tracker.schedule as NSObject
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
-    private func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
-            guard let id = entity.id,
-                  let name = entity.name,
-                  let emoji = entity.emoji,
-                  let colorHex = entity.colorHex,
-                  let schedule = entity.schedule as? [Weekday] else {
-                return nil
-            }
-            
-            let color = uiColorMarshalling.color(from: colorHex)
-            
-            return Tracker(
-                id: id,
-                name: name,
-                color: color,
-                emoji: emoji,
-                schedule: schedule,
-                isHabit: entity.isHabit
-            )
+    func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
+        guard let id = entity.id,
+              let name = entity.name,
+              let emoji = entity.emoji,
+              let colorHex = entity.colorHex,
+              let schedule = entity.schedule as? [Weekday] else {
+            return nil
         }
-    
-    
+        
+        let color = uiColorMarshalling.color(from: colorHex)
+        
+        return Tracker(
+            id: id,
+            name: name,
+            color: color,
+            emoji: emoji,
+            schedule: schedule,
+            isHabit: entity.isHabit
+        )
+    }
 }
 
+extension TrackerStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.didUpdateTrackers()
+    }
+}

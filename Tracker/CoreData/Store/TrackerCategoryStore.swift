@@ -5,7 +5,7 @@ import CoreData
 protocol TrackerCategoryStoreProtocol {
     func addCategory(_ category: TrackerCategory) throws
     func fetchAllCategories() throws -> [TrackerCategory]
-    func deleteCategory(witchTitle title: String) throws
+    func deleteCategory(withTitle title: String) throws
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData
 }
 
@@ -17,8 +17,8 @@ final class TrackerCategoryStore: NSObject {
     private static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
     
     // MARK: Init
-    init(coreDataManager: CoreDataManager) {
-        self.context = coreDataManager.context
+    init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
+        self.context = context
     }
 }
 
@@ -48,7 +48,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
     
     // MARK: Delete Category
-    func deleteCategory(witchTitle title: String) throws {
+    func deleteCategory(withTitle title: String) throws {
         let request = TrackerCategoryStore.fetchRequestSimple
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
         

@@ -13,8 +13,8 @@ final class TrackerRecordStore: NSObject {
     private let context: NSManagedObjectContext
     private let fetchRequestSimple: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
     
-    init(coreDataManager: CoreDataManager) {
-        self.context = coreDataManager.context
+    init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
+        self.context = context
     }
 }
 
@@ -24,11 +24,11 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         recordEntity.trackerID = record.trackerID
         recordEntity.date = record.date
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     func removeRecord(for trackerId: UUID, date: Date) throws {
-        let request = fetchRequestSimple
+        let request = TrackerRecordCoreData.fetchRequest()
         
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
@@ -46,7 +46,7 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
             context.delete(record)
         }
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     func fetchAllRecords() throws -> [TrackerRecord] {
@@ -82,11 +82,9 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
     }
     
     func getCompletionCount(for trackerId: UUID) throws -> Int {
-            let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
-            request.predicate = NSPredicate(format: "trackerID == %@", trackerId as CVarArg)
-            
-            return try context.count(for: request)
-        }
-    
-    
+        let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "trackerID == %@", trackerId as CVarArg)
+        
+        return try context.count(for: request)
+    }
 }
