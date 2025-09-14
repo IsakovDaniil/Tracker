@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+// MARK: - TrackerStoreProtocol
 protocol TrackerStoreProtocol {
     func addTracker(_ tracker: Tracker, to categoryTitle: String) throws
     func fetchAllTrackers() throws -> [Tracker]
@@ -8,23 +9,29 @@ protocol TrackerStoreProtocol {
     func updateTracker(_ tracker: Tracker) throws
 }
 
+// MARK: - TrackerStoreDelegate
 protocol TrackerStoreDelegate: AnyObject {
     func didUpdateTrackers()
 }
 
+// MARK: - TrackerStore
 final class TrackerStore: NSObject {
+    
+    // MARK: Properties
     weak var delegate: TrackerStoreDelegate?
     private let context: NSManagedObjectContext
     private let uiColorMarshalling = UIColorMarshalling()
     private static let fetchRequestSimple: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
     private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>?
     
+    // MARK: Init
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
         super.init()
         setupFetchedResultsController()
     }
     
+    // MARK: Setup
     private func setupFetchedResultsController() {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -45,7 +52,10 @@ final class TrackerStore: NSObject {
     }
 }
 
+// MARK: - TrackerStoreProtocol Implementation
 extension TrackerStore: TrackerStoreProtocol {
+    
+    // MARK: Add Tracker
     func addTracker(_ tracker: Tracker, to categoryTitle: String) throws {
         let categoryStore = TrackerCategoryStore(context: context)
         let categoryEntity = try categoryStore.findOrCreateCategory(with: categoryTitle)
@@ -62,6 +72,7 @@ extension TrackerStore: TrackerStoreProtocol {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: Fetch All Trackers
     func fetchAllTrackers() throws -> [Tracker] {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         let trackerEntities = try context.fetch(request)
@@ -71,6 +82,7 @@ extension TrackerStore: TrackerStoreProtocol {
         }
     }
     
+    // MARK: Delete Tracker
     func deleteTracker(withId id: UUID) throws {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
@@ -83,6 +95,7 @@ extension TrackerStore: TrackerStoreProtocol {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: Update Tracker
     func updateTracker(_ tracker: Tracker) throws {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
@@ -100,6 +113,7 @@ extension TrackerStore: TrackerStoreProtocol {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: - Helpers
     func convertToTracker(from entity: TrackerCoreData) -> Tracker? {
         guard let id = entity.id,
               let name = entity.name,
@@ -122,6 +136,7 @@ extension TrackerStore: TrackerStoreProtocol {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didUpdateTrackers()

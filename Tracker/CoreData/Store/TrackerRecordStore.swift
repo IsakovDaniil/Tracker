@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+// MARK: - TrackerRecordStoreProtocol
 protocol TrackerRecordStoreProtocol {
     func addRecord(_ record: TrackerRecord) throws
     func removeRecord(for trackerId: UUID, date: Date) throws
@@ -9,16 +10,23 @@ protocol TrackerRecordStoreProtocol {
     func getCompletionCount(for trackerId: UUID) throws -> Int
 }
 
+// MARK: - TrackerRecordStore
 final class TrackerRecordStore: NSObject {
+    
+    // MARK: Properties
     private let context: NSManagedObjectContext
     private let fetchRequestSimple: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
     
+    // MARK: Init
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
     }
 }
 
+// MARK: - TrackerRecordStoreProtocol Implementation
 extension TrackerRecordStore: TrackerRecordStoreProtocol {
+    
+    // MARK: Add Record
     func addRecord(_ record: TrackerRecord) throws {
         let recordEntity = TrackerRecordCoreData(context: context)
         recordEntity.trackerID = record.trackerID
@@ -27,6 +35,7 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: Remove Record
     func removeRecord(for trackerId: UUID, date: Date) throws {
         let request = TrackerRecordCoreData.fetchRequest()
         
@@ -49,6 +58,7 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: Fetch All Records
     func fetchAllRecords() throws -> [TrackerRecord] {
         let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         let recordEntities = try context.fetch(request)
@@ -63,6 +73,7 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         }
     }
     
+    // MARK: Is Tracker Completed
     func isTrackerCompleted(trackerId: UUID, date: Date) throws -> Bool {
         let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         
@@ -81,6 +92,7 @@ extension TrackerRecordStore: TrackerRecordStoreProtocol {
         return count > 0
     }
     
+    // MARK: Get Completion Count
     func getCompletionCount(for trackerId: UUID) throws -> Int {
         let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "trackerID == %@", trackerId as CVarArg)
