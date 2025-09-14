@@ -86,12 +86,12 @@ extension TrackerStore: TrackerStoreProtocol {
     func deleteTracker(withId id: UUID) throws {
         let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-              
+        
         let trackers = try context.fetch(request)
         for tracker in trackers {
             context.delete(tracker)
         }
-              
+        
         CoreDataManager.shared.saveContext()
     }
     

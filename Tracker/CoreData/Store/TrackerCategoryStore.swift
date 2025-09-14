@@ -9,16 +9,43 @@ protocol TrackerCategoryStoreProtocol {
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData
 }
 
+protocol TrackerCategoryStoreDelegate: AnyObject {
+    func didUpdateCategories()
+}
+
 // MARK: - TrackerCategoryStore
 final class TrackerCategoryStore: NSObject {
     
     // MARK: Properties
+    weak var delegate: TrackerCategoryStoreDelegate?
     private let context: NSManagedObjectContext
     private static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>?
     
     // MARK: Init
     init(context: NSManagedObjectContext = CoreDataManager.shared.context) {
         self.context = context
+        super.init()
+        setupFetchedResultsController()
+    }
+    
+    private func setupFetchedResultsController() {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController?.delegate = self
+        
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print("Error performing fetch for categories: \(error)")
+        }
     }
 }
 
@@ -30,7 +57,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         let categoryEntity = TrackerCategoryCoreData(context: context)
         categoryEntity.title = category.title
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     // MARK: Fetch All Categories
@@ -58,7 +85,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
             context.delete(category)
         }
         
-        try context.save()
+        CoreDataManager.shared.saveContext()
     }
     
     // MARK: Find or Create Category
@@ -97,5 +124,12 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
             schedule: schedule,
             isHabit: entity.isHabit
         )
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.didUpdateCategories()
     }
 }

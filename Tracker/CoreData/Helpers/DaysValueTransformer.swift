@@ -15,6 +15,8 @@ final class DaysValueTransformer: ValueTransformer {
         return try? JSONDecoder().decode([Weekday].self, from: data as Data)
     }
     
+    
+    
     static func register() {
         ValueTransformer.setValueTransformer(
             DaysValueTransformer(),
