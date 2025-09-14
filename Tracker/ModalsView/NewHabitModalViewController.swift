@@ -9,11 +9,17 @@ final class NewHabitModalViewController: UIViewController {
     
     // MARK: - Properties
     weak var delegate: NewHabitDelegate?
+    
     private var selectedDays: [Weekday] = []
     private var selectedCategory: String? = nil
+    private var selectedColor: UIColor = .white
+    private var selectedEmoji: String = ""
     
-    private let defaultColor: UIColor = .ypSelection5
-    private let defaultEmoji: String = "😪"
+    private lazy var emojiColorManager: EmojiColorCollectionManager = {
+        let manager = EmojiColorCollectionManager()
+        manager.delegate = self
+        return manager
+    }()
     
     // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
@@ -30,6 +36,15 @@ final class NewHabitModalViewController: UIViewController {
         delegate: self,
         separatorStyle: .singleLine
     )
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        emojiColorManager.configure(collectionView: collection)
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        return collection
+    }()
     
     private lazy var buttonsStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [cancelButton, createButton])
@@ -76,6 +91,7 @@ final class NewHabitModalViewController: UIViewController {
         view.addSubview(titleTextField)
         view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
+        view.addSubview(collectionView)
         view.addSubview(buttonsStackView)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -103,6 +119,12 @@ final class NewHabitModalViewController: UIViewController {
             optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.optionsTableHorizontalInset),
             optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.optionsTableHorizontalInset),
             optionsTableView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.optionsTableViewHeight),
+            
+            collectionView.topAnchor.constraint(equalTo: optionsTableView.bottomAnchor, constant: 32),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16),
+            
             
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
@@ -151,8 +173,8 @@ final class NewHabitModalViewController: UIViewController {
         let newTracker = Tracker(
             id: UUID(),
             name: title,
-            color: defaultColor,
-            emoji: defaultEmoji,
+            color: selectedColor,
+            emoji: selectedEmoji,
             schedule: selectedDays,
             isHabit: true
         )
@@ -228,11 +250,26 @@ extension NewHabitModalViewController: UITableViewDelegate {
     }
 }
 
+
+
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {
     func didSelectDays(_ days: [Weekday]) {
         selectedDays = days
         optionsTableView.reloadData()
+        updateCreateButtonState()
+    }
+}
+
+// MARK: - EmojiColorSelectionDelegate
+extension NewHabitModalViewController: EmojiColorSelectionDelegate {
+    func didSelectEmoji(_ emoji: String) {
+        selectedEmoji = emoji
+        updateCreateButtonState()
+    }
+    
+    func didSelectColor(_ color: UIColor) {
+        selectedColor = color
         updateCreateButtonState()
     }
 }

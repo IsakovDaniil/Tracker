@@ -1,6 +1,8 @@
 import UIKit
 
 final class MainTabBarController: UITabBarController {
+    // MARK: - Properties
+    private let coreDataManager: CoreDataManager
     
     // MARK: - Constants
     private enum TabBarConstants {
@@ -9,6 +11,16 @@ final class MainTabBarController: UITabBarController {
         static let statisticsTitle = "Статистика"
         static let trackersTag = 0
         static let statisticsTag = 1
+    }
+    
+    // MARK: - Init
+    init(coreDataManager: CoreDataManager) {
+        self.coreDataManager = coreDataManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - UI Elements
@@ -45,10 +57,12 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        let firstVC = UINavigationController(rootViewController: TrackersViewController())
+        let trackersVC = TrackersViewController(coreDataManager: coreDataManager)
+        let firstVC = UINavigationController(rootViewController: trackersVC)
         firstVC.tabBarItem = UITabBarItem(title: TabBarConstants.trackersTitle, image: UIImage.trakers, tag: TabBarConstants.trackersTag)
         
-        let secondVC = UINavigationController(rootViewController: StatisticsViewController())
+        let statisticsVC = StatisticsViewController(coreDataManager: coreDataManager)
+        let secondVC = UINavigationController(rootViewController: statisticsVC)
         secondVC.tabBarItem = UITabBarItem(title: TabBarConstants.statisticsTitle, image: UIImage.stats, tag: TabBarConstants.statisticsTag)
         
         viewControllers = [firstVC, secondVC]
