@@ -121,8 +121,8 @@ final class NewHabitModalViewController: UIViewController {
             optionsTableView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.optionsTableViewHeight),
             
             collectionView.topAnchor.constraint(equalTo: optionsTableView.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
             collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16),
             
             
