@@ -1,19 +1,21 @@
 import CoreData
 
 final class CoreDataManager {
+    static let shared = CoreDataManager()
     private var modelName = "TrackerModel"
     
-    init() {
+    private init() {
         DaysValueTransformer.register()
     }
     
-    private lazy var persistentContainer: NSPersistentContainer = {
+    lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: modelName)
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores { description, error in
             if let error = error as NSError? {
                 fatalError("Ошибка при загрузке Core Data: \(error)")
             }
-        })
+        }
+        container.viewContext.automaticallyMergesChangesFromParent = true
         return container
     }()
     
