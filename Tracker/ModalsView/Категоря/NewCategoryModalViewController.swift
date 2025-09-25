@@ -8,8 +8,10 @@ final class NewCategoryModalViewController: UIViewController {
         action: #selector(textFieldDidChange)
     )
     
-    private lazy var doneButton = UIButton.ypAddModalButton(
+    private lazy var doneButton = UIButton.ypModalSecondaryButton(
         title: "Готово",
+        titleColor: .ypWhite,
+        backgroundColor: .ypGray,
         target: self,
         action: #selector(doneButtonTapped)
     )
@@ -19,6 +21,7 @@ final class NewCategoryModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        doneButton.isEnabled = false  
     }
     
     private func setupView() {
@@ -50,8 +53,13 @@ final class NewCategoryModalViewController: UIViewController {
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
+        updateDoneButtonState()
+    }
+    
+    private func updateDoneButtonState() {
+        let hasText = !(titleTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
+        doneButton.isEnabled = hasText
+        doneButton.backgroundColor = hasText ? .ypBlack : .ypGray
     }
     
     @objc private func doneButtonTapped() {
