@@ -10,12 +10,25 @@ final class OnboardingPageViewController: UIViewController {
         return iv
     }()
     
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 32, weight: .bold)
+        label.textColor = .ypBlack
+        label.numberOfLines = .zero
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - Properties
     private let imageName: String
+    private let text: String
     
     // MARK: - Init
-    init(imageName: String) {
+    init(imageName: String, text: String) {
         self.imageName = imageName
+        self.text = text
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,12 +45,18 @@ final class OnboardingPageViewController: UIViewController {
     // MARK: - Private Methods
     private func setup() {
         view.addSubview(imageView)
+        view.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -16)
         ])
     }
 }
