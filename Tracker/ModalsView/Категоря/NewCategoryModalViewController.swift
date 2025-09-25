@@ -16,12 +16,15 @@ final class NewCategoryModalViewController: UIViewController {
         action: #selector(doneButtonTapped)
     )
     
+    // MARK: - Callback
+    var onCategoryAdded: ((String) -> Void)?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        doneButton.isEnabled = false  
+        doneButton.isEnabled = false
     }
     
     private func setupView() {
@@ -63,16 +66,26 @@ final class NewCategoryModalViewController: UIViewController {
     }
     
     @objc private func doneButtonTapped() {
+        guard let categoryName = titleTextField.text?.trimmingCharacters(in: .whitespaces),
+              !categoryName.isEmpty else {
+            return
+        }
         
+        // Вызываем callback с новой категорией
+        onCategoryAdded?(categoryName)
+        
+        // Закрываем модальное окно
+        dismiss(animated: true)
     }
-    
 }
-
 
 // MARK: - UITextFieldDelegate
 extension NewCategoryModalViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        if doneButton.isEnabled {
+            doneButtonTapped()
+        }
         return true
     }
 }
