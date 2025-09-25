@@ -52,6 +52,9 @@ final class AddCategoryModalViewController: UIViewController {
     }
     
     @objc private func addCategoryButtonTapped() {
-        
+        let newCategoryVC = NewCategoryModalViewController()
+        newCategoryVC.modalPresentationStyle = .pageSheet
+        newCategoryVC.modalTransitionStyle = .coverVertical
+        present(newCategoryVC, animated: true)
     }
 }
