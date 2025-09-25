@@ -71,10 +71,8 @@ final class NewCategoryModalViewController: UIViewController {
             return
         }
         
-        // Вызываем callback с новой категорией
         onCategoryAdded?(categoryName)
         
-        // Закрываем модальное окно
         dismiss(animated: true)
     }
 }

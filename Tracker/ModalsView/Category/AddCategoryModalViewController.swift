@@ -12,7 +12,9 @@ final class AddCategoryModalViewController: UIViewController {
     private lazy var optionsTableView = UITableView.makeOptionsTableView(
         dataSource: self,
         delegate: self,
-        separatorStyle: .none
+        separatorStyle: .none,
+        reuseIdentifier: CategoryCell.reuseIdentifier,
+        cellClass: CategoryCell.self
     )
     
     private lazy var addCategoryButton = UIButton.ypAddModalButton(
@@ -21,6 +23,8 @@ final class AddCategoryModalViewController: UIViewController {
         action: #selector(addCategoryButtonTapped)
     )
     
+    
+    private var selectedCategoryIndex: Int?
     // MARK: - Data
     private var categories: [String] = []
     
@@ -37,7 +41,7 @@ final class AddCategoryModalViewController: UIViewController {
         view.layer.cornerRadius = NewEventConstants.Layout.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
-        
+
         view.addSubview(titleLabel)
         view.addSubview(stubStack)
         stubStack.addArrangedSubview(stubImageView)
@@ -80,6 +84,33 @@ final class AddCategoryModalViewController: UIViewController {
         optionsTableView.reloadData()
     }
     
+    private func configureAppearance(for cell: UITableViewCell, at indexPath: IndexPath) {
+        let numberOfRows = optionsTableView.numberOfRows(inSection: indexPath.section)
+        cell.layer.masksToBounds = true
+        cell.layer.cornerRadius = 16
+        if numberOfRows == 1 {
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        } else {
+            if indexPath.row == 0 {
+                cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            } else if indexPath.row == numberOfRows - 1 {
+                cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            } else {
+                cell.layer.maskedCorners = []
+            }
+        }
+    }
+    
+    private func refreshCustomSeparators() {
+        guard let visibleIndexPaths = optionsTableView.indexPathsForVisibleRows else { return }
+        for indexPath in visibleIndexPaths {
+            if let cell = optionsTableView.cellForRow(at: indexPath) as? CategoryCell {
+                let lastRow = optionsTableView.numberOfRows(inSection: indexPath.section) - 1
+                cell.setSeparatorHidden(indexPath.row == lastRow)
+            }
+        }
+    }
+    
     @objc private func addCategoryButtonTapped() {
         let newCategoryVC = NewCategoryModalViewController()
         newCategoryVC.modalPresentationStyle = .pageSheet
@@ -92,6 +123,7 @@ final class AddCategoryModalViewController: UIViewController {
         
         present(newCategoryVC, animated: true)
     }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -101,21 +133,43 @@ extension AddCategoryModalViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath) as? OptionCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCell.reuseIdentifier, for: indexPath) as? CategoryCell else {
             return UITableViewCell()
         }
         
         let categoryName = categories[indexPath.row]
-        cell.configure(title: categoryName, subtitle: nil)
-        
+        cell.configure(title: categoryName)
+        cell.accessoryType = (selectedCategoryIndex == indexPath.row) ? .checkmark : .none
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        configureAppearance(for: cell, at: indexPath)
+        if let cell = cell as? CategoryCell {
+            let lastRow = tableView.numberOfRows(inSection: indexPath.section) - 1
+            cell.setSeparatorHidden(indexPath.row == lastRow)
+        }
+    }
+    
 }
 
 // MARK: - UITableViewDelegate
 extension AddCategoryModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // Здесь можно добавить логику выбора категории
+        
+        var indexPathsToReload: [IndexPath] = []
+        if let oldIndex = selectedCategoryIndex {
+            indexPathsToReload.append(IndexPath(row: oldIndex, section: 0))
+        }
+        
+        if selectedCategoryIndex == indexPath.row {
+            selectedCategoryIndex = nil
+        } else {
+            selectedCategoryIndex = indexPath.row
+            indexPathsToReload.append(indexPath)
+        }
+        
+        tableView.reloadRows(at: indexPathsToReload, with: .automatic)
     }
 }
