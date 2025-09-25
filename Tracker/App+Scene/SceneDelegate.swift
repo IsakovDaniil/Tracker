@@ -9,9 +9,16 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let coreDataManager = CoreDataManager.shared
-
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = /*MainTabBarController(coreDataManager: coreDataManager)*/ OnboardingViewController()
+        
+        let isOnboardingCompleted = UserDefaults.standard.bool(forKey: "OnboardingCompleted")
+        
+        if isOnboardingCompleted {
+            window.rootViewController = MainTabBarController(coreDataManager: coreDataManager)
+        } else {
+            window.rootViewController = OnboardingViewController()
+        }
+        
         self.window = window
         window.makeKeyAndVisible()
     }
