@@ -48,9 +48,9 @@ final class TrackersViewController: UIViewController {
         return stack
     }()
     
-    private lazy var stubImageView = UIImageView.stubImage()
+    private let stubImageView = UIImageView.stubImage()
     
-    private lazy var stubLabel = UILabel.stubLabel(withText: TrackersViewConstants.Strings.stubLabelText)
+    private let stubLabel = UILabel.stubLabel(withText: TrackersViewConstants.Strings.stubLabelText)
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

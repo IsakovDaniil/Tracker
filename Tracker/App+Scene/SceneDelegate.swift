@@ -14,7 +14,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let isOnboardingCompleted = UserDefaults.standard.bool(forKey: "OnboardingCompleted")
         
         if isOnboardingCompleted {
-            window.rootViewController = MainTabBarController(coreDataManager: coreDataManager)
+            window.rootViewController = AddCategoryModalViewController()/*MainTabBarController(coreDataManager: coreDataManager)*/
         } else {
             window.rootViewController = OnboardingViewController()
         }
