@@ -11,7 +11,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let coreDataManager = CoreDataManager.shared
 
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = MainTabBarController(coreDataManager: coreDataManager)
+        window.rootViewController = /*MainTabBarController(coreDataManager: coreDataManager)*/ OnboardingViewController()
         self.window = window
         window.makeKeyAndVisible()
     }
