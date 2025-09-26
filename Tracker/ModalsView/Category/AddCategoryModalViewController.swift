@@ -23,19 +23,27 @@ final class AddCategoryModalViewController: UIViewController {
         action: #selector(addCategoryButtonTapped)
     )
     
+    // MARK: - ViewModel
+    private lazy var viewModel = CategoryListViewModel()
+    
     // MARK: - Callbacks
     var onCategorySelected: ((String) -> Void)?
-    
-    private var selectedCategoryIndex: Int?
-    // MARK: - Data
-    private var categories: [String] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        updateUI()
+        bindViewModel()
+        viewModel.fetchCategories()
+    }
+    
+    private func bindViewModel() {
+        viewModel.onCategoriesUpdated = { [weak self] in
+            self?.optionsTableView.reloadData()
+            self?.updateUI()
+        }
+        viewModel.onCategorySelected = onCategorySelected
     }
     
     private func setupView() {
@@ -51,7 +59,6 @@ final class AddCategoryModalViewController: UIViewController {
         
         view.addSubview(optionsTableView)
         view.addSubview(addCategoryButton)
-        
     }
     
     private func setupConstraints() {
@@ -75,15 +82,9 @@ final class AddCategoryModalViewController: UIViewController {
     }
     
     private func updateUI() {
-        let hasCategories = !categories.isEmpty
+        let hasCategories = !viewModel.categories.isEmpty
         stubStack.isHidden = hasCategories
         optionsTableView.isHidden = !hasCategories
-    }
-    
-    private func addCategory(_ categoryName: String) {
-        categories.append(categoryName)
-        updateUI()
-        optionsTableView.reloadData()
     }
     
     private func configureAppearance(for cell: UITableViewCell, at indexPath: IndexPath) {
@@ -103,35 +104,23 @@ final class AddCategoryModalViewController: UIViewController {
         }
     }
     
-    private func refreshCustomSeparators() {
-        guard let visibleIndexPaths = optionsTableView.indexPathsForVisibleRows else { return }
-        for indexPath in visibleIndexPaths {
-            if let cell = optionsTableView.cellForRow(at: indexPath) as? CategoryCell {
-                let lastRow = optionsTableView.numberOfRows(inSection: indexPath.section) - 1
-                cell.setSeparatorHidden(indexPath.row == lastRow)
-            }
-        }
-    }
-    
     @objc private func addCategoryButtonTapped() {
         let newCategoryVC = NewCategoryModalViewController()
         newCategoryVC.modalPresentationStyle = .pageSheet
         newCategoryVC.modalTransitionStyle = .coverVertical
         
-        // Передаем замыкание для обработки новой категории
         newCategoryVC.onCategoryAdded = { [weak self] categoryName in
-            self?.addCategory(categoryName)
+            self?.viewModel.addCategory(name: categoryName)
         }
         
         present(newCategoryVC, animated: true)
     }
-    
 }
 
 // MARK: - UITableViewDataSource
 extension AddCategoryModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -139,20 +128,11 @@ extension AddCategoryModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let categoryName = categories[indexPath.row]
-        cell.configure(title: categoryName)
-        cell.accessoryType = (selectedCategoryIndex == indexPath.row) ? .checkmark : .none
+        let title = viewModel.categoryTitle(at: indexPath.row)
+        cell.configure(title: title)
+        cell.accessoryType = viewModel.isSelected(at: indexPath.row) ? .checkmark : .none
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        configureAppearance(for: cell, at: indexPath)
-        if let cell = cell as? CategoryCell {
-            let lastRow = tableView.numberOfRows(inSection: indexPath.section) - 1
-            cell.setSeparatorHidden(indexPath.row == lastRow)
-        }
-    }
-    
 }
 
 // MARK: - UITableViewDelegate
@@ -161,24 +141,29 @@ extension AddCategoryModalViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         var indexPathsToReload: [IndexPath] = []
-        if let oldIndex = selectedCategoryIndex {
+        if let oldIndex = viewModel.selectedIndex {
             indexPathsToReload.append(IndexPath(row: oldIndex, section: 0))
         }
         
-        if selectedCategoryIndex == indexPath.row {
-            selectedCategoryIndex = nil
-        } else {
-            selectedCategoryIndex = indexPath.row
+        let shouldDismiss = viewModel.selectCategory(at: indexPath.row)
+        if viewModel.selectedIndex == indexPath.row {
             indexPathsToReload.append(indexPath)
-            
-            let selectedCategoryName = categories[indexPath.row]
-            onCategorySelected?(selectedCategoryName)
-            
-            dismiss(animated: true)
         }
         
         if !indexPathsToReload.isEmpty {
             tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+        }
+        
+        if shouldDismiss {
+            dismiss(animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        configureAppearance(for: cell, at: indexPath)
+        if let cell = cell as? CategoryCell {
+            let lastRow = tableView.numberOfRows(inSection: indexPath.section) - 1
+            cell.setSeparatorHidden(indexPath.row == lastRow)
         }
     }
 }

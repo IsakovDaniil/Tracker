@@ -142,8 +142,15 @@ final class NewHabitModalViewController: UIViewController {
     
     private func isFormValid() -> Bool {
         guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
+        
         guard selectedCategory != nil else { return false }
+        
         guard !selectedDays.isEmpty else { return false }
+        
+        guard !selectedEmoji.isEmpty else { return false }
+        
+        guard selectedColor != .white else { return false }
+        
         return true
     }
     
@@ -258,8 +265,6 @@ extension NewHabitModalViewController: UITableViewDelegate {
         }
     }
 }
-
-
 
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {

@@ -137,9 +137,16 @@ final class NewEventModalViewController: UIViewController {
     }
     
     private func isFormValid() -> Bool {
-        guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
+        guard let
+                text = titleTextField.text,
+                !text.trimmingCharacters(in: .whitespaces).isEmpty
+        else { return false }
         
         guard selectedCategory != nil else { return false }
+        
+        guard !selectedEmoji.isEmpty else { return false }
+        
+        guard selectedColor != .white else { return false }
         
         return true
     }
@@ -224,9 +231,17 @@ extension NewEventModalViewController: UITableViewDelegate {
         
         guard indexPath.row == .zero else { return }
         
-        selectedCategory = NewEventConstants.Strings.defaultCategory
-        optionsTableView.reloadData()
-        updateCreateButtonState()
+        let categoryModalVC = AddCategoryModalViewController()
+        categoryModalVC.modalPresentationStyle = .pageSheet
+        categoryModalVC.modalTransitionStyle = .coverVertical
+        
+        categoryModalVC.onCategorySelected = { [weak self] categoryName in
+            self?.selectedCategory = categoryName
+            self?.optionsTableView.reloadData()
+            self?.updateCreateButtonState()
+        }
+        
+        present(categoryModalVC, animated: true)
     }
 }
 
