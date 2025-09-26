@@ -1,6 +1,7 @@
 import UIKit
 
 final class NewCategoryModalViewController: UIViewController {
+    // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle("Новая категория")
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
@@ -27,6 +28,7 @@ final class NewCategoryModalViewController: UIViewController {
         doneButton.isEnabled = false
     }
     
+    // MARK: - Setup
     private func setupView() {
         view.layer.masksToBounds = true
         view.layer.cornerRadius = NewEventConstants.Layout.cornerRadius
@@ -55,14 +57,16 @@ final class NewCategoryModalViewController: UIViewController {
         ])
     }
     
-    @objc private func textFieldDidChange(_ textField: UITextField) {
-        updateDoneButtonState()
-    }
-    
+    // MARK: - Private Methods
     private func updateDoneButtonState() {
         let hasText = !(titleTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
         doneButton.isEnabled = hasText
         doneButton.backgroundColor = hasText ? .ypBlack : .ypGray
+    }
+    
+    // MARK: - Actions
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        updateDoneButtonState()
     }
     
     @objc private func doneButtonTapped() {

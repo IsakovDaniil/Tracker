@@ -2,6 +2,7 @@ import UIKit
 
 class OnboardingViewController: UIPageViewController {
     
+    // MARK: - UI Elements
     private lazy var getStaredButton = UIButton.ypAddModalButton(
         title: "Вот это технологии!",
         target: self,
@@ -21,13 +22,25 @@ class OnboardingViewController: UIPageViewController {
         return pc
     }()
     
+    
+    // MARK: - Data
     private lazy var pages: [UIViewController] = {
         [
-            OnboardingPageViewController(imageName: "OnbordingBlue", text: "Отслеживайте только то, что хотите"),
+            OnboardingPageViewController(imageName: "OnbordingBlue", text: "Отслеживайте только \nто, что хотите"),
             OnboardingPageViewController(imageName: "OnbordingRed", text: "Даже если это не литры воды и йога"),
         ]
     }()
     
+    // MARK: - Init
+    init() {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -37,6 +50,8 @@ class OnboardingViewController: UIPageViewController {
         setupInitialPage()
     }
     
+    
+    // MARK: - Setup
     private func setupView() {
         view.addSubview(getStaredButton)
         view.addSubview(pageControl)
@@ -62,6 +77,7 @@ class OnboardingViewController: UIPageViewController {
         setViewControllers([first], direction: .forward, animated: true, completion: nil)
     }
     
+    // MARK: - Actions
     @objc private func getStaredButtonTapped() {
         UserDefaults.standard.set(true, forKey: "OnboardingCompleted")
         
@@ -77,6 +93,7 @@ class OnboardingViewController: UIPageViewController {
     }
 }
 
+// MARK: - UIPageViewControllerDataSource
 extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
@@ -103,6 +120,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
     }
 }
 
+// MARK: - UIPageViewControllerDelegate
 extension OnboardingViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentViewController = pageViewController.viewControllers?.first,

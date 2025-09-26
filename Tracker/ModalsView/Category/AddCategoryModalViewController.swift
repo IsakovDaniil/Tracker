@@ -1,6 +1,7 @@
 import UIKit
 
 final class AddCategoryModalViewController: UIViewController {
+    // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle("Категория")
     
     private lazy var stubStack = UIStackView.stubStack()
@@ -38,6 +39,7 @@ final class AddCategoryModalViewController: UIViewController {
         viewModel.fetchCategories()
     }
     
+    // MARK: - Private methods
     private func bindViewModel() {
         viewModel.onCategoriesUpdated = { [weak self] in
             self?.optionsTableView.reloadData()
@@ -51,7 +53,7 @@ final class AddCategoryModalViewController: UIViewController {
         view.layer.cornerRadius = NewEventConstants.Layout.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
-
+        
         view.addSubview(titleLabel)
         view.addSubview(stubStack)
         stubStack.addArrangedSubview(stubImageView)

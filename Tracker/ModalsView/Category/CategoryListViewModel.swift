@@ -1,14 +1,17 @@
 import UIKit
 
-// MARK: - CategoryListViewModel
+// MARK: - ViewModel
 final class CategoryListViewModel {
+    // MARK: - Properties
     private let store: TrackerCategoryStoreProtocol
     private(set) var categories: [TrackerCategory] = []
     private(set) var selectedIndex: Int?
     
+    // MARK: - Callbacks
     var onCategoriesUpdated: (() -> Void)?
     var onCategorySelected: ((String) -> Void)?
     
+    // MARK: - Init
     init(store: TrackerCategoryStoreProtocol = TrackerCategoryStore()) {
         self.store = store
         if let delegateStore = store as? TrackerCategoryStore {
@@ -16,6 +19,7 @@ final class CategoryListViewModel {
         }
     }
     
+    // MARK: - Public Methods
     func fetchCategories() {
         do {
             categories = try store.fetchAllCategories()
