@@ -47,7 +47,7 @@ final class AddCategoryModalViewController: UIViewController {
     }
     
     private func setupView() {
-        view.layer.masksToBounds = true
+        view.layer.masksToBounds = false
         view.layer.cornerRadius = NewEventConstants.Layout.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = UIColor.ypWhite
@@ -59,6 +59,8 @@ final class AddCategoryModalViewController: UIViewController {
         
         view.addSubview(optionsTableView)
         view.addSubview(addCategoryButton)
+        
+        optionsTableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -10)
     }
     
     private func setupConstraints() {
