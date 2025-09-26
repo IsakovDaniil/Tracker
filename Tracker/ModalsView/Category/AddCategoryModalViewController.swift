@@ -23,6 +23,8 @@ final class AddCategoryModalViewController: UIViewController {
         action: #selector(addCategoryButtonTapped)
     )
     
+    // MARK: - Callbacks
+    var onCategorySelected: ((String) -> Void)?
     
     private var selectedCategoryIndex: Int?
     // MARK: - Data
@@ -168,8 +170,15 @@ extension AddCategoryModalViewController: UITableViewDelegate {
         } else {
             selectedCategoryIndex = indexPath.row
             indexPathsToReload.append(indexPath)
+            
+            let selectedCategoryName = categories[indexPath.row]
+            onCategorySelected?(selectedCategoryName)
+            
+            dismiss(animated: true)
         }
         
-        tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+        if !indexPathsToReload.isEmpty {
+            tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+        }
     }
 }

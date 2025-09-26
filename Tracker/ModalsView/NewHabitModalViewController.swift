@@ -238,9 +238,18 @@ extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
-            selectedCategory = NewHabitConstants.Strings.defaultCategory
-            optionsTableView.reloadData()
-            updateCreateButtonState()
+            let categoryModalVC = AddCategoryModalViewController()
+            categoryModalVC.modalPresentationStyle = .pageSheet
+            categoryModalVC.modalTransitionStyle = .coverVertical
+            
+            categoryModalVC.onCategorySelected = { [weak self] categoryName in
+                self?.selectedCategory = categoryName
+                self?.optionsTableView.reloadData()
+                self?.updateCreateButtonState()
+            }
+            
+            present(categoryModalVC, animated: true)
+            
         } else if indexPath.row == 1 {
             let scheduleVC = SelectScheduleModalViewController()
             scheduleVC.delegate = self
