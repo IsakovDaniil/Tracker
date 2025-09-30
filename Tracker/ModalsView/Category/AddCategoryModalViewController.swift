@@ -135,7 +135,7 @@ final class AddCategoryModalViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension AddCategoryModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.categories.count
+        viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
