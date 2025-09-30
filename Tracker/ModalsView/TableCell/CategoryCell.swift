@@ -1,10 +1,9 @@
-import Foundation
 import UIKit
 
 final class CategoryCell: UITableViewCell {
     // MARK: - Properties
     static let reuseIdentifier = "CategoryCell"
-    private var bottomSeparatorHeightConstraint: NSLayoutConstraint!
+    private var bottomSeparatorHeightConstraint: NSLayoutConstraint?
     private var pixelHeight: CGFloat { 1.5 / UIScreen.main.scale }
     
     // MARK: - UI Elements
@@ -39,13 +38,14 @@ final class CategoryCell: UITableViewCell {
         contentView.layer.masksToBounds = true
         
         contentView.addSubview(bottomSeparator)
-        bottomSeparatorHeightConstraint = bottomSeparator.heightAnchor.constraint(equalToConstant: pixelHeight)
-        
         contentView.addSubview(titleLabel)
     }
     
     // MARK: - Setup Constraints
     private func setupConstraints() {
+        let heightConstraint = bottomSeparator.heightAnchor.constraint(equalToConstant: pixelHeight)
+        bottomSeparatorHeightConstraint = heightConstraint
+        
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: OptionCellConstants.Layout.titleLabelLeadingInset),
@@ -54,7 +54,7 @@ final class CategoryCell: UITableViewCell {
             bottomSeparator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bottomSeparator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             bottomSeparator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            bottomSeparatorHeightConstraint,
+            heightConstraint,
             
             contentView.heightAnchor.constraint(equalToConstant: OptionCellConstants.Layout.contentViewHeight)
         ])
@@ -67,7 +67,7 @@ final class CategoryCell: UITableViewCell {
     
     func setSeparatorAppearance(color: UIColor = .separator, height: CGFloat? = nil) {
         bottomSeparator.backgroundColor = color
-        bottomSeparatorHeightConstraint.constant = height ?? pixelHeight
+        bottomSeparatorHeightConstraint?.constant = height ?? pixelHeight
         setNeedsLayout()
     }
     
