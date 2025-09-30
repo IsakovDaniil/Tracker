@@ -48,20 +48,9 @@ final class TrackersViewController: UIViewController {
         return stack
     }()
     
-    private lazy var stubImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.dizzyStar
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    private let stubImageView = UIImageView.stubImage()
     
-    private lazy var stubLabel: UILabel = {
-        let label = UILabel()
-        label.text = TrackersViewConstants.Strings.stubLabelText
-        label.textColor = UIColor.ypBlack
-        label.font = UIFont.systemFont(ofSize: TrackersViewConstants.Typography.stubLabelFontSize, weight: .medium)
-        return label
-    }()
+    private let stubLabel = UILabel.stubLabel(withText: TrackersViewConstants.Strings.stubLabelText)
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

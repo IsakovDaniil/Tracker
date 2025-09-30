@@ -130,18 +130,18 @@ final class NewEventModalViewController: UIViewController {
     
     // MARK: - Validation
     private func updateCreateButtonState() {
-        let isValid = isFormValid()
+        let isValid = isFormValid
         
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? .ypBlack : .ypGray
     }
     
-    private func isFormValid() -> Bool {
-        guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        
-        guard selectedCategory != nil else { return false }
-        
-        return true
+    private var isFormValid: Bool {
+        let trimmedText = titleTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        return !trimmedText.isEmpty
+            && selectedCategory != nil
+            && !selectedEmoji.isEmpty
+            && selectedColor != .white
     }
     
     // MARK: - Actions
@@ -164,7 +164,7 @@ final class NewEventModalViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        guard isFormValid(),
+        guard isFormValid,
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
               let category = selectedCategory else {
             return
@@ -224,9 +224,17 @@ extension NewEventModalViewController: UITableViewDelegate {
         
         guard indexPath.row == .zero else { return }
         
-        selectedCategory = NewEventConstants.Strings.defaultCategory
-        optionsTableView.reloadData()
-        updateCreateButtonState()
+        let categoryModalVC = AddCategoryModalViewController()
+        categoryModalVC.modalPresentationStyle = .pageSheet
+        categoryModalVC.modalTransitionStyle = .coverVertical
+        
+        categoryModalVC.onCategorySelected = { [weak self] categoryName in
+            self?.selectedCategory = categoryName
+            self?.optionsTableView.reloadData()
+            self?.updateCreateButtonState()
+        }
+        
+        present(categoryModalVC, animated: true)
     }
 }
 

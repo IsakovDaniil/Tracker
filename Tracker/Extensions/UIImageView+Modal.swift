@@ -8,4 +8,11 @@ extension UIImageView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }
+    
+    static func stubImage() -> UIImageView {
+        let imageView = UIImageView(image: UIImage.dizzyStar)
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }
 }

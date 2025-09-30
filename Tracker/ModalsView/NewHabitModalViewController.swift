@@ -135,16 +135,18 @@ final class NewHabitModalViewController: UIViewController {
     
     // MARK: - Validation
     private func updateCreateButtonState() {
-        let isValid = isFormValid()
+        let isValid = isFormValid
         createButton.isEnabled = isValid
         createButton.backgroundColor = isValid ? .ypBlack : .ypGray
     }
     
-    private func isFormValid() -> Bool {
-        guard let text = titleTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return false }
-        guard selectedCategory != nil else { return false }
-        guard !selectedDays.isEmpty else { return false }
-        return true
+    private var isFormValid: Bool {
+        let trimmedText = titleTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        return !trimmedText.isEmpty
+            && selectedCategory != nil
+            && !selectedDays.isEmpty
+            && !selectedEmoji.isEmpty
+            && selectedColor != .white
     }
     
     // MARK: - Actions
@@ -166,7 +168,7 @@ final class NewHabitModalViewController: UIViewController {
     }
     
     @objc private func createButtonTapped() {
-        guard isFormValid(),
+        guard isFormValid,
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
               let category = selectedCategory else { return }
         
@@ -238,9 +240,18 @@ extension NewHabitModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
-            selectedCategory = NewHabitConstants.Strings.defaultCategory
-            optionsTableView.reloadData()
-            updateCreateButtonState()
+            let categoryModalVC = AddCategoryModalViewController()
+            categoryModalVC.modalPresentationStyle = .pageSheet
+            categoryModalVC.modalTransitionStyle = .coverVertical
+            
+            categoryModalVC.onCategorySelected = { [weak self] categoryName in
+                self?.selectedCategory = categoryName
+                self?.optionsTableView.reloadData()
+                self?.updateCreateButtonState()
+            }
+            
+            present(categoryModalVC, animated: true)
+            
         } else if indexPath.row == 1 {
             let scheduleVC = SelectScheduleModalViewController()
             scheduleVC.delegate = self
@@ -249,8 +260,6 @@ extension NewHabitModalViewController: UITableViewDelegate {
         }
     }
 }
-
-
 
 // MARK: - SelectScheduleDelegate
 extension NewHabitModalViewController: SelectScheduleDelegate {

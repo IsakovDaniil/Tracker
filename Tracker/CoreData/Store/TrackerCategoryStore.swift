@@ -19,7 +19,6 @@ final class TrackerCategoryStore: NSObject {
     // MARK: Properties
     weak var delegate: TrackerCategoryStoreDelegate?
     private let context: NSManagedObjectContext
-    private static let fetchRequestSimple: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>?
     
     // MARK: Init
@@ -54,6 +53,13 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     // MARK: Add Category
     func addCategory(_ category: TrackerCategory) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), category.title)
+        
+        let count = try context.count(for: request)
+        
+        guard count == .zero else { return }
+        
         let categoryEntity = TrackerCategoryCoreData(context: context)
         categoryEntity.title = category.title
         
@@ -62,7 +68,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     // MARK: Fetch All Categories
     func fetchAllCategories() throws -> [TrackerCategory] {
-        let request = TrackerCategoryStore.fetchRequestSimple
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         let categoryEntities = try context.fetch(request)
         
         return categoryEntities.map { entity in
@@ -76,7 +82,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     // MARK: Delete Category
     func deleteCategory(withTitle title: String) throws {
-        let request = TrackerCategoryStore.fetchRequestSimple
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
         
         let categories = try context.fetch(request)
@@ -90,7 +96,7 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
     
     // MARK: Find or Create Category
     func findOrCreateCategory(with title: String) throws -> TrackerCategoryCoreData {
-        let request = TrackerCategoryStore.fetchRequestSimple
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), title)
         
         if let existingCategory = try context.fetch(request).first {

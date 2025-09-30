@@ -21,7 +21,6 @@ final class TrackerStore: NSObject {
     weak var delegate: TrackerStoreDelegate?
     private let context: NSManagedObjectContext
     private let uiColorMarshalling = UIColorMarshalling()
-    private static let fetchRequestSimple: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
     private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>?
     
     // MARK: Init
