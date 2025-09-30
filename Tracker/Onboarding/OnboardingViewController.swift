@@ -79,7 +79,7 @@ class OnboardingViewController: UIPageViewController {
     
     // MARK: - Actions
     @objc private func getStaredButtonTapped() {
-        UserDefaults.standard.set(true, forKey: "OnboardingCompleted")
+        UserDefaultsService.shared.isOnboardingCompleted = true
         
         let coreDataManager = CoreDataManager.shared
         let mainTabBarController = MainTabBarController(coreDataManager: coreDataManager)
@@ -89,7 +89,13 @@ class OnboardingViewController: UIPageViewController {
         
         window.rootViewController = mainTabBarController
         
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+        UIView.transition(
+            with: window,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: nil,
+            completion: nil
+        )
     }
 }
 
