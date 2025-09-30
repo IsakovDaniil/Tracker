@@ -57,9 +57,8 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.title), category.title)
         
         let count = try context.count(for: request)
-        if count > 0 {
-            return
-        }
+        
+        guard count == .zero else { return }
         
         let categoryEntity = TrackerCategoryCoreData(context: context)
         categoryEntity.title = category.title
