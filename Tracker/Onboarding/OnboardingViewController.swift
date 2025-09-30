@@ -1,6 +1,6 @@
 import UIKit
 
-class OnboardingViewController: UIPageViewController {
+final class OnboardingViewController: UIPageViewController {
     
     // MARK: - UI Elements
     private lazy var getStaredButton = UIButton.ypAddModalButton(
@@ -26,8 +26,8 @@ class OnboardingViewController: UIPageViewController {
     // MARK: - Data
     private lazy var pages: [UIViewController] = {
         [
-            OnboardingPageViewController(imageName: "OnbordingBlue", text: "Отслеживайте только \nто, что хотите"),
-            OnboardingPageViewController(imageName: "OnbordingRed", text: "Даже если это не литры воды и йога"),
+            OnboardingPageViewController(imageName: "OnboardingBlue", text: "Отслеживайте только \nто, что хотите"),
+            OnboardingPageViewController(imageName: "OnboardingRed", text: "Даже если это не литры воды и йога"),
         ]
     }()
     
