@@ -25,10 +25,21 @@ final class AddCategoryModalViewController: UIViewController {
     )
     
     // MARK: - ViewModel
-    private lazy var viewModel = CategoryListViewModel()
+    private let viewModel: CategoryListViewModel
     
     // MARK: - Callbacks
     var onCategorySelected: ((String) -> Void)?
+    
+    // MARK: - Init
+    init(viewModel: CategoryListViewModel = CategoryListViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.viewModel = CategoryListViewModel()
+        super.init(coder: coder)
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
