@@ -2,6 +2,7 @@
   Localizable.strings (English)
   Tracker
 */
+
 // MARK: - Main Tab Bar
 "mainTabBar.trackersTitle" = "Trackers";
 "mainTabBar.statisticsTitle" = "Statistics";
@@ -11,11 +12,16 @@
 "common.create" = "Create";
 "common.done" = "Done";
 "common.everyday" = "Every day";
+"common.trackerNamePlaceholder" = "Enter tracker name";
 
 // MARK: - Onboarding
 "onboarding.button" = "That's the technology!";
 "onboarding.page1.title" = "Track only \nwhat you want";
 "onboarding.page2.title" = "Even if it's not liters of water and yoga";
+
+// MARK: - Emoji & Color Headers
+"emojiColor.emoji" = "Emoji";
+"emojiColor.color" = "Color";
 
 // MARK: - Trackers Main Screen
 "trackers.title" = "Trackers";

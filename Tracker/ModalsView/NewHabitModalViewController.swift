@@ -211,7 +211,10 @@ extension NewHabitModalViewController: UITableViewDataSource {
         }
         
         if indexPath.row == 0 {
-            cell.configure(title: NewHabitConstants.Strings.categoryTitle, subtitle: selectedCategory)
+            cell.configure(
+                title: R.string.localizable.newHabitCategory(),
+                subtitle: selectedCategory
+            )
         } else {
             let subtitle: String?
             if selectedDays.count == 7 {
@@ -219,7 +222,10 @@ extension NewHabitModalViewController: UITableViewDataSource {
             } else {
                 subtitle = selectedDays.isEmpty ? nil : selectedDays.map { $0.shortName }.joined(separator: ", ")
             }
-            cell.configure(title: NewHabitConstants.Strings.scheduleTitle, subtitle: subtitle)
+            cell.configure(
+                title: R.string.localizable.newHabitSchedule(),
+                subtitle: subtitle
+            )
         }
         
         return cell

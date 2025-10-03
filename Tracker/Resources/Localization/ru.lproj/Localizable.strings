@@ -2,6 +2,7 @@
   Localizable.strings (Russian)
   Tracker
 */
+
 // MARK: - Main Tab Bar
 "mainTabBar.trackersTitle" = "Трекеры";
 "mainTabBar.statisticsTitle" = "Статистика";
@@ -11,11 +12,16 @@
 "common.create" = "Создать";
 "common.done" = "Готово";
 "common.everyday" = "Каждый день";
+"common.trackerNamePlaceholder" = "Введите название трекера";
 
 // MARK: - Onboarding
 "onboarding.button" = "Вот это технологии!";
 "onboarding.page1.title" = "Отслеживайте только \nто, что хотите";
 "onboarding.page2.title" = "Даже если это не литры воды и йога";
+
+// MARK: - Emoji & Color Headers
+"emojiColor.emoji" = "Emoji";
+"emojiColor.color" = "Цвет";
 
 // MARK: - Trackers Main Screen
 "trackers.title" = "Трекеры";
