@@ -210,7 +210,10 @@ extension NewEventModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(title: NewEventConstants.Strings.category, subtitle: selectedCategory)
+        cell.configure(
+            title: R.string.localizable.newEventCategory(),
+            subtitle: selectedCategory
+        )
         return cell
     }
 }
