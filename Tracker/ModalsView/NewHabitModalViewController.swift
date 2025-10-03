@@ -175,6 +175,8 @@ final class NewHabitModalViewController: UIViewController {
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
               let category = selectedCategory else { return }
         
+        print("DEBUG: Creating tracker with title: \(title), category: \(category) (type: \(type(of: category))") // Проверьте тип category
+        
         let newTracker = Tracker(
             id: UUID(),
             name: title,
@@ -184,10 +186,10 @@ final class NewHabitModalViewController: UIViewController {
             isHabit: true
         )
         
+        print("DEBUG: Tracker created: \(newTracker.name)")
         delegate?.didCreateTracker(newTracker, categoryTitle: category)
         dismiss(animated: true)
     }
-    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
