@@ -4,7 +4,7 @@ final class OnboardingViewController: UIPageViewController {
     
     // MARK: - UI Elements
     private lazy var getStaredButton = UIButton.ypAddModalButton(
-        title: "Вот это технологии!",
+        title: R.string.localizable.onboardingButton(),
         target: self,
         action: #selector(getStaredButtonTapped)
     )

@@ -27,3 +27,5 @@ enum NewEventConstants {
         static let titleCharacterLimit = 38
     }
 }
+
+
