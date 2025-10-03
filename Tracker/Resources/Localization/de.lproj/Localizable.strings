@@ -2,6 +2,9 @@
   Localizable.strings (German)
   Tracker
 */
+// MARK: - Main Tab Bar
+"mainTabBar.trackersTitle" = "Tracker";
+"mainTabBar.statisticsTitle" = "Statistiken";
 
 // MARK: - Common
 "common.cancel" = "Abbrechen";

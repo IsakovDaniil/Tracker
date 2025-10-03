@@ -2,6 +2,9 @@
   Localizable.strings (Russian)
   Tracker
 */
+// MARK: - Main Tab Bar
+"mainTabBar.trackersTitle" = "Трекеры";
+"mainTabBar.statisticsTitle" = "Статистика";
 
 // MARK: - Common
 "common.cancel" = "Отмена";
