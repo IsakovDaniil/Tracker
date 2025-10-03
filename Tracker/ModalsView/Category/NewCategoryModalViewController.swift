@@ -2,7 +2,9 @@ import UIKit
 
 final class NewCategoryModalViewController: UIViewController {
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle("Новая категория")
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.newCategoryTitle()
+    )
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -10,7 +12,7 @@ final class NewCategoryModalViewController: UIViewController {
     )
     
     private lazy var doneButton = UIButton.ypModalSecondaryButton(
-        title: "Готово",
+        title: R.string.localizable.commonDone(),
         titleColor: .ypWhite,
         backgroundColor: .ypGray,
         target: self,

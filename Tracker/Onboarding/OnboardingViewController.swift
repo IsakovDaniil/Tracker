@@ -26,8 +26,14 @@ final class OnboardingViewController: UIPageViewController {
     // MARK: - Data
     private lazy var pages: [UIViewController] = {
         [
-            OnboardingPageViewController(imageName: "OnboardingBlue", text: "Отслеживайте только \nто, что хотите"),
-            OnboardingPageViewController(imageName: "OnboardingRed", text: "Даже если это не литры воды и йога"),
+            OnboardingPageViewController(
+                imageName: R.image.onboardingBlue.name,
+                text: R.string.localizable.onboardingPage1Title()
+            ),
+            OnboardingPageViewController(
+                imageName: R.image.onboardingRed.name,
+                text: R.string.localizable.onboardingPage2Title()
+            ),
         ]
     }()
     

@@ -11,7 +11,9 @@ final class SelectScheduleModalViewController: UIViewController {
     weak var delegate: SelectScheduleDelegate?
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(SelectScheduleConstants.Strings.titleLabel)
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.scheduleTitle()
+    )
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -28,7 +30,7 @@ final class SelectScheduleModalViewController: UIViewController {
     }()
     
     private lazy var doneButton = UIButton.ypAddModalButton(
-        title: SelectScheduleConstants.Strings.doneButton,
+        title: R.string.localizable.commonDone(),
         target: self,
         action: #selector(doneButtonTapped)
     )

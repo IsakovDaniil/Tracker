@@ -22,7 +22,9 @@ final class NewHabitModalViewController: UIViewController {
     }()
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(NewHabitConstants.Strings.titleLabel)
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.newHabitTitle()
+    )
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -56,7 +58,7 @@ final class NewHabitModalViewController: UIViewController {
     }()
     
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
-        title: NewHabitConstants.Strings.cancelButton,
+        title: R.string.localizable.commonCancel(),
         titleColor: .ypRed,
         backgroundColor: .clear,
         hasBorder: true,
@@ -65,12 +67,13 @@ final class NewHabitModalViewController: UIViewController {
     )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: NewHabitConstants.Strings.createButton,
+        title: R.string.localizable.commonCreate(),
         titleColor: .ypWhite,
         backgroundColor: .ypGray,
         target: self,
         action: #selector(createButtonTapped)
     )
+
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -212,7 +215,7 @@ extension NewHabitModalViewController: UITableViewDataSource {
         } else {
             let subtitle: String?
             if selectedDays.count == 7 {
-                subtitle = NewHabitConstants.Strings.scheduleEveryday
+                subtitle = R.string.localizable.commonEveryday()
             } else {
                 subtitle = selectedDays.isEmpty ? nil : selectedDays.map { $0.shortName }.joined(separator: ", ")
             }

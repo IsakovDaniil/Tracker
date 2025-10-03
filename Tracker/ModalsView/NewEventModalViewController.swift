@@ -19,7 +19,9 @@ final class NewEventModalViewController: UIViewController {
     }()
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.newEventTitle()
+    )
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -53,7 +55,7 @@ final class NewEventModalViewController: UIViewController {
     }()
     
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
-        title: NewEventConstants.Strings.cancelButton,
+        title: R.string.localizable.commonCancel(),
         titleColor: .ypRed,
         backgroundColor: .clear,
         hasBorder: true,
@@ -62,9 +64,9 @@ final class NewEventModalViewController: UIViewController {
     )
     
     private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: NewEventConstants.Strings.createButton,
+        title: R.string.localizable.commonCreate(),
         titleColor: .ypWhite,
-        backgroundColor: .ypBlack,
+        backgroundColor: .ypGray,
         target: self,
         action: #selector(createButtonTapped)
     )

@@ -21,7 +21,7 @@ final class TrackersViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = TrackersViewConstants.Strings.titleText
+        label.text = R.string.localizable.trackersTitle()
         label.textColor = UIColor.ypBlack
         label.font = UIFont.systemFont(ofSize: TrackersViewConstants.Typography.titleLabelFontSize, weight: .bold)
         label.textAlignment = .left
@@ -31,7 +31,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.placeholder = TrackersViewConstants.Strings.searchBarPlaceholder
+        bar.placeholder = R.string.localizable.trackersSearchBarPlaceholder()
         bar.searchBarStyle = .minimal
         bar.delegate = self
         bar.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ final class TrackersViewController: UIViewController {
     
     private let stubImageView = UIImageView.stubImage()
     
-    private let stubLabel = UILabel.stubLabel(withText: TrackersViewConstants.Strings.stubLabelText)
+    private let stubLabel = UILabel.stubLabel(withText: R.string.localizable.trackersStubText())
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -252,9 +252,9 @@ final class TrackersViewController: UIViewController {
         updateFilteredCategories()
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = TrackersViewConstants.Strings.dateFormat
+        dateFormatter.dateFormat = R.string.localizable.trackersDateFormat()
         let formattedDate = dateFormatter.string(from: selectedDate)
-        print(String(format: TrackersViewConstants.Strings.selectedDateMessage, formattedDate))
+        print(R.string.localizable.trackersSelectedDate(formattedDate))
     }
 }
 
