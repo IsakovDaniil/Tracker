@@ -1,82 +1,82 @@
 /*
-  Localizable.strings (English)
+  Localizable.strings (German)
   Tracker
 */
 
 // MARK: - Common
-"common.cancel" = "Cancel";
-"common.create" = "Create";
-"common.done" = "Done";
-"common.everyday" = "Every day";
+"common.cancel" = "Abbrechen";
+"common.create" = "Erstellen";
+"common.done" = "Fertig";
+"common.everyday" = "Jeden Tag";
 
 // MARK: - Onboarding
-"onboarding.button" = "That's the technology!";
-"onboarding.page1.title" = "Track only \nwhat you want";
-"onboarding.page2.title" = "Even if it's not liters of water and yoga";
+"onboarding.button" = "Das ist Technologie!";
+"onboarding.page1.title" = "Verfolgen Sie nur \nwas Sie möchten";
+"onboarding.page2.title" = "Auch wenn es nicht Liter Wasser und Yoga sind";
 
 // MARK: - Trackers Main Screen
-"trackers.title" = "Trackers";
-"trackers.searchBar.placeholder" = "Search";
-"trackers.stub.text" = "What will we track?";
-"trackers.dateFormat" = "MM/dd/yyyy";
-"trackers.selectedDate" = "Selected date: %@";
+"trackers.title" = "Tracker";
+"trackers.searchBar.placeholder" = "Suchen";
+"trackers.stub.text" = "Was werden wir verfolgen?";
+"trackers.dateFormat" = "dd.MM.yyyy";
+"trackers.selectedDate" = "Ausgewähltes Datum: %@";
 
 // MARK: - Add Trackers Modal
-"addTrackers.title" = "Create Tracker";
-"addTrackers.habitButton" = "Habit";
-"addTrackers.eventButton" = "Irregular Event";
+"addTrackers.title" = "Tracker Erstellen";
+"addTrackers.habitButton" = "Gewohnheit";
+"addTrackers.eventButton" = "Unregelmäßiges Ereignis";
 
 // MARK: - New Habit
-"newHabit.title" = "New Habit";
-"newHabit.textField.placeholder" = "Enter tracker name";
-"newHabit.characterLimit" = "38 character limit";
-"newHabit.category" = "Category";
-"newHabit.schedule" = "Schedule";
-"newHabit.cancelButton" = "Cancel";
-"newHabit.createButton" = "Create";
+"newHabit.title" = "Neue Gewohnheit";
+"newHabit.textField.placeholder" = "Tracker-Namen eingeben";
+"newHabit.characterLimit" = "38 Zeichen Limit";
+"newHabit.category" = "Kategorie";
+"newHabit.schedule" = "Zeitplan";
+"newHabit.cancelButton" = "Abbrechen";
+"newHabit.createButton" = "Erstellen";
 
 // MARK: - New Event
-"newEvent.title" = "New Irregular Event";
-"newEvent.textField.placeholder" = "Enter tracker name";
-"newEvent.characterLimit" = "38 character limit";
-"newEvent.category" = "Category";
-"newEvent.cancelButton" = "Cancel";
-"newEvent.createButton" = "Create";
+"newEvent.title" = "Neues Unregelmäßiges Ereignis";
+"newEvent.textField.placeholder" = "Tracker-Namen eingeben";
+"newEvent.characterLimit" = "38 Zeichen Limit";
+"newEvent.category" = "Kategorie";
+"newEvent.cancelButton" = "Abbrechen";
+"newEvent.createButton" = "Erstellen";
 
 // MARK: - Select Schedule
-"schedule.title" = "Schedule";
-"schedule.doneButton" = "Done";
+"schedule.title" = "Zeitplan";
+"schedule.doneButton" = "Fertig";
 
 // MARK: - Weekdays
-"weekday.monday.full" = "Monday";
-"weekday.tuesday.full" = "Tuesday";
-"weekday.wednesday.full" = "Wednesday";
-"weekday.thursday.full" = "Thursday";
-"weekday.friday.full" = "Friday";
-"weekday.saturday.full" = "Saturday";
-"weekday.sunday.full" = "Sunday";
+"weekday.monday.full" = "Montag";
+"weekday.tuesday.full" = "Dienstag";
+"weekday.wednesday.full" = "Mittwoch";
+"weekday.thursday.full" = "Donnerstag";
+"weekday.friday.full" = "Freitag";
+"weekday.saturday.full" = "Samstag";
+"weekday.sunday.full" = "Sonntag";
 
-"weekday.monday.short" = "Mon";
-"weekday.tuesday.short" = "Tue";
-"weekday.wednesday.short" = "Wed";
-"weekday.thursday.short" = "Thu";
-"weekday.friday.short" = "Fri";
-"weekday.saturday.short" = "Sat";
-"weekday.sunday.short" = "Sun";
+"weekday.monday.short" = "Mo";
+"weekday.tuesday.short" = "Di";
+"weekday.wednesday.short" = "Mi";
+"weekday.thursday.short" = "Do";
+"weekday.friday.short" = "Fr";
+"weekday.saturday.short" = "Sa";
+"weekday.sunday.short" = "So";
 
 // MARK: - Category
-"category.title" = "Category";
-"category.addButton" = "Add Category";
-"category.stub.text" = "Habits and events can be grouped by meaning";
+"category.title" = "Kategorie";
+"category.addButton" = "Kategorie Hinzufügen";
+"category.stub.text" = "Gewohnheiten und Ereignisse können nach Bedeutung gruppiert werden";
 
 // MARK: - New Category
-"newCategory.title" = "New Category";
-"newCategory.textField.placeholder" = "Enter category name";
-"newCategory.doneButton" = "Done";
+"newCategory.title" = "Neue Kategorie";
+"newCategory.textField.placeholder" = "Kategorienamen eingeben";
+"newCategory.doneButton" = "Fertig";
 
 // MARK: - Emoji & Color Headers
 "emojiColor.emoji" = "Emoji";
-"emojiColor.color" = "Color";
+"emojiColor.color" = "Farbe";
 
 // MARK: - Placeholders
 "placeholder.empty" = "";

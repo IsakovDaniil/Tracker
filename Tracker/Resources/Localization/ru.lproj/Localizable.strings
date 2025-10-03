@@ -1,0 +1,82 @@
+/*
+  Localizable.strings (Russian)
+  Tracker
+*/
+
+// MARK: - Common
+"common.cancel" = "Отмена";
+"common.create" = "Создать";
+"common.done" = "Готово";
+"common.everyday" = "Каждый день";
+
+// MARK: - Onboarding
+"onboarding.button" = "Вот это технологии!";
+"onboarding.page1.title" = "Отслеживайте только \nто, что хотите";
+"onboarding.page2.title" = "Даже если это не литры воды и йога";
+
+// MARK: - Trackers Main Screen
+"trackers.title" = "Трекеры";
+"trackers.searchBar.placeholder" = "Поиск";
+"trackers.stub.text" = "Что будем отслеживать?";
+"trackers.dateFormat" = "dd.MM.yyyy";
+"trackers.selectedDate" = "Выбранная дата: %@";
+
+// MARK: - Add Trackers Modal
+"addTrackers.title" = "Создание трекера";
+"addTrackers.habitButton" = "Привычка";
+"addTrackers.eventButton" = "Нерегулярное событие";
+
+// MARK: - New Habit
+"newHabit.title" = "Новая привычка";
+"newHabit.textField.placeholder" = "Введите название трекера";
+"newHabit.characterLimit" = "Ограничение 38 символов";
+"newHabit.category" = "Категория";
+"newHabit.schedule" = "Расписание";
+"newHabit.cancelButton" = "Отмена";
+"newHabit.createButton" = "Создать";
+
+// MARK: - New Event
+"newEvent.title" = "Новое нерегулярное событие";
+"newEvent.textField.placeholder" = "Введите название трекера";
+"newEvent.characterLimit" = "Ограничение 38 символов";
+"newEvent.category" = "Категория";
+"newEvent.cancelButton" = "Отмена";
+"newEvent.createButton" = "Создать";
+
+// MARK: - Select Schedule
+"schedule.title" = "Расписание";
+"schedule.doneButton" = "Готово";
+
+// MARK: - Weekdays
+"weekday.monday.full" = "Понедельник";
+"weekday.tuesday.full" = "Вторник";
+"weekday.wednesday.full" = "Среда";
+"weekday.thursday.full" = "Четверг";
+"weekday.friday.full" = "Пятница";
+"weekday.saturday.full" = "Суббота";
+"weekday.sunday.full" = "Воскресенье";
+
+"weekday.monday.short" = "Пн";
+"weekday.tuesday.short" = "Вт";
+"weekday.wednesday.short" = "Ср";
+"weekday.thursday.short" = "Чт";
+"weekday.friday.short" = "Пт";
+"weekday.saturday.short" = "Сб";
+"weekday.sunday.short" = "Вс";
+
+// MARK: - Category
+"category.title" = "Категория";
+"category.addButton" = "Добавить категорию";
+"category.stub.text" = "Привычки и события можно объединить по смыслу";
+
+// MARK: - New Category
+"newCategory.title" = "Новая категория";
+"newCategory.textField.placeholder" = "Введите название категории";
+"newCategory.doneButton" = "Готово";
+
+// MARK: - Emoji & Color Headers
+"emojiColor.emoji" = "Emoji";
+"emojiColor.color" = "Цвет";
+
+// MARK: - Placeholders
+"placeholder.empty" = "";
