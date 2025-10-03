@@ -156,21 +156,9 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func updateCounterLabel() {
-        let daysText: String
-        let count = completionCount
-        
-        switch count {
-        case 0:
-            daysText = TrackerCellConstants.Strings.daysMany
-        case 1:
-            daysText = TrackerCellConstants.Strings.daySingle
-        case 2...4:
-            daysText = TrackerCellConstants.Strings.daysFew
-        default:
-            daysText = TrackerCellConstants.Strings.daysMany
-        }
-        
-        counterLabel.text = "\(count) \(daysText)"
+        let format = NSLocalizedString("days_count", comment: "Number of days")
+        let daysString = String.localizedStringWithFormat(format, completionCount)
+        counterLabel.text = daysString
     }
     
     private func updateCounterButton() {

@@ -41,9 +41,6 @@ enum TrackerCellConstants {
     }
     
     struct Strings {
-        static let daySingle = "день"
-        static let daysFew = "дня"
-        static let daysMany = "дней"
         static let checkmarkSymbol = "checkmark"
         static let plusSymbol = "plus"
     }
