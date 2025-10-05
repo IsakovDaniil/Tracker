@@ -178,7 +178,8 @@ final class NewEventModalViewController: UIViewController {
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: Weekday.allCases,
-            isHabit: false
+            isHabit: false,
+            isPinned: false
         )
         
         delegate?.didCreateEvent(newEvent, categoryTitle: category)

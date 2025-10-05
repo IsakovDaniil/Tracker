@@ -154,7 +154,10 @@ final class TrackersViewController: UIViewController {
         let selectedWeekday = getWeekdayFromDate(selectedDate)
         let searchText = searchBar.text?.lowercased() ?? ""
         
-        filteredCategories = categories.compactMap { category in
+        var allPinnedTrackers: [Tracker] = []
+        var regularCategories: [TrackerCategory] = []
+        
+        for category in categories {
             let filteredTrackers = category.trackers.filter { tracker in
                 let isDayMatched = tracker.isHabit ? tracker.schedule.contains(selectedWeekday) : true
                 let isSearchMatched = searchText.isEmpty || tracker.name.lowercased().contains(searchText)
@@ -162,8 +165,24 @@ final class TrackersViewController: UIViewController {
                 return isDayMatched && isSearchMatched
             }
             
-            return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
+            let pinnedTrackers = filteredTrackers.filter { $0.isPinned }
+            let unpinnedTrackers = filteredTrackers.filter { !$0.isPinned }
+            
+            allPinnedTrackers.append(contentsOf: pinnedTrackers)
+            
+            if !unpinnedTrackers.isEmpty {
+                regularCategories.append(TrackerCategory(title: category.title, trackers: unpinnedTrackers))
+            }
         }
+        
+        filteredCategories = []
+        
+        if !allPinnedTrackers.isEmpty {
+            filteredCategories.append(TrackerCategory(title: "Закрепленные", trackers: allPinnedTrackers))
+        }
+        
+        filteredCategories.append(contentsOf: regularCategories)
+        
         collectionView.reloadData()
         updateStubVisibility()
     }
@@ -198,6 +217,59 @@ final class TrackersViewController: UIViewController {
             updateFilteredCategories()
         } catch {
             print("Error adding tracker: \(error)")
+        }
+    }
+    
+    private func editTracker(at indexPath: IndexPath) {
+        let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
+        let categoryTitle = filteredCategories[indexPath.section].title
+        
+        // TODO: Создать и показать экран редактирования трекера
+
+        
+        print("Редактирование трекера: \(tracker.name)")
+    }
+    
+    private func togglePinTracker(at indexPath: IndexPath) {
+        let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
+        
+        do {
+            try trackerStore.togglePinTracker(with: tracker.id)
+            loadData()
+            updateFilteredCategories()
+        } catch {
+            print("Error toggling pin tracker: \(error)")
+        }
+    }
+    
+    private func deleteTracker(at indexPath: IndexPath) {
+        let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
+        
+        let alert = UIAlertController(
+            title: nil,
+            message: "Уверены что хотите удалить трекер?",
+            preferredStyle: .actionSheet
+        )
+        
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            self?.performDeleteTracker(tracker.id)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel)
+        
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
+    
+    private func performDeleteTracker(_ trackerID: UUID) {
+        do {
+            try trackerStore.deleteTracker(withId: trackerID)
+            loadData()
+            updateFilteredCategories()
+        } catch {
+            print("Error deleting tracker: \(error)")
         }
     }
     
@@ -331,6 +403,42 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ -> UIMenu? in
+            guard let self = self else { return nil }
+            
+            let tracker = self.filteredCategories[indexPath.section].trackers[indexPath.item]
+            
+            // Действие "Закрепить/Открепить"
+            let pinTitle = tracker.isPinned ? "Открепить" : "Закрепить"
+            let pinAction = UIAction(
+                title: pinTitle,
+                image: nil
+            ) { _ in
+                self.togglePinTracker(at: indexPath)
+            }
+            
+            // Действие "Редактировать"
+            let editAction = UIAction(
+                title: "Редактировать",
+                image: nil
+            ) { _ in
+                self.editTracker(at: indexPath)
+            }
+            
+            // Действие "Удалить"
+            let deleteAction = UIAction(
+                title: "Удалить",
+                image: nil,
+                attributes: .destructive
+            ) { _ in
+                self.deleteTracker(at: indexPath)
+            }
+            
+            return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+        }
+    }
 }
 
 // MARK: - UISearchBarDelegate

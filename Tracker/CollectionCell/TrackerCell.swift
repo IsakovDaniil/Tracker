@@ -37,6 +37,16 @@ final class TrackerCell: UICollectionViewCell {
         return label
     }()
     
+    private let pinImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.pin
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .ypWhite
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(
@@ -92,6 +102,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(cardView)
         cardView.addSubview(emojiView)
         emojiView.addSubview(emojiLabel)
+        cardView.addSubview(pinImageView)
         cardView.addSubview(titleLabel)
         contentView.addSubview(counterView)
         counterView.addSubview(counterLabel)
@@ -113,6 +124,11 @@ final class TrackerCell: UICollectionViewCell {
             
             emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
+            
+            pinImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            pinImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -4),
+            pinImageView.widthAnchor.constraint(equalToConstant: 24),
+            pinImageView.heightAnchor.constraint(equalToConstant: 24),
             
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: TrackerCellConstants.Layout.titleLabelLeadingInset),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: TrackerCellConstants.Layout.titleLabelTrailingInset),
@@ -150,7 +166,7 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.name
         cardView.backgroundColor = tracker.color
-        
+        pinImageView.isHidden = !tracker.isPinned
         updateCounterLabel()
         updateCounterButton()
     }

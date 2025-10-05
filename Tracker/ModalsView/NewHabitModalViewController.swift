@@ -183,7 +183,9 @@ final class NewHabitModalViewController: UIViewController {
             color: selectedColor,
             emoji: selectedEmoji,
             schedule: selectedDays,
-            isHabit: true
+            isHabit: true,
+            isPinned: false,
+            
         )
         
         print("DEBUG: Tracker created: \(newTracker.name)")
