@@ -7,9 +7,10 @@ protocol EventDelegate: AnyObject {
 
 final class NewEventModalViewController: UIViewController {
     
+    // MARK: - Mode
     enum Mode {
         case create
-        case edit(tracker: Tracker, categoryTitle: String, completedDays: Int)
+        case edit(tracker: Tracker, categoryTitle: String)
     }
     
     // MARK: - Properties
@@ -32,7 +33,7 @@ final class NewEventModalViewController: UIViewController {
         case .create:
             title = R.string.localizable.newEventTitle()
         case .edit:
-            title = "Редактировать событие"
+            title = R.string.localizable.newEventTitleEdit()
         }
         return UILabel.ypTitle(title)
     }()
@@ -83,7 +84,7 @@ final class NewEventModalViewController: UIViewController {
         case .create:
             title = R.string.localizable.commonCreate()
         case .edit:
-            title = "Сохранить"
+            title = R.string.localizable.newEventSave()
         }
         return UIButton.ypModalSecondaryButton(
             title: title,
@@ -165,7 +166,7 @@ final class NewEventModalViewController: UIViewController {
     }
     
     private func setupInitialData() {
-        if case let .edit(tracker, categoryTitle, completedDays) = mode {
+        if case let .edit(tracker, categoryTitle) = mode {
             titleTextField.text = tracker.name
             selectedCategory = categoryTitle
             selectedColor = tracker.color
@@ -230,7 +231,7 @@ final class NewEventModalViewController: UIViewController {
                 isPinned: false
             )
             delegate?.didCreateEvent(tracker, categoryTitle: category)
-        case .edit(let original, _, _):
+        case .edit(let original, _):
             tracker = Tracker(
                 id: original.id,
                 name: title,
@@ -315,4 +316,3 @@ extension NewEventModalViewController: EmojiColorSelectionDelegate {
         updateCreateButtonState()
     }
 }
-

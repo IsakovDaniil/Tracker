@@ -235,7 +235,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
             modalVC.modalTransitionStyle = .coverVertical
             present(modalVC, animated: true)
         } else {
-            let modalVC = NewEventModalViewController(mode: .edit(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays))
+            let modalVC = NewEventModalViewController(mode: .edit(tracker: tracker, categoryTitle: categoryTitle))
             modalVC.delegate = self
             modalVC.modalPresentationStyle = .pageSheet
             modalVC.modalTransitionStyle = .coverVertical

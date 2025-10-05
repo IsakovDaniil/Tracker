@@ -59,6 +59,9 @@
 "newEvent.category" = "Категория";
 "newEvent.cancelButton" = "Отмена";
 "newEvent.createButton" = "Создать";
+"newEvent.titleEdit" = "Редактировать нерегулярное событие";
+"newEvent.save" = "Сохранить";
+
 
 // MARK: - Select Schedule
 "schedule.title" = "Расписание";

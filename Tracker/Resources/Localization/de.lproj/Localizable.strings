@@ -59,6 +59,8 @@
 "newEvent.category" = "Kategorie";
 "newEvent.cancelButton" = "Abbrechen";
 "newEvent.createButton" = "Erstellen";
+"newEvent.titleEdit" = "Unregelmäßiges Ereignis bearbeiten";
+"newEvent.save" = "Speichern";
 
 // MARK: - Select Schedule
 "schedule.title" = "Zeitplan";

@@ -59,6 +59,8 @@
 "newEvent.category" = "Categoría";
 "newEvent.cancelButton" = "Cancelar";
 "newEvent.createButton" = "Crear";
+"newEvent.titleEdit" = "Editar evento irregular";
+"newEvent.save" = "Guardar";
 
 // MARK: - Select Schedule
 "schedule.title" = "Horario";
