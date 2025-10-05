@@ -51,6 +51,8 @@
 "newHabit.schedule" = "Расписание";
 "newHabit.cancelButton" = "Отмена";
 "newHabit.createButton" = "Создать";
+"newHabit.titleEdit" = "Редактировать привычку";
+"newHabit.save" = "Сохранить";
 
 // MARK: - New Event
 "newEvent.title" = "Новое нерегулярное событие";

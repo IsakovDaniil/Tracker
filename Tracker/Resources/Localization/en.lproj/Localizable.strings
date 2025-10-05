@@ -51,6 +51,8 @@
 "newHabit.schedule" = "Schedule";
 "newHabit.cancelButton" = "Cancel";
 "newHabit.createButton" = "Create";
+"newHabit.titleEdit" = "Edit habit";
+"newHabit.save" = "Save";
 
 // MARK: - New Event
 "newEvent.title" = "New Irregular Event";

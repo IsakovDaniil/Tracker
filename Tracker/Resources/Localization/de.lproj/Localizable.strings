@@ -51,6 +51,8 @@
 "newHabit.schedule" = "Zeitplan";
 "newHabit.cancelButton" = "Abbrechen";
 "newHabit.createButton" = "Erstellen";
+"newHabit.titleEdit" = "Gewohnheit bearbeiten";
+"newHabit.save" = "Speichern";
 
 // MARK: - New Event
 "newEvent.title" = "Neues Unregelmäßiges Ereignis";

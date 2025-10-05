@@ -51,6 +51,9 @@
 "newHabit.schedule" = "Horario";
 "newHabit.cancelButton" = "Cancelar";
 "newHabit.createButton" = "Crear";
+"newHabit.titleEdit" = "Editar hábito";
+"newHabit.save" = "Guardar";
+
 
 // MARK: - New Event
 "newEvent.title" = "Nuevo Evento Irregular";
@@ -61,6 +64,7 @@
 "newEvent.createButton" = "Crear";
 "newEvent.titleEdit" = "Editar evento irregular";
 "newEvent.save" = "Guardar";
+
 
 // MARK: - Select Schedule
 "schedule.title" = "Horario";

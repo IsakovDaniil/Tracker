@@ -100,7 +100,7 @@ final class NewEventModalViewController: UIViewController {
         self.mode = mode
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -189,9 +189,9 @@ final class NewEventModalViewController: UIViewController {
     private var isFormValid: Bool {
         let trimmedText = titleTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         return !trimmedText.isEmpty
-            && selectedCategory != nil
-            && !selectedEmoji.isEmpty
-            && selectedColor != .white
+        && selectedCategory != nil
+        && !selectedEmoji.isEmpty
+        && selectedColor != .white
     }
     
     // MARK: - Actions

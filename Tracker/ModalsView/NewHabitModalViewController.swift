@@ -37,7 +37,7 @@ final class NewHabitModalViewController: UIViewController {
         case .create:
             title = R.string.localizable.newHabitTitle()
         case .edit:
-            title = "Редактировать привычку"
+            title = R.string.localizable.newHabitTitleEdit()
         }
         return UILabel.ypTitle(title)
     }()
@@ -97,7 +97,7 @@ final class NewHabitModalViewController: UIViewController {
         case .create:
             title = R.string.localizable.commonCreate()
         case .edit:
-            title = "Сохранить"
+            title = R.string.localizable.newHabitSave()
         }
         return UIButton.ypModalSecondaryButton(
             title: title,
@@ -136,7 +136,8 @@ final class NewHabitModalViewController: UIViewController {
             selectedColor = tracker.color
             selectedEmoji = tracker.emoji
             completedDaysCount = completedDays
-            daysLabel.text = ("\(completedDaysCount)")
+            let format = NSLocalizedString("days_count", comment: "Number of days")
+            daysLabel.text = String(format: format, completedDaysCount)
             emojiColorManager.setSelectedEmoji(tracker.emoji)
             emojiColorManager.setSelectedColor(tracker.color)
             optionsTableView.reloadData()
