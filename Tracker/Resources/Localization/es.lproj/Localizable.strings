@@ -29,6 +29,14 @@
 "trackers.stub.text" = "¿Qué vamos a rastrear?";
 "trackers.dateFormat" = "dd/MM/yyyy";
 "trackers.selectedDate" = "Fecha seleccionada: %@";
+"trackers.allPinnedTrackers" = "Fijados";
+"trackers.deleteTracker" = "¿Está seguro de que desea eliminar el rastreador?";
+"trackers.deleteAction" = "Eliminar";
+"trackers.cancelAction" = "Cancelar";
+"trackers.pinAction" = "Fijar";
+"trackers.unpinAction" = "Desfijar";
+"trackers.editPinAction" = "Editar";
+"trackers.deletePinAction" = "Eliminar";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Crear Rastreador";

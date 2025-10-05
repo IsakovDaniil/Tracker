@@ -29,6 +29,14 @@
 "trackers.stub.text" = "Что будем отслеживать?";
 "trackers.dateFormat" = "dd.MM.yyyy";
 "trackers.selectedDate" = "Выбранная дата: %@";
+"trackers.allPinnedTrackers" = "Закрепленные";
+"trackers.deleteTracker" = "Уверены что хотите удалить трекер?";
+"trackers.deleteAction" = "Удалить";
+"trackers.cancelAction" = "Отменить";
+"trackers.pinAction" = "Закрепить";
+"trackers.unpinAction" = "Открепить";
+"trackers.editPinAction" = "Редактировать";
+"trackers.deletePinAction" = "Удалить";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Создание трекера";

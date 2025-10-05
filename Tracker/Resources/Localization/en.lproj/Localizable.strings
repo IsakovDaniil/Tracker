@@ -29,6 +29,14 @@
 "trackers.stub.text" = "What will we track?";
 "trackers.dateFormat" = "MM/dd/yyyy";
 "trackers.selectedDate" = "Selected date: %@";
+"trackers.allPinnedTrackers" = "Pinned";
+"trackers.deleteTracker" = "Are you sure you want to delete the tracker?";
+"trackers.deleteAction" = "Delete";
+"trackers.cancelAction" = "Cancel";
+"trackers.pinAction" = "Pin";
+"trackers.unpinAction" = "Unpin";
+"trackers.editPinAction" = "Edit";
+"trackers.deletePinAction" = "Delete";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Create Tracker";

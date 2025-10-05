@@ -178,7 +178,10 @@ final class TrackersViewController: UIViewController {
         filteredCategories = []
         
         if !allPinnedTrackers.isEmpty {
-            filteredCategories.append(TrackerCategory(title: "Закрепленные", trackers: allPinnedTrackers))
+            filteredCategories.append(TrackerCategory(
+                title: R.string.localizable.trackersAllPinnedTrackers(),
+                trackers: allPinnedTrackers)
+            )
         }
         
         filteredCategories.append(contentsOf: regularCategories)
@@ -247,15 +250,15 @@ final class TrackersViewController: UIViewController {
         
         let alert = UIAlertController(
             title: nil,
-            message: "Уверены что хотите удалить трекер?",
+            message: R.string.localizable.trackersDeleteTracker(),
             preferredStyle: .actionSheet
         )
         
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let deleteAction = UIAlertAction(title: R.string.localizable.trackersDeleteAction(), style: .destructive) { [weak self] _ in
             self?.performDeleteTracker(tracker.id)
         }
         
-        let cancelAction = UIAlertAction(title: "Отменить", style: .cancel)
+        let cancelAction = UIAlertAction(title: R.string.localizable.trackersCancelAction(), style: .cancel)
         
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
@@ -411,7 +414,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             let tracker = self.filteredCategories[indexPath.section].trackers[indexPath.item]
             
             // Действие "Закрепить/Открепить"
-            let pinTitle = tracker.isPinned ? "Открепить" : "Закрепить"
+            let pinTitle = tracker.isPinned ? R.string.localizable.trackersPinAction() : R.string.localizable.trackersUnpinAction()
             let pinAction = UIAction(
                 title: pinTitle,
                 image: nil
@@ -421,7 +424,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             // Действие "Редактировать"
             let editAction = UIAction(
-                title: "Редактировать",
+                title: R.string.localizable.trackersEditPinAction(),
                 image: nil
             ) { _ in
                 self.editTracker(at: indexPath)
@@ -429,7 +432,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             // Действие "Удалить"
             let deleteAction = UIAction(
-                title: "Удалить",
+                title: R.string.localizable.trackersDeletePinAction(),
                 image: nil,
                 attributes: .destructive
             ) { _ in
