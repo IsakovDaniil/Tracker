@@ -3,15 +3,24 @@ import UIKit
 protocol NewHabitDelegate: AnyObject {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String)
     func didCreateEvent(_ event: Tracker, categoryTitle: String)
+    func didEditTracker(_ tracker: Tracker, categoryTitle: String)
 }
 
 final class NewHabitModalViewController: UIViewController {
     
+    // MARK: - Mode
+    enum Mode {
+        case create
+        case edit(tracker: Tracker, categoryTitle: String, completedDays: Int)
+    }
+    
     // MARK: - Properties
     weak var delegate: NewHabitDelegate?
+    private let mode: Mode
+    private var completedDaysCount: Int = 0
     
     private var selectedDays: [Weekday] = []
-    private var selectedCategory: String? = nil
+    private var selectedCategory: String?
     private var selectedColor: UIColor = .white
     private var selectedEmoji: String = ""
     
@@ -22,9 +31,25 @@ final class NewHabitModalViewController: UIViewController {
     }()
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(
-        R.string.localizable.newHabitTitle()
-    )
+    private lazy var titleLabel: UILabel = {
+        let title: String
+        switch mode {
+        case .create:
+            title = R.string.localizable.newHabitTitle()
+        case .edit:
+            title = "Редактировать привычку"
+        }
+        return UILabel.ypTitle(title)
+    }()
+    
+    private lazy var daysLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .label
+        label.font = .systemFont(ofSize: 32, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -66,21 +91,57 @@ final class NewHabitModalViewController: UIViewController {
         action: #selector(cancelButtonTapped)
     )
     
-    private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: R.string.localizable.commonCreate(),
-        titleColor: .ypWhite,
-        backgroundColor: .ypGray,
-        target: self,
-        action: #selector(createButtonTapped)
-    )
-
+    private lazy var createButton: UIButton = {
+        let title: String
+        switch mode {
+        case .create:
+            title = R.string.localizable.commonCreate()
+        case .edit:
+            title = "Сохранить"
+        }
+        return UIButton.ypModalSecondaryButton(
+            title: title,
+            titleColor: .ypWhite,
+            backgroundColor: .ypGray,
+            target: self,
+            action: #selector(createButtonTapped)
+        )
+    }()
+    
+    // MARK: - Init
+    init(mode: Mode = .create) {
+        self.mode = mode
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        setupInitialData()
         updateCreateButtonState()
+    }
+    
+    // MARK: - Setup Initial Data
+    private func setupInitialData() {
+        if case let .edit(tracker, categoryTitle, completedDays) = mode {
+            titleTextField.text = tracker.name
+            selectedCategory = categoryTitle
+            selectedDays = tracker.schedule
+            selectedColor = tracker.color
+            selectedEmoji = tracker.emoji
+            completedDaysCount = completedDays
+            daysLabel.text = ("\(completedDaysCount)")
+            emojiColorManager.setSelectedEmoji(tracker.emoji)
+            emojiColorManager.setSelectedColor(tracker.color)
+            optionsTableView.reloadData()
+            collectionView.reloadData()
+        }
     }
     
     // MARK: - Setup View
@@ -91,6 +152,9 @@ final class NewHabitModalViewController: UIViewController {
         view.backgroundColor = .ypWhite
         
         view.addSubview(titleLabel)
+        if case .edit = mode {
+            view.addSubview(daysLabel)
+        }
         view.addSubview(titleTextField)
         view.addSubview(characterLimitLabel)
         view.addSubview(optionsTableView)
@@ -105,7 +169,6 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NewHabitConstants.Layout.titleTextFieldTopInset),
@@ -128,12 +191,23 @@ final class NewHabitModalViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
             collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16),
             
-            
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             buttonsStackView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.buttonsStackViewHeight)
         ])
+        
+        switch mode {
+        case .create:
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset).isActive = true
+        case .edit:
+            NSLayoutConstraint.activate([
+                daysLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
+                daysLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
+                daysLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
+                titleLabel.topAnchor.constraint(equalTo: daysLabel.bottomAnchor, constant: 16)
+            ])
+        }
     }
     
     // MARK: - Validation
@@ -146,10 +220,10 @@ final class NewHabitModalViewController: UIViewController {
     private var isFormValid: Bool {
         let trimmedText = titleTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         return !trimmedText.isEmpty
-            && selectedCategory != nil
-            && !selectedDays.isEmpty
-            && !selectedEmoji.isEmpty
-            && selectedColor != .white
+        && selectedCategory != nil
+        && !selectedDays.isEmpty
+        && !selectedEmoji.isEmpty
+        && selectedColor != .white
     }
     
     // MARK: - Actions
@@ -175,25 +249,61 @@ final class NewHabitModalViewController: UIViewController {
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
               let category = selectedCategory else { return }
         
-        print("DEBUG: Creating tracker with title: \(title), category: \(category) (type: \(type(of: category))") // Проверьте тип category
+        let tracker: Tracker
+        switch mode {
+        case .create:
+            tracker = Tracker(
+                id: UUID(),
+                name: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: selectedDays,
+                isHabit: true,
+                isPinned: false
+            )
+            delegate?.didCreateTracker(tracker, categoryTitle: category)
+        case .edit(let original, _, _):
+            tracker = Tracker(
+                id: original.id,
+                name: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: selectedDays,
+                isHabit: true,
+                isPinned: original.isPinned
+            )
+            delegate?.didEditTracker(tracker, categoryTitle: category)
+        }
         
-        let newTracker = Tracker(
-            id: UUID(),
-            name: title,
-            color: selectedColor,
-            emoji: selectedEmoji,
-            schedule: selectedDays,
-            isHabit: true,
-            isPinned: false,
-            
-        )
-        
-        print("DEBUG: Tracker created: \(newTracker.name)")
-        delegate?.didCreateTracker(newTracker, categoryTitle: category)
         dismiss(animated: true)
     }
+    
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - Mode Extension
+extension NewHabitModalViewController.Mode {
+    var tracker: Tracker? {
+        if case let .edit(tracker, _, _) = self {
+            return tracker
+        }
+        return nil
+    }
+    
+    var categoryTitle: String? {
+        if case let .edit(_, categoryTitle, _) = self {
+            return categoryTitle
+        }
+        return nil
+    }
+    
+    var completedDays: Int? {
+        if case let .edit(_, _, completedDays) = self {
+            return completedDays
+        }
+        return nil
     }
 }
 

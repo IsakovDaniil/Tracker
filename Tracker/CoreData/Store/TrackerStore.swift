@@ -6,7 +6,7 @@ protocol TrackerStoreProtocol {
     func addTracker(_ tracker: Tracker, to categoryTitle: String) throws
     func fetchAllTrackers() throws -> [Tracker]
     func deleteTracker(withId id: UUID) throws
-    func updateTracker(_ tracker: Tracker) throws
+    func updateTracker(_ tracker: Tracker, toCategoryWithTitle categoryTitle: String) throws
     func togglePinTracker(with id: UUID) throws
 }
 
@@ -97,23 +97,28 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     // MARK: Update Tracker
-    func updateTracker(_ tracker: Tracker) throws {
-        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
-        
-        guard let trackerEntity = try context.fetch(request).first else {
-            throw NSError(domain: "TrackerStore", code: 404, userInfo: [NSLocalizedDescriptionKey: "Трекер не найден"])
+    func updateTracker(_ tracker: Tracker, toCategoryWithTitle categoryTitle: String) throws {
+            let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+            
+            guard let trackerEntity = try context.fetch(request).first else {
+                throw NSError(domain: "TrackerStore", code: 404, userInfo: [NSLocalizedDescriptionKey: "Трекер не найден"])
+            }
+            
+            let categoryStore = TrackerCategoryStore(context: context)
+            let categoryEntity = try categoryStore.findOrCreateCategory(with: categoryTitle)
+            
+            trackerEntity.name = tracker.name
+            trackerEntity.emoji = tracker.emoji
+            trackerEntity.colorHex = uiColorMarshalling.hexString(from: tracker.color)
+            trackerEntity.isHabit = tracker.isHabit
+            trackerEntity.isPinned = tracker.isPinned
+            trackerEntity.schedule = tracker.schedule as NSObject
+            trackerEntity.category = categoryEntity 
+            
+            CoreDataManager.shared.saveContext()
+            delegate?.didUpdateTrackers()
         }
-        
-        trackerEntity.name = tracker.name
-        trackerEntity.emoji = tracker.emoji
-        trackerEntity.colorHex = uiColorMarshalling.hexString(from: tracker.color)
-        trackerEntity.isHabit = tracker.isHabit
-        trackerEntity.isPinned = tracker.isPinned
-        trackerEntity.schedule = tracker.schedule as NSObject
-        
-        CoreDataManager.shared.saveContext()
-    }
     
     // MARK: Toggle Pin Tracker
     func togglePinTracker(with id: UUID) throws {

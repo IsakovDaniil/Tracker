@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackersViewController: UIViewController {
+final class TrackersViewController: UIViewController, NewHabitDelegate {
     
     // MARK: - Properties
     private let trackerStore: TrackerStore
@@ -226,9 +226,15 @@ final class TrackersViewController: UIViewController {
     private func editTracker(at indexPath: IndexPath) {
         let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
         let categoryTitle = filteredCategories[indexPath.section].title
+        let completedDays = getCompletionCount(for: tracker.id)
         
-        // TODO: Создать и показать экран редактирования трекера
-
+        let modalVC = NewHabitModalViewController(
+            mode: .edit(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays)
+        )
+        modalVC.delegate = self
+        modalVC.modalPresentationStyle = .pageSheet
+        modalVC.modalTransitionStyle = .coverVertical
+        present(modalVC, animated: true)
         
         print("Редактирование трекера: \(tracker.name)")
     }
@@ -464,6 +470,16 @@ extension TrackersViewController: AddTrackersModalDelegate {
     func didCreateEvent(_ event: Tracker, categoryTitle: String) {
         addTracker(event, toCategoryWithTitle: categoryTitle)
     }
+    
+    func didEditTracker(_ tracker: Tracker, categoryTitle: String) {
+        do {
+            try trackerStore.updateTracker(tracker, toCategoryWithTitle: categoryTitle)
+            loadData()
+            updateFilteredCategories()
+        } catch {
+            print("Error updating tracker: \(error)")
+        }
+    }
 }
 
 // MARK: - TrackerStoreDelegate
@@ -473,3 +489,5 @@ extension TrackersViewController: TrackerStoreDelegate {
         updateFilteredCategories()
     }
 }
+
+

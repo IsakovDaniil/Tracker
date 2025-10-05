@@ -90,6 +90,10 @@ final class AddTrackersModalViewController: UIViewController {
 
 // MARK: - NewHabitDelegate
 extension AddTrackersModalViewController: NewHabitDelegate, EventDelegate {
+    func didEditTracker(_ tracker: Tracker, categoryTitle: String) {
+        //
+    }
+    
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
         delegate?.didCreateTracker(tracker, categoryTitle: categoryTitle)
         
