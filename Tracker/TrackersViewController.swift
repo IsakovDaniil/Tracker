@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackersViewController: UIViewController, NewHabitDelegate {
+final class TrackersViewController: UIViewController, NewHabitDelegate, EventDelegate {
     
     // MARK: - Properties
     private let trackerStore: TrackerStore
@@ -228,15 +228,19 @@ final class TrackersViewController: UIViewController, NewHabitDelegate {
         let categoryTitle = filteredCategories[indexPath.section].title
         let completedDays = getCompletionCount(for: tracker.id)
         
-        let modalVC = NewHabitModalViewController(
-            mode: .edit(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays)
-        )
-        modalVC.delegate = self
-        modalVC.modalPresentationStyle = .pageSheet
-        modalVC.modalTransitionStyle = .coverVertical
-        present(modalVC, animated: true)
-        
-        print("Редактирование трекера: \(tracker.name)")
+        if tracker.isHabit {
+            let modalVC = NewHabitModalViewController(mode: .edit(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays))
+            modalVC.delegate = self
+            modalVC.modalPresentationStyle = .pageSheet
+            modalVC.modalTransitionStyle = .coverVertical
+            present(modalVC, animated: true)
+        } else {
+            let modalVC = NewEventModalViewController(mode: .edit(tracker: tracker, categoryTitle: categoryTitle, completedDays: completedDays))
+            modalVC.delegate = self
+            modalVC.modalPresentationStyle = .pageSheet
+            modalVC.modalTransitionStyle = .coverVertical
+            present(modalVC, animated: true)
+        }
     }
     
     private func togglePinTracker(at indexPath: IndexPath) {
