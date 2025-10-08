@@ -9,6 +9,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     private var categories: [TrackerCategory] = []
     private var filteredCategories: [TrackerCategory] = []
     private var selectedDate: Date = Date()
+    private var currentFilter: TrackerFilterType = .allTrackers
     
     // MARK: - UI Elements
     private lazy var datePicker: UIDatePicker = {
@@ -50,7 +51,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     private let stubImageView = UIImageView.stubImage()
     
-    private let stubLabel = UILabel.stubLabel(withText: R.string.localizable.trackersStubText())
+    private lazy var stubLabel = UILabel.stubLabel(withText: R.string.localizable.trackersStubText())
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -178,8 +179,9 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
             let filteredTrackers = category.trackers.filter { tracker in
                 let isDayMatched = tracker.isHabit ? tracker.schedule.contains(selectedWeekday) : true
                 let isSearchMatched = searchText.isEmpty || tracker.name.lowercased().contains(searchText)
+                let isFilterMatched = matchesCurrentFilter(tracker: tracker)
                 
-                return isDayMatched && isSearchMatched
+                return isDayMatched && isSearchMatched && isFilterMatched
             }
             
             let pinnedTrackers = filteredTrackers.filter { $0.isPinned }
@@ -205,13 +207,53 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         
         collectionView.reloadData()
         updateStubVisibility()
+        updateFilterButtonVisibility()
+    }
+    
+    private func matchesCurrentFilter(tracker: Tracker) -> Bool {
+        switch currentFilter {
+        case .allTrackers, .todayTrackers:
+            return true
+        case .completed:
+            return isTrackerCompleted(tracker.id, on: selectedDate)
+        case .notCompleted:
+            return !isTrackerCompleted(tracker.id, on: selectedDate)
+        }
     }
     
     private func updateStubVisibility() {
         let hasData = !filteredCategories.isEmpty
+        
+        if !hasData {
+            if currentFilter == .completed || currentFilter == .notCompleted {
+                stubLabel.text = "Ничего не найдено"
+            } else {
+                stubLabel.text = R.string.localizable.trackersStubText()
+            }
+        }
+        
         stubStack.isHidden = hasData
         collectionView.isHidden = !hasData
     }
+    
+    private func updateFilterButtonVisibility() {
+        let hasTrackersForSelectedDay = hasTrackersAvailableForDate(selectedDate)
+        filterButton.isHidden = !hasTrackersForSelectedDay
+    }
+    
+    private func hasTrackersAvailableForDate(_ date: Date) -> Bool {
+            let selectedWeekday = getWeekdayFromDate(date)
+            
+            for category in categories {
+                for tracker in category.trackers {
+                    let isDayMatched = tracker.isHabit ? tracker.schedule.contains(selectedWeekday) : true
+                    if isDayMatched {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
     
     private func getWeekdayFromDate(_ date: Date) -> Weekday {
         let calendar = Calendar.current
@@ -360,7 +402,8 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     }
     
     @objc private func filterButtonTapped() {
-        let modalVC = FilterModalViewController()
+        let modalVC = FilterModalViewController(currentFilter: currentFilter)
+        modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
         modalVC.modalTransitionStyle = .coverVertical
         present(modalVC, animated: true)
@@ -511,6 +554,20 @@ extension TrackersViewController: AddTrackersModalDelegate {
 extension TrackersViewController: TrackerStoreDelegate {
     func didUpdateTrackers() {
         loadData()
+        updateFilteredCategories()
+    }
+}
+
+// MARK: - TrackerFilterDelegate
+extension TrackersViewController: FilterModalDelegate {
+    func didSelectFilter(_ filterType: TrackerFilterType) {
+        currentFilter = filterType
+        
+        if filterType == .todayTrackers {
+            selectedDate = Date()
+            datePicker.date = Date()
+        }
+        
         updateFilteredCategories()
     }
 }
