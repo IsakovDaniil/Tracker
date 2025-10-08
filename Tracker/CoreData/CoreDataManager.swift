@@ -26,10 +26,16 @@ final class CoreDataManager {
     func saveContext() {
         if context.hasChanges {
             do {
+                NotificationCenter.default.post(name: .coreDataDidChange, object: nil)
                 try context.save()
             } catch {
                 print("Ошибка при сохранении контекста: \(error)")
             }
         }
     }
+}
+
+// MARK: - Notification Names
+extension Notification.Name {
+    static let coreDataDidChange = Notification.Name("coreDataDidChange")
 }

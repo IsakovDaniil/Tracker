@@ -29,7 +29,10 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Dependencies
     private let coreDataManager: CoreDataManager
+    private let statisticsService: StatisticsServiceProtocol
     private var statistics: Statistics = .zero
+    private let analytics = AnalyticsService.shared
+    
     // MARK: - Data
     private enum Metric: Int, CaseIterable {
         case bestStreak
@@ -44,7 +47,7 @@ final class StatisticsViewController: UIViewController {
             case .perfectDays:
                 "Идеальные дни"
             case .completedTrackers:
-                "Трекеров заведено"
+                "Трекеров завершено"
             case .averagePerDay:
                 "Среднее значение"
             }
@@ -52,8 +55,11 @@ final class StatisticsViewController: UIViewController {
     }
     
     // MARK: - Init
-    init(coreDataManager: CoreDataManager) {
+    init(coreDataManager: CoreDataManager, statisticsService: StatisticsServiceProtocol = StatisticsService()) {
         self.coreDataManager = coreDataManager
+        self.statisticsService = statisticsService
+        
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,7 +74,21 @@ final class StatisticsViewController: UIViewController {
         setupView()
         setupConstraints()
         updateViewBasedOnData()
+        statistics = statisticsService.calculateStatistics()
+        updateViewBasedOnData()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(dataDidChange),
+            name: .coreDataDidChange,
+            object: nil
+        )
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    
     
     // MARK: - Setup Methods
     private func setupNavigation() {
@@ -102,9 +122,9 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Helpers
     private func updateViewBasedOnData() {
         let isEmpty = statistics.bestStreak == 0 &&
-                      statistics.perfectDays == 0 &&
-                      statistics.completedTrackers == 0 &&
-                      statistics.averagePerDay == 0
+        statistics.perfectDays == 0 &&
+        statistics.completedTrackers == 0 &&
+        statistics.averagePerDay == 0
         
         stubStack.isHidden = !isEmpty
         tableView.isHidden = isEmpty
@@ -113,43 +133,50 @@ final class StatisticsViewController: UIViewController {
             tableView.reloadData()
         }
     }
-}
-
-    // MARK: - UITableViewDataSource
-    extension StatisticsViewController: UITableViewDataSource {
-        
-        func numberOfSections(in tableView: UITableView) -> Int {
-            Metric.allCases.count
-        }
-        
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return 1 // Одна ячейка на секцию
-        }
-        
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let metric = Metric(rawValue: indexPath.row),
-                  let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath) as? StatisticsCell else {
-                return UITableViewCell()
-            }
-            let value: Int
-            switch metric {
-            case .bestStreak: value = statistics.bestStreak
-            case .perfectDays: value = statistics.perfectDays
-            case .completedTrackers: value = statistics.completedTrackers
-            case .averagePerDay: value = statistics.averagePerDay
-            }
-            
-            cell.configure(withNumber: value, title: metric.title)
-            cell.selectionStyle = .none
-            return cell
-        }
+    
+    private func recomputeAndReload() {
+        statistics = statisticsService.calculateStatistics()
+        updateViewBasedOnData()
     }
     
-    // MARK: - UITableViewDelegate
-    extension StatisticsViewController: UITableViewDelegate {
-        
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 114
-        }
+    @objc private func dataDidChange() {
+        recomputeAndReload()
     }
+    
+}
+
+// MARK: - UITableViewDataSource
+extension StatisticsViewController: UITableViewDataSource {
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        Metric.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let metric = Metric(rawValue: indexPath.row),
+              let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath) as? StatisticsCell else {
+            return UITableViewCell()
+        }
+        let value: Int
+        switch metric {
+        case .bestStreak: value = statistics.bestStreak
+        case .perfectDays: value = statistics.perfectDays
+        case .completedTrackers: value = statistics.completedTrackers
+        case .averagePerDay: value = statistics.averagePerDay
+        }
+        
+        cell.configure(withNumber: value, title: metric.title)
+        cell.selectionStyle = .none
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension StatisticsViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 114
+    }
+}
 

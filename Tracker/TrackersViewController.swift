@@ -81,6 +81,18 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     // MARK: - Service
     private let analytics = AnalyticsService.shared
     
+    private func reportMain(event: String, screen: String, item: String? = nil) {
+        var params = [
+            "event": event,
+            "screen": screen
+        ]
+        if let item {
+            params["item"] = item
+        }
+        print("Analytics -> event=\(event), params=\(params)")
+        analytics.report(event: event, params: params)
+    }
+    
     // MARK: - Init
     init(coreDataManager: CoreDataManager = CoreDataManager.shared) {
         self.trackerStore = TrackerStore(context: coreDataManager.context)
@@ -102,6 +114,16 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         setupStoreDelegate()
         loadData()
         updateFilteredCategories()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        reportMain(event: "open", screen: "Main")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        reportMain(event: "close", screen: "Main")
     }
     
     // MARK: - Setup Methods
@@ -326,7 +348,6 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     private func deleteTracker(at indexPath: IndexPath) {
         let tracker = filteredCategories[indexPath.section].trackers[indexPath.item]
-        
         let alert = UIAlertController(
             title: nil,
             message: R.string.localizable.trackersDeleteTracker(),
@@ -395,6 +416,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let modalVC = AddTrackersModalViewController()
+        reportMain(event: "click", screen: "Main", item: "add_track")
         modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
         modalVC.modalTransitionStyle = .coverVertical
@@ -412,6 +434,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     }
     
     @objc private func filterButtonTapped() {
+        reportMain(event: "click", screen: "Main", item: "filter")
         let modalVC = FilterModalViewController(currentFilter: currentFilter)
         modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
@@ -509,6 +532,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             }
             
             let editAction = UIAction(
+                
                 title: R.string.localizable.trackersEditPinAction(),
                 image: nil
             ) { _ in
@@ -542,10 +566,12 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - AddTrackersModalDelegate
 extension TrackersViewController: AddTrackersModalDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
+        analytics.report(event: "click", params: ["screen": "Main", "item": "add_track"])
         addTracker(tracker, toCategoryWithTitle: categoryTitle)
     }
     
     func didCreateEvent(_ event: Tracker, categoryTitle: String) {
+        analytics.report(event: "click", params: ["screen": "Main", "item": "add_track"])
         addTracker(event, toCategoryWithTitle: categoryTitle)
     }
     

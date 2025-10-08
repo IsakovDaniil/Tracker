@@ -1,5 +1,6 @@
 import UIKit
 
+
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -22,6 +23,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         self.window = window
+        AnalyticsService.activate()
         window.makeKeyAndVisible()
     }
     
