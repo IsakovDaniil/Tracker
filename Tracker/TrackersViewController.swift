@@ -360,7 +360,10 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     }
     
     @objc private func filterButtonTapped() {
-        
+        let modalVC = FilterModalViewController()
+        modalVC.modalPresentationStyle = .pageSheet
+        modalVC.modalTransitionStyle = .coverVertical
+        present(modalVC, animated: true)
     }
 }
 
