@@ -76,8 +76,8 @@ final class StatisticsCell: UITableViewCell {
         selectionStyle = .none
     }
     
-    func configure(withNumber number: String, title: String) {
-        numberLabel.text = number
+    func configure(withNumber number: Int, title: String) {
+        numberLabel.text = "\(number)"
         titleLabel.text = title
     }
     

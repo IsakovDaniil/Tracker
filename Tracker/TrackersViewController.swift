@@ -78,6 +78,9 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         return button
     }()
     
+    // MARK: - Service
+    private let analytics = AnalyticsService.shared
+    
     // MARK: - Init
     init(coreDataManager: CoreDataManager = CoreDataManager.shared) {
         self.trackerStore = TrackerStore(context: coreDataManager.context)

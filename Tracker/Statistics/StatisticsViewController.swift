@@ -1,7 +1,8 @@
 import UIKit
 
-final class StatisticsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class StatisticsViewController: UIViewController {
     
+    // MARK: - UI Elements
     private lazy var stubStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -24,19 +25,33 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
     }()
     
     private let stubImageView = UIImageView.stubImage()
-    
     private lazy var stubLabel = UILabel.stubLabel(withText: "Анализировать пока нечего")
     
+    // MARK: - Dependencies
     private let coreDataManager: CoreDataManager
+    private var statistics: Statistics = .zero
+    // MARK: - Data
+    private enum Metric: Int, CaseIterable {
+        case bestStreak
+        case perfectDays
+        case completedTrackers
+        case averagePerDay
+        
+        var title: String {
+            switch self {
+            case .bestStreak:
+                "Лучший период"
+            case .perfectDays:
+                "Идеальные дни"
+            case .completedTrackers:
+                "Трекеров заведено"
+            case .averagePerDay:
+                "Среднее значение"
+            }
+        }
+    }
     
-    // Данные для таблицы
-    private let statisticsData = [
-        ("6", "Лущил период"),
-        ("2", "Идеальные дни"),
-        ("5", "Трекеров заверено"),
-        ("4", "Среднее значение")
-    ]
-    
+    // MARK: - Init
     init(coreDataManager: CoreDataManager) {
         self.coreDataManager = coreDataManager
         super.init(nibName: nil, bundle: nil)
@@ -46,6 +61,7 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
@@ -54,6 +70,7 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         updateViewBasedOnData()
     }
     
+    // MARK: - Setup Methods
     private func setupNavigation() {
         title = "Статистика"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -82,36 +99,57 @@ final class StatisticsViewController: UIViewController, UITableViewDataSource, U
         ])
     }
     
+    // MARK: - Helpers
     private func updateViewBasedOnData() {
-        if !statisticsData.isEmpty {
-            stubStack.isHidden = true
+        let isEmpty = statistics.bestStreak == 0 &&
+                      statistics.perfectDays == 0 &&
+                      statistics.completedTrackers == 0 &&
+                      statistics.averagePerDay == 0
+        
+        stubStack.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
+        
+        if !isEmpty {
             tableView.reloadData()
-        } else {
-            stubStack.isHidden = false
-            tableView.isHidden = true
         }
     }
-    
+}
+
     // MARK: - UITableViewDataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return statisticsData.count // Каждая ячейка в отдельной секции для отступов
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 // Одна ячейка на секцию
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath) as? StatisticsCell else {
-            return UITableViewCell()
+    extension StatisticsViewController: UITableViewDataSource {
+        
+        func numberOfSections(in tableView: UITableView) -> Int {
+            Metric.allCases.count
         }
-        let data = statisticsData[indexPath.section]
-        cell.configure(withNumber: data.0, title: data.1)
-        return cell
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return 1 // Одна ячейка на секцию
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            guard let metric = Metric(rawValue: indexPath.row),
+                  let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath) as? StatisticsCell else {
+                return UITableViewCell()
+            }
+            let value: Int
+            switch metric {
+            case .bestStreak: value = statistics.bestStreak
+            case .perfectDays: value = statistics.perfectDays
+            case .completedTrackers: value = statistics.completedTrackers
+            case .averagePerDay: value = statistics.averagePerDay
+            }
+            
+            cell.configure(withNumber: value, title: metric.title)
+            cell.selectionStyle = .none
+            return cell
+        }
     }
     
     // MARK: - UITableViewDelegate
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 114
+    extension StatisticsViewController: UITableViewDelegate {
+        
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 114
+        }
     }
-}
+
