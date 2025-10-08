@@ -3,6 +3,14 @@
   Tracker
 */
 
+// MARK: - Statistics
+"statistics.title" = "Estadísticas";
+"statistics.bestStreak" = "Mejor período";
+"statistics.perfectDays" = "Días perfectos";
+"statistics.completedTrackers" = "Rastreadores completados";
+"statistics.averagePerDay" = "Promedio por día";
+"statistics.emptyState" = "Nada que analizar todavía";
+
 // MARK: - Main Tab Bar
 "mainTabBar.trackersTitle" = "Rastreadores";
 "mainTabBar.statisticsTitle" = "Estadísticas";

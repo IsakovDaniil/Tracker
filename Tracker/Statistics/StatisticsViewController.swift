@@ -25,7 +25,10 @@ final class StatisticsViewController: UIViewController {
     }()
     
     private let stubImageView = UIImageView.stubImage()
-    private lazy var stubLabel = UILabel.stubLabel(withText: "Анализировать пока нечего")
+    
+    private lazy var stubLabel = UILabel.stubLabel(
+        withText: R.string.localizable.statisticsEmptyState()
+    )
     
     // MARK: - Dependencies
     private let coreDataManager: CoreDataManager
@@ -43,13 +46,13 @@ final class StatisticsViewController: UIViewController {
         var title: String {
             switch self {
             case .bestStreak:
-                "Лучший период"
+                R.string.localizable.statisticsBestStreak()
             case .perfectDays:
-                "Идеальные дни"
+                R.string.localizable.statisticsPerfectDays()
             case .completedTrackers:
-                "Трекеров завершено"
+                R.string.localizable.statisticsCompletedTrackers()
             case .averagePerDay:
-                "Среднее значение"
+                R.string.localizable.statisticsAveragePerDay()
             }
         }
     }
@@ -109,7 +112,7 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Setup Methods
     private func setupNavigation() {
-        title = "Статистика"
+        title = R.string.localizable.statisticsTitle()
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     

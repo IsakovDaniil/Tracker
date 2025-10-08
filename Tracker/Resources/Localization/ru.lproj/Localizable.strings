@@ -3,6 +3,14 @@
   Tracker
 */
 
+// MARK: - Statistics
+"statistics.title" = "Статистика";
+"statistics.bestStreak" = "Лучший период";
+"statistics.perfectDays" = "Идеальные дни";
+"statistics.completedTrackers" = "Трекеров завершено";
+"statistics.averagePerDay" = "Среднее значение";
+"statistics.emptyState" = "Анализировать пока нечего";
+
 // MARK: - Main Tab Bar
 "mainTabBar.trackersTitle" = "Трекеры";
 "mainTabBar.statisticsTitle" = "Статистика";

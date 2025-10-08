@@ -31,31 +31,25 @@ final class StatisticsService: StatisticsServiceProtocol {
         var averagePerDay = 0
         
         do {
-            // Получаем все трекеры и записи
             let trackers = try trackerStore.fetchAllTrackers()
             let records = try recordStore.fetchAllRecords()
-            
-            // Группируем записи по датам
+
             var recordsByDate: [Date: [TrackerRecord]] = [:]
             for record in records {
                 let date = calendar.startOfDay(for: record.date)
                 recordsByDate[date, default: []].append(record)
             }
             
-            // Подсчёт completedTrackers (общее количество записей)
             completedTrackers = records.count
             
-            // Подсчёт perfectDays и bestStreak
             var currentStreak = 0
             let allDates = recordsByDate.keys.sorted()
             for date in allDates {
-                // Получаем трекеры, запланированные на этот день
                 let weekday = Weekday(rawValue: calendar.component(.weekday, from: date)) ?? .sunday
                 let scheduledTrackers = trackers.filter { tracker in
-                    tracker.isHabit ? tracker.schedule.contains(weekday) : true // События не привязаны к конкретной дате
+                    tracker.isHabit ? tracker.schedule.contains(weekday) : true
                 }
                 
-                // Проверяем, все ли запланированные трекеры выполнены
                 let recordsForDate = recordsByDate[date] ?? []
                 let completedTrackerIds = Set(recordsForDate.map { $0.trackerID })
                 let scheduledTrackerIds = Set(scheduledTrackers.map { $0.id })
@@ -67,11 +61,10 @@ final class StatisticsService: StatisticsServiceProtocol {
                     currentStreak += 1
                     bestStreak = max(bestStreak, currentStreak)
                 } else {
-                    currentStreak = 0
+                    currentStreak = .zero
                 }
             }
             
-            // Подсчёт averagePerDay
             if !allDates.isEmpty {
                 let totalDays = allDates.count
                 averagePerDay = completedTrackers / totalDays
