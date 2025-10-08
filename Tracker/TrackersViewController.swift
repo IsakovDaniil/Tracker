@@ -66,6 +66,16 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         return collection
     }()
     
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Фильтры", for: .normal)
+        button.backgroundColor = .ypBlue
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     // MARK: - Init
     init(coreDataManager: CoreDataManager = CoreDataManager.shared) {
         self.trackerStore = TrackerStore(context: coreDataManager.context)
@@ -96,6 +106,8 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         view.addSubview(searchBar)
         view.addSubview(collectionView)
         view.addSubview(stubStack)
+        view.addSubview(filterButton)
+        view.bringSubviewToFront(filterButton)
         stubStack.addArrangedSubview(stubImageView)
         stubStack.addArrangedSubview(stubLabel)
     }
@@ -117,7 +129,12 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: TrackersViewConstants.Layout.collectionViewTopInset),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: TrackersViewConstants.Layout.collectionViewHorizontalInset),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -TrackersViewConstants.Layout.collectionViewHorizontalInset),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 131),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -130),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -341,6 +358,10 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         let formattedDate = dateFormatter.string(from: selectedDate)
         print(R.string.localizable.trackersSelectedDate(formattedDate))
     }
+    
+    @objc private func filterButtonTapped() {
+        
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -423,7 +444,6 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             let tracker = self.filteredCategories[indexPath.section].trackers[indexPath.item]
             
-            // Действие "Закрепить/Открепить"
             let pinTitle = tracker.isPinned ? R.string.localizable.trackersPinAction() : R.string.localizable.trackersUnpinAction()
             let pinAction = UIAction(
                 title: pinTitle,
@@ -432,7 +452,6 @@ extension TrackersViewController: UICollectionViewDelegate {
                 self.togglePinTracker(at: indexPath)
             }
             
-            // Действие "Редактировать"
             let editAction = UIAction(
                 title: R.string.localizable.trackersEditPinAction(),
                 image: nil
@@ -440,7 +459,6 @@ extension TrackersViewController: UICollectionViewDelegate {
                 self.editTracker(at: indexPath)
             }
             
-            // Действие "Удалить"
             let deleteAction = UIAction(
                 title: R.string.localizable.trackersDeletePinAction(),
                 image: nil,

@@ -203,13 +203,15 @@ final class NewHabitModalViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset).isActive = true
         case .edit:
             NSLayoutConstraint.activate([
-                daysLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
+                titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
+                daysLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 36),
                 daysLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
                 daysLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
-                titleLabel.topAnchor.constraint(equalTo: daysLabel.bottomAnchor, constant: 16)
+                
             ])
         }
     }
+
     
     // MARK: - Validation
     private func updateCreateButtonState() {
