@@ -81,15 +81,12 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     // MARK: - Service
     private let analytics = AnalyticsService.shared
     
-    private func reportMain(event: String, screen: String, item: String? = nil) {
-        var params = [
-            "event": event,
-            "screen": screen
-        ]
-        if let item {
+    private func reportAnalytics(event: String, screen: String, item: String? = nil) {
+        var params: [AnyHashable: Any] = ["screen": screen]
+        if let item = item {
             params["item"] = item
         }
-        print("Analytics -> event=\(event), params=\(params)")
+        print("📊 Analytics -> event=\(event), screen=\(screen), item=\(item ?? "nil")")
         analytics.report(event: event, params: params)
     }
     
@@ -118,12 +115,12 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        reportMain(event: "open", screen: "Main")
+        reportAnalytics(event: "open", screen: "Main")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        reportMain(event: "close", screen: "Main")
+        reportAnalytics(event: "close", screen: "Main")
     }
     
     // MARK: - Setup Methods
@@ -380,6 +377,9 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         do {
             let record = TrackerRecord(trackerID: trackerID, date: date)
             try trackerRecordStore.addRecord(record)
+            
+            reportAnalytics(event: "click", screen: "Main", item: "track")
+            
             collectionView.reloadData()
         } catch {
             print("Error marking tracker as completed: \(error)")
@@ -389,6 +389,9 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     private func unmarkTrackerCompleted(_ trackerID: UUID, on date: Date) {
         do {
             try trackerRecordStore.removeRecord(for: trackerID, date: date)
+            
+            reportAnalytics(event: "click", screen: "Main", item: "track")
+            
             collectionView.reloadData()
         } catch {
             print("Error unmarking tracker: \(error)")
@@ -415,8 +418,9 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     // MARK: - Actions
     @objc private func addButtonTapped() {
+        reportAnalytics(event: "click", screen: "Main", item: "add_track")
+        
         let modalVC = AddTrackersModalViewController()
-        reportMain(event: "click", screen: "Main", item: "add_track")
         modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
         modalVC.modalTransitionStyle = .coverVertical
@@ -434,7 +438,8 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     }
     
     @objc private func filterButtonTapped() {
-        reportMain(event: "click", screen: "Main", item: "filter")
+        reportAnalytics(event: "click", screen: "Main", item: "add_track")
+        
         let modalVC = FilterModalViewController(currentFilter: currentFilter)
         modalVC.delegate = self
         modalVC.modalPresentationStyle = .pageSheet
@@ -536,6 +541,7 @@ extension TrackersViewController: UICollectionViewDelegate {
                 title: R.string.localizable.trackersEditPinAction(),
                 image: nil
             ) { _ in
+                self.reportAnalytics(event: "click", screen: "Main", item: "edit")
                 self.editTracker(at: indexPath)
             }
             
@@ -544,6 +550,7 @@ extension TrackersViewController: UICollectionViewDelegate {
                 image: nil,
                 attributes: .destructive
             ) { _ in
+                self.reportAnalytics(event: "click", screen: "Main", item: "delete")
                 self.deleteTracker(at: indexPath)
             }
             
@@ -566,12 +573,10 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - AddTrackersModalDelegate
 extension TrackersViewController: AddTrackersModalDelegate {
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
-        analytics.report(event: "click", params: ["screen": "Main", "item": "add_track"])
         addTracker(tracker, toCategoryWithTitle: categoryTitle)
     }
     
     func didCreateEvent(_ event: Tracker, categoryTitle: String) {
-        analytics.report(event: "click", params: ["screen": "Main", "item": "add_track"])
         addTracker(event, toCategoryWithTitle: categoryTitle)
     }
     

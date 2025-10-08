@@ -58,8 +58,6 @@ final class StatisticsViewController: UIViewController {
     init(coreDataManager: CoreDataManager, statisticsService: StatisticsServiceProtocol = StatisticsService()) {
         self.coreDataManager = coreDataManager
         self.statisticsService = statisticsService
-        
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -84,11 +82,30 @@ final class StatisticsViewController: UIViewController {
         )
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+           super.viewDidAppear(animated)
+           reportAnalytics(event: "open", screen: "Statistics")
+       }
+       
+       override func viewDidDisappear(_ animated: Bool) {
+           super.viewDidDisappear(animated)
+           reportAnalytics(event: "close", screen: "Statistics")
+       }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    
+    // MARK: - Analytics
+     private func reportAnalytics(event: String, screen: String, item: String? = nil) {
+         var params: [AnyHashable: Any] = ["screen": screen]
+         if let item = item {
+             params["item"] = item
+         }
+         print("📊 Analytics -> event=\(event), screen=\(screen), item=\(item ?? "nil")")
+         analytics.report(event: event, params: params)
+     }
+     
     
     // MARK: - Setup Methods
     private func setupNavigation() {
