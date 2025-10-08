@@ -37,6 +37,7 @@
 "trackers.unpinAction" = "Unpin";
 "trackers.editPinAction" = "Edit";
 "trackers.deletePinAction" = "Delete";
+"trackers.filters" = "Filters";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Create Tracker";

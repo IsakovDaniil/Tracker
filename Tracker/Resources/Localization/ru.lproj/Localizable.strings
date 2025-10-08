@@ -37,6 +37,7 @@
 "trackers.unpinAction" = "Открепить";
 "trackers.editPinAction" = "Редактировать";
 "trackers.deletePinAction" = "Удалить";
+"trackers.filters" = "Фильтры";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Создание трекера";

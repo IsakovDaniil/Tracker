@@ -68,7 +68,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     private lazy var filterButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Фильтры", for: .normal)
+        button.setTitle(R.string.localizable.trackersFilters(), for: .normal)
         button.backgroundColor = .ypBlue
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)

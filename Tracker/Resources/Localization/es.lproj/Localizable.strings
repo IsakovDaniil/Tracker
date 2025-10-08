@@ -42,6 +42,7 @@
 "addTrackers.title" = "Crear Rastreador";
 "addTrackers.habitButton" = "Hábito";
 "addTrackers.eventButton" = "Evento Irregular";
+"trackers.filters" = "Filtros";
 
 // MARK: - New Habit
 "newHabit.title" = "Nuevo Hábito";
