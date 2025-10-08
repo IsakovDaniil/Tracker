@@ -2,6 +2,22 @@ import UIKit
 
 final class StatisticsViewController: UIViewController {
     
+    private lazy var stubStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = TrackersViewConstants.Layout.stubStackSpacing
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    private let stubImageView = UIImageView.stubImage()
+    
+    private lazy var stubLabel = UILabel.stubLabel(withText: "Анализировать пока нечего")
+    
+    
+    
     private let coreDataManager: CoreDataManager
     
     init(coreDataManager: CoreDataManager) {
@@ -15,8 +31,9 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
         setupNavigation()
+        setupView()
+        setupConstraints()
     }
     
     private func setupNavigation() {
@@ -25,6 +42,18 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = UIColor.ypWhite
+        view.backgroundColor = .ypWhite
+        stubImageView.image = .stubEmoji
+        
+        view.addSubview(stubStack)
+        stubStack.addArrangedSubview(stubImageView)
+        stubStack.addArrangedSubview(stubLabel)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stubStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 246),
+        ])
     }
 }
