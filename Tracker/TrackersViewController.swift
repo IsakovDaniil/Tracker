@@ -93,7 +93,6 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.ypWhite
         setupView()
         setupConstraints()
         setupNavigation()
@@ -104,6 +103,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     
     // MARK: - Setup Methods
     private func setupView() {
+        view.backgroundColor = UIColor.ypWhite
         view.addSubview(titleLabel)
         view.addSubview(searchBar)
         view.addSubview(collectionView)

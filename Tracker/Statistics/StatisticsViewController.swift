@@ -16,5 +16,15 @@ final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .blue
+        setupNavigation()
+    }
+    
+    private func setupNavigation() {
+        title = "Статистика"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    private func setupView() {
+        view.backgroundColor = UIColor.ypWhite
     }
 }
