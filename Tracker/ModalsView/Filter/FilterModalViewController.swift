@@ -99,7 +99,7 @@ extension FilterModalViewController: UITableViewDataSource {
         let filterType = TrackerFilterType.allCases[indexPath.row]
         cell.configure(title: filterType.title)
         
-        let shouldShowCheckmark = filterType.shouldShowCheckmark && selectedFilterType == filterType
+        let shouldShowCheckmark = (filterType.shouldShowCheckmark || filterType == .todayTrackers) && selectedFilterType == filterType
         cell.accessoryType = shouldShowCheckmark ? .checkmark : .none
         cell.tintColor = UIColor.ypBlue
         

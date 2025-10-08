@@ -72,6 +72,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         button.setTitle(R.string.localizable.trackersFilters(), for: .normal)
         button.backgroundColor = .ypBlue
         button.layer.cornerRadius = 16
+        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -239,6 +240,12 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     private func updateFilterButtonVisibility() {
         let hasTrackersForSelectedDay = hasTrackersAvailableForDate(selectedDate)
         filterButton.isHidden = !hasTrackersForSelectedDay
+        updateFilterButtonAppearance()
+    }
+    
+    private func updateFilterButtonAppearance() {
+        let isActive = currentFilter == .todayTrackers || currentFilter == .completed || currentFilter == .notCompleted
+        filterButton.setTitleColor(isActive ? .ypRed : .white, for: .normal)
     }
     
     private func hasTrackersAvailableForDate(_ date: Date) -> Bool {
