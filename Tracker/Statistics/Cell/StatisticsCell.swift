@@ -1,11 +1,22 @@
 import UIKit
 
 final class StatisticsCell: UITableViewCell {
+    static let reuseIdentifier = "StatisticsCell"
+    
+    private let cardView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypWhite
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     
     let numberLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.textColor = .ypBlack
         return label
@@ -14,40 +25,62 @@ final class StatisticsCell: UITableViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = .systemFont(ofSize: 12, weight: .medium)
         return label
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [numberLabel, titleLabel])
+        stack.axis = .vertical
+        stack.spacing = 7
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
+        configureAppearance()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutIfNeeded()
+        FancyGradientBorder.add(to: cardView)
+    }
+    
     func setupCell() {
-        contentView.addSubview(numberLabel)
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(cardView)
+        cardView.addSubview(stackView)
         
-        // Констрейнты
         NSLayoutConstraint.activate([
-            numberLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            numberLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: numberLabel.bottomAnchor, constant: 5)
+            stackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            stackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
+            stackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
+            stackView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12)
         ])
-        
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.blue.cgColor
-        contentView.layer.cornerRadius = 10
+    }
+    
+    func configureAppearance() {
+        backgroundColor = .clear
+        selectionStyle = .none
     }
     
     func configure(withNumber number: String, title: String) {
         numberLabel.text = number
         titleLabel.text = title
     }
+    
+    
 }
+
