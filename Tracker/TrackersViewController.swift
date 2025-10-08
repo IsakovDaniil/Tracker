@@ -6,7 +6,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
     private let trackerStore: TrackerStore
     private let trackerCategoryStore: TrackerCategoryStore
     private let trackerRecordStore: TrackerRecordStore
-    private var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory] = []
     private var filteredCategories: [TrackerCategory] = []
     private var selectedDate: Date = Date()
     private var currentFilter: TrackerFilterType = .allTrackers
@@ -446,6 +446,8 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         modalVC.modalTransitionStyle = .coverVertical
         present(modalVC, animated: true)
     }
+    
+
 }
 
 // MARK: - UICollectionViewDataSource
@@ -614,3 +616,10 @@ extension TrackersViewController: FilterModalDelegate {
 }
 
 
+
+extension TrackersViewController {
+    public func addCategoryForTesting(_ category: TrackerCategory) {
+        categories.append(category)
+        updateFilteredCategories()
+    }
+}

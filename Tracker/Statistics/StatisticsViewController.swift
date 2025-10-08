@@ -132,7 +132,7 @@ final class StatisticsViewController: UIViewController {
             stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stubStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 246),
             
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 77),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
