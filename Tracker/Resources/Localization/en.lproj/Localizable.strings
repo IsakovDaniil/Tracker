@@ -7,6 +7,12 @@
 "mainTabBar.trackersTitle" = "Trackers";
 "mainTabBar.statisticsTitle" = "Statistics";
 
+// MARK: - Filter
+"filter.allTrackers" = "All trackers";
+"filter.todayTrackers" = "Trackers for today";
+"filter.completed" = "Completed";
+"filter.notCompleted" = "Not completed";
+
 // MARK: - Common
 "common.cancel" = "Cancel";
 "common.create" = "Create";
@@ -38,6 +44,7 @@
 "trackers.editPinAction" = "Edit";
 "trackers.deletePinAction" = "Delete";
 "trackers.filters" = "Filters";
+"trackers.noFound" = "Nothing found";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Create Tracker";

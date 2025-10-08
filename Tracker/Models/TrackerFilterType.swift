@@ -9,13 +9,13 @@ enum TrackerFilterType: Int, CaseIterable {
     var title: String {
         switch self {
         case .allTrackers:
-            return "Все трекеры"
+            return R.string.localizable.filterAllTrackers()
         case .todayTrackers:
-            return "Трекеры на сегодня"
+            return R.string.localizable.filterTodayTrackers()
         case .completed:
-            return "Завершенные"
+            return R.string.localizable.filterCompleted()
         case .notCompleted:
-            return "Не завершенные"
+            return R.string.localizable.filterNotCompleted()
         }
     }
     

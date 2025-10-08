@@ -7,6 +7,12 @@
 "mainTabBar.trackersTitle" = "Rastreadores";
 "mainTabBar.statisticsTitle" = "Estadísticas";
 
+// MARK: - Filter
+"filter.allTrackers" = "Todos los rastreadores";
+"filter.todayTrackers" = "Rastreadores para hoy";
+"filter.completed" = "Completados";
+"filter.notCompleted" = "No completados";
+
 // MARK: - Common
 "common.cancel" = "Cancelar";
 "common.create" = "Crear";
@@ -37,12 +43,13 @@
 "trackers.unpinAction" = "Desfijar";
 "trackers.editPinAction" = "Editar";
 "trackers.deletePinAction" = "Eliminar";
+"trackers.filters" = "Filtros";
+"trackers.noFound" = "No se encontró nada";
 
 // MARK: - Add Trackers Modal
 "addTrackers.title" = "Crear Rastreador";
 "addTrackers.habitButton" = "Hábito";
 "addTrackers.eventButton" = "Evento Irregular";
-"trackers.filters" = "Filtros";
 
 // MARK: - New Habit
 "newHabit.title" = "Nuevo Hábito";

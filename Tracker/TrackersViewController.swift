@@ -226,7 +226,7 @@ final class TrackersViewController: UIViewController, NewHabitDelegate, EventDel
         
         if !hasData {
             if currentFilter == .completed || currentFilter == .notCompleted {
-                stubLabel.text = "Ничего не найдено"
+                stubLabel.text = R.string.localizable.trackersNoFound()
             } else {
                 stubLabel.text = R.string.localizable.trackersStubText()
             }

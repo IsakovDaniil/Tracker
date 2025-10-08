@@ -11,7 +11,9 @@ final class FilterModalViewController: UIViewController {
     private var selectedFilterType: TrackerFilterType
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle("Фильтры")
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.trackersFilters()
+    )
     
     private lazy var filterTableView: UITableView = {
         let tableView = UITableView()
