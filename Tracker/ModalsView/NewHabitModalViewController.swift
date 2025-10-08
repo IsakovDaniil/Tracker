@@ -91,6 +91,15 @@ final class NewHabitModalViewController: UIViewController {
         action: #selector(cancelButtonTapped)
     )
     
+    private lazy var vStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 24
+        stack.alignment = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     private lazy var createButton: UIButton = {
         let title: String
         switch mode {
@@ -152,13 +161,16 @@ final class NewHabitModalViewController: UIViewController {
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = .ypWhite
         
-        view.addSubview(titleLabel)
+        view.addSubview(vStack)
+        vStack.addArrangedSubview(titleLabel)
+        
         if case .edit = mode {
-            view.addSubview(daysLabel)
+            vStack.addArrangedSubview(daysLabel)
         }
-        view.addSubview(titleTextField)
-        view.addSubview(characterLimitLabel)
-        view.addSubview(optionsTableView)
+        
+        vStack.addArrangedSubview(titleTextField)
+        vStack.addArrangedSubview(characterLimitLabel)
+        vStack.addArrangedSubview(optionsTableView)
         view.addSubview(collectionView)
         view.addSubview(buttonsStackView)
         
@@ -170,21 +182,14 @@ final class NewHabitModalViewController: UIViewController {
     // MARK: - Setup Constraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            vStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
+            vStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
+            vStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
             
-            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NewHabitConstants.Layout.titleTextFieldTopInset),
-            titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
-            titleTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
             titleTextField.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.titleTextFieldHeight),
             
-            characterLimitLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: NewHabitConstants.Layout.characterLimitLabelTopInset),
-            characterLimitLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
-            characterLimitLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
             characterLimitLabel.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.characterLimitLabelHeight),
             
-            optionsTableView.topAnchor.constraint(equalTo: characterLimitLabel.bottomAnchor, constant: NewHabitConstants.Layout.optionsTableViewTopInset),
-            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.optionsTableHorizontalInset),
-            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.optionsTableHorizontalInset),
             optionsTableView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.optionsTableViewHeight),
             
             collectionView.topAnchor.constraint(equalTo: optionsTableView.bottomAnchor, constant: 32),
@@ -192,26 +197,13 @@ final class NewHabitModalViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
             collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16),
             
+            
             buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.buttonsStackViewHorizontalInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             buttonsStackView.heightAnchor.constraint(equalToConstant: NewHabitConstants.Layout.buttonsStackViewHeight)
         ])
-        
-        switch mode {
-        case .create:
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset).isActive = true
-        case .edit:
-            NSLayoutConstraint.activate([
-                titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: NewHabitConstants.Layout.titleTopInset),
-                daysLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 36),
-                daysLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: NewHabitConstants.Layout.textFieldHorizontalInset),
-                daysLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -NewHabitConstants.Layout.textFieldHorizontalInset),
-                
-            ])
-        }
     }
-
     
     // MARK: - Validation
     private func updateCreateButtonState() {
