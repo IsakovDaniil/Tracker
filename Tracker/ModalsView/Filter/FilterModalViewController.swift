@@ -1,16 +1,14 @@
 import Foundation
 import UIKit
 
+protocol FilterModalDelegate: AnyObject {
+    func didSelectFilter(_ filterType: TrackerFilterType)
+}
+
 final class FilterModalViewController: UIViewController {
     // MARK: - Properties
-    private let filterOptions = [
-        "Все трекеры",
-        "Трекеры на сегодня",
-        "Завершенные",
-        "Не завершенные"
-    ]
-    
-    private var selectedIndex: Int? = 0
+    weak var delegate: FilterModalDelegate?
+    private var selectedFilterType: TrackerFilterType
     
     // MARK: - UI Elements
     private let titleLabel = UILabel.ypTitle("Фильтры")
@@ -26,6 +24,16 @@ final class FilterModalViewController: UIViewController {
         tableView.isScrollEnabled = false
         return tableView
     }()
+    
+    // MARK: - Init
+    init(currentFilter: TrackerFilterType = .allTrackers) {
+        self.selectedFilterType = currentFilter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -78,7 +86,7 @@ final class FilterModalViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension FilterModalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filterOptions.count
+        return TrackerFilterType.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,9 +94,11 @@ extension FilterModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let title = filterOptions[indexPath.row]
-        cell.configure(title: title)
-        cell.accessoryType = selectedIndex == indexPath.row ? .checkmark : .none
+        let filterType = TrackerFilterType.allCases[indexPath.row]
+        cell.configure(title: filterType.title)
+        
+        let shouldShowCheckmark = filterType.shouldShowCheckmark && selectedFilterType == filterType
+        cell.accessoryType = shouldShowCheckmark ? .checkmark : .none
         cell.tintColor = UIColor.ypBlue
         
         return cell
@@ -104,24 +114,32 @@ extension FilterModalViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        var indexPathsToReload: [IndexPath] = []
+        let newFilterType = TrackerFilterType.allCases[indexPath.row]
         
-        // Добавляем старый выбранный индекс для обновления
-        if let oldIndex = selectedIndex {
-            indexPathsToReload.append(IndexPath(row: oldIndex, section: 0))
+        if newFilterType.shouldShowCheckmark || selectedFilterType.shouldShowCheckmark {
+            var indexPathsToReload: [IndexPath] = []
+            
+            if selectedFilterType.shouldShowCheckmark {
+                indexPathsToReload.append(IndexPath(row: selectedFilterType.rawValue, section: 0))
+            }
+            
+            if newFilterType.shouldShowCheckmark {
+                indexPathsToReload.append(indexPath)
+            }
+            
+            selectedFilterType = newFilterType
+            
+            if !indexPathsToReload.isEmpty {
+                tableView.reloadRows(at: indexPathsToReload, with: .automatic)
+            }
+        } else {
+            selectedFilterType = newFilterType
         }
         
-        // Обновляем выбранный индекс
-        selectedIndex = indexPath.row
-        indexPathsToReload.append(indexPath)
-        
-        // Обновляем ячейки
-        tableView.reloadRows(at: indexPathsToReload, with: .automatic)
-        
-        // TODO: Здесь будет логика применения фильтра
-        // Пока просто закрываем модалку после выбора
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.dismiss(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.didSelectFilter(newFilterType)
+            self.dismiss(animated: true)
         }
     }
     
