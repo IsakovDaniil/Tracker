@@ -4,7 +4,7 @@ final class OnboardingViewController: UIPageViewController {
     
     // MARK: - UI Elements
     private lazy var getStaredButton = UIButton.ypAddModalButton(
-        title: "Вот это технологии!",
+        title: R.string.localizable.onboardingButton(),
         target: self,
         action: #selector(getStaredButtonTapped)
     )
@@ -26,8 +26,14 @@ final class OnboardingViewController: UIPageViewController {
     // MARK: - Data
     private lazy var pages: [UIViewController] = {
         [
-            OnboardingPageViewController(imageName: "OnboardingBlue", text: "Отслеживайте только \nто, что хотите"),
-            OnboardingPageViewController(imageName: "OnboardingRed", text: "Даже если это не литры воды и йога"),
+            OnboardingPageViewController(
+                imageName: R.image.onboardingBlue.name,
+                text: R.string.localizable.onboardingPage1Title()
+            ),
+            OnboardingPageViewController(
+                imageName: R.image.onboardingRed.name,
+                text: R.string.localizable.onboardingPage2Title()
+            ),
         ]
     }()
     

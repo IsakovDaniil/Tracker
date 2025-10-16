@@ -33,7 +33,7 @@ extension UILabel {
     
     static func makeCharacterLimitLabel() -> UILabel {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = R.string.localizable.newEventCharacterLimit()
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textColor = UIColor.ypRed
         label.textAlignment = .center

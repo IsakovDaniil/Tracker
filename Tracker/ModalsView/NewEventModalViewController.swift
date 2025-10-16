@@ -2,12 +2,20 @@ import UIKit
 
 protocol EventDelegate: AnyObject {
     func didCreateEvent(_ event: Tracker, categoryTitle: String)
+    func didEditTracker(_ tracker: Tracker, categoryTitle: String)
 }
 
 final class NewEventModalViewController: UIViewController {
     
+    // MARK: - Mode
+    enum Mode {
+        case create
+        case edit(tracker: Tracker, categoryTitle: String)
+    }
+    
     // MARK: - Properties
     weak var delegate: EventDelegate?
+    private let mode: Mode
     private var selectedCategory: String? = nil
     private var selectedColor: UIColor = .white
     private var selectedEmoji: String = ""
@@ -19,7 +27,16 @@ final class NewEventModalViewController: UIViewController {
     }()
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(NewEventConstants.Strings.title)
+    private lazy var titleLabel: UILabel = {
+        let title: String
+        switch mode {
+        case .create:
+            title = R.string.localizable.newEventTitle()
+        case .edit:
+            title = R.string.localizable.newEventTitleEdit()
+        }
+        return UILabel.ypTitle(title)
+    }()
     
     private lazy var titleTextField: UITextField = .makeTitleTextField(
         delegate: self,
@@ -53,7 +70,7 @@ final class NewEventModalViewController: UIViewController {
     }()
     
     private lazy var cancelButton = UIButton.ypModalSecondaryButton(
-        title: NewEventConstants.Strings.cancelButton,
+        title: R.string.localizable.commonCancel(),
         titleColor: .ypRed,
         backgroundColor: .clear,
         hasBorder: true,
@@ -61,19 +78,39 @@ final class NewEventModalViewController: UIViewController {
         action: #selector(cancelButtonTapped)
     )
     
-    private lazy var createButton = UIButton.ypModalSecondaryButton(
-        title: NewEventConstants.Strings.createButton,
-        titleColor: .ypWhite,
-        backgroundColor: .ypBlack,
-        target: self,
-        action: #selector(createButtonTapped)
-    )
+    private lazy var createButton: UIButton = {
+        let title: String
+        switch mode {
+        case .create:
+            title = R.string.localizable.commonCreate()
+        case .edit:
+            title = R.string.localizable.newEventSave()
+        }
+        return UIButton.ypModalSecondaryButton(
+            title: title,
+            titleColor: .ypWhite,
+            backgroundColor: .ypGray,
+            target: self,
+            action: #selector(createButtonTapped)
+        )
+    }()
+    
+    // MARK: - Init
+    init(mode: Mode = .create) {
+        self.mode = mode
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        setupInitialData()
         updateCreateButtonState()
     }
     
@@ -128,6 +165,19 @@ final class NewEventModalViewController: UIViewController {
         ])
     }
     
+    private func setupInitialData() {
+        if case let .edit(tracker, categoryTitle) = mode {
+            titleTextField.text = tracker.name
+            selectedCategory = categoryTitle
+            selectedColor = tracker.color
+            selectedEmoji = tracker.emoji
+            emojiColorManager.setSelectedEmoji(tracker.emoji)
+            emojiColorManager.setSelectedColor(tracker.color)
+            optionsTableView.reloadData()
+            collectionView.reloadData()
+        }
+    }
+    
     // MARK: - Validation
     private func updateCreateButtonState() {
         let isValid = isFormValid
@@ -139,9 +189,9 @@ final class NewEventModalViewController: UIViewController {
     private var isFormValid: Bool {
         let trimmedText = titleTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         return !trimmedText.isEmpty
-            && selectedCategory != nil
-            && !selectedEmoji.isEmpty
-            && selectedColor != .white
+        && selectedCategory != nil
+        && !selectedEmoji.isEmpty
+        && selectedColor != .white
     }
     
     // MARK: - Actions
@@ -166,20 +216,33 @@ final class NewEventModalViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard isFormValid,
               let title = titleTextField.text?.trimmingCharacters(in: .whitespaces),
-              let category = selectedCategory else {
-            return
+              let category = selectedCategory else { return }
+        
+        let tracker: Tracker
+        switch mode {
+        case .create:
+            tracker = Tracker(
+                id: UUID(),
+                name: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: Weekday.allCases,
+                isHabit: false,
+                isPinned: false
+            )
+            delegate?.didCreateEvent(tracker, categoryTitle: category)
+        case .edit(let original, _):
+            tracker = Tracker(
+                id: original.id,
+                name: title,
+                color: selectedColor,
+                emoji: selectedEmoji,
+                schedule: Weekday.allCases,
+                isHabit: false,
+                isPinned: original.isPinned
+            )
+            delegate?.didEditTracker(tracker, categoryTitle: category)
         }
-        
-        let newEvent = Tracker(
-            id: UUID(),
-            name: title,
-            color: selectedColor,
-            emoji: selectedEmoji,
-            schedule: Weekday.allCases,
-            isHabit: false
-        )
-        
-        delegate?.didCreateEvent(newEvent, categoryTitle: category)
         
         dismiss(animated: true)
     }
@@ -208,7 +271,10 @@ extension NewEventModalViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(title: NewEventConstants.Strings.category, subtitle: selectedCategory)
+        cell.configure(
+            title: R.string.localizable.newEventCategory(),
+            subtitle: selectedCategory
+        )
         return cell
     }
 }
@@ -250,4 +316,3 @@ extension NewEventModalViewController: EmojiColorSelectionDelegate {
         updateCreateButtonState()
     }
 }
-

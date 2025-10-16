@@ -96,9 +96,12 @@ extension EmojiColorCollectionManager: UICollectionViewDataSource {
         }
         
         switch indexPath.section {
-        case 0: header.configure(with: "Emoji")
-        case 1: header.configure(with: "Цвет")
-        default: break
+        case 0:
+            header.configure(with: R.string.localizable.emojiColorEmoji())
+        case 1:
+            header.configure(with: R.string.localizable.emojiColorColor())
+        default:
+            break
         }
         
         return header

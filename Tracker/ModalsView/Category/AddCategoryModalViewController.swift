@@ -2,13 +2,17 @@ import UIKit
 
 final class AddCategoryModalViewController: UIViewController {
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle("Категория")
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.categoryTitle()
+    )
     
     private lazy var stubStack = UIStackView.stubStack()
     
     private let stubImageView = UIImageView.stubImage()
     
-    private let stubLabel = UILabel.stubLabel(withText: "Привычки и события можно объединить по смыслу")
+    private let stubLabel = UILabel.stubLabel(
+        withText: R.string.localizable.categoryStubText()
+    )
     
     private lazy var optionsTableView = UITableView.makeOptionsTableView(
         dataSource: self,
@@ -19,7 +23,7 @@ final class AddCategoryModalViewController: UIViewController {
     )
     
     private lazy var addCategoryButton = UIButton.ypAddModalButton(
-        title: "Добавить категорию",
+        title: R.string.localizable.categoryAddButton(),
         target: self,
         action: #selector(addCategoryButtonTapped)
     )

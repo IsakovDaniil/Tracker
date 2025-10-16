@@ -7,8 +7,6 @@ final class MainTabBarController: UITabBarController {
     // MARK: - Constants
     private enum TabBarConstants {
         static let topLineHeight: CGFloat = 1
-        static let trackersTitle = "Трекеры"
-        static let statisticsTitle = "Статистика"
         static let trackersTag = 0
         static let statisticsTag = 1
     }
@@ -57,14 +55,22 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupViewControllers() {
-        let trackersVC = TrackersViewController(coreDataManager: coreDataManager)
-        let firstVC = UINavigationController(rootViewController: trackersVC)
-        firstVC.tabBarItem = UITabBarItem(title: TabBarConstants.trackersTitle, image: UIImage.trakers, tag: TabBarConstants.trackersTag)
-        
-        let statisticsVC = StatisticsViewController(coreDataManager: coreDataManager)
-        let secondVC = UINavigationController(rootViewController: statisticsVC)
-        secondVC.tabBarItem = UITabBarItem(title: TabBarConstants.statisticsTitle, image: UIImage.stats, tag: TabBarConstants.statisticsTag)
-        
-        viewControllers = [firstVC, secondVC]
+            let trackersVC = TrackersViewController(coreDataManager: coreDataManager)
+            let firstVC = UINavigationController(rootViewController: trackersVC)
+            firstVC.tabBarItem = UITabBarItem(
+                title: R.string.localizable.mainTabBarTrackersTitle(),
+                image: UIImage.trakers,
+                tag: TabBarConstants.trackersTag
+            )
+            
+            let statisticsVC = StatisticsViewController(coreDataManager: coreDataManager)
+            let secondVC = UINavigationController(rootViewController: statisticsVC)
+            secondVC.tabBarItem = UITabBarItem(
+                title: R.string.localizable.mainTabBarStatisticsTitle(),
+                image: UIImage.stats,
+                tag: TabBarConstants.statisticsTag
+            )
+            
+            viewControllers = [firstVC, secondVC]
+        }
     }
-}

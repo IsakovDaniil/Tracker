@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (German)
+  Tracker
+*/
+
+// MARK: - Statistics
+"statistics.title" = "Statistik";
+"statistics.bestStreak" = "Bester Zeitraum";
+"statistics.perfectDays" = "Perfekte Tage";
+"statistics.completedTrackers" = "Abgeschlossene Tracker";
+"statistics.averagePerDay" = "Durchschnitt pro Tag";
+"statistics.emptyState" = "Noch nichts zu analysieren";
+
+// MARK: - Main Tab Bar
+"mainTabBar.trackersTitle" = "Tracker";
+"mainTabBar.statisticsTitle" = "Statistiken";
+
+// MARK: - Filter
+"filter.allTrackers" = "Alle Tracker";
+"filter.todayTrackers" = "Tracker für heute";
+"filter.completed" = "Abgeschlossen";
+"filter.notCompleted" = "Nicht abgeschlossen";
+
+// MARK: - Common
+"common.cancel" = "Abbrechen";
+"common.create" = "Erstellen";
+"common.done" = "Fertig";
+"common.everyday" = "Jeden Tag";
+"common.trackerNamePlaceholder" = "Tracker-Namen eingeben";
+
+// MARK: - Onboarding
+"onboarding.button" = "Das ist Technologie!";
+"onboarding.page1.title" = "Verfolgen Sie nur \nwas Sie möchten";
+"onboarding.page2.title" = "Auch wenn es nicht Liter Wasser und Yoga sind";
+
+// MARK: - Emoji & Color Headers
+"emojiColor.emoji" = "Emoji";
+"emojiColor.color" = "Farbe";
+
+// MARK: - Trackers Main Screen
+"trackers.title" = "Tracker";
+"trackers.searchBar.placeholder" = "Suchen";
+"trackers.stub.text" = "Was werden wir verfolgen?";
+"trackers.dateFormat" = "dd.MM.yyyy";
+"trackers.selectedDate" = "Ausgewähltes Datum: %@";
+"trackers.allPinnedTrackers" = "Angeheftet";
+"trackers.deleteTracker" = "Sind Sie sicher, dass Sie den Tracker löschen möchten?";
+"trackers.deleteAction" = "Löschen";
+"trackers.cancelAction" = "Abbrechen";
+"trackers.pinAction" = "Anheften";
+"trackers.unpinAction" = "Lösen";
+"trackers.editPinAction" = "Bearbeiten";
+"trackers.deletePinAction" = "Löschen";
+"trackers.filters" = "Filter";
+"trackers.noFound" = "Nichts gefunden";
+
+// MARK: - Add Trackers Modal
+"addTrackers.title" = "Tracker Erstellen";
+"addTrackers.habitButton" = "Gewohnheit";
+"addTrackers.eventButton" = "Unregelmäßiges Ereignis";
+
+// MARK: - New Habit
+"newHabit.title" = "Neue Gewohnheit";
+"newHabit.textField.placeholder" = "Tracker-Namen eingeben";
+"newHabit.characterLimit" = "38 Zeichen Limit";
+"newHabit.category" = "Kategorie";
+"newHabit.schedule" = "Zeitplan";
+"newHabit.cancelButton" = "Abbrechen";
+"newHabit.createButton" = "Erstellen";
+"newHabit.titleEdit" = "Gewohnheit bearbeiten";
+"newHabit.save" = "Speichern";
+
+// MARK: - New Event
+"newEvent.title" = "Neues Unregelmäßiges Ereignis";
+"newEvent.textField.placeholder" = "Tracker-Namen eingeben";
+"newEvent.characterLimit" = "38 Zeichen Limit";
+"newEvent.category" = "Kategorie";
+"newEvent.cancelButton" = "Abbrechen";
+"newEvent.createButton" = "Erstellen";
+"newEvent.titleEdit" = "Unregelmäßiges Ereignis bearbeiten";
+"newEvent.save" = "Speichern";
+
+// MARK: - Select Schedule
+"schedule.title" = "Zeitplan";
+"schedule.doneButton" = "Fertig";
+
+// MARK: - Weekdays
+"weekday.monday.full" = "Montag";
+"weekday.tuesday.full" = "Dienstag";
+"weekday.wednesday.full" = "Mittwoch";
+"weekday.thursday.full" = "Donnerstag";
+"weekday.friday.full" = "Freitag";
+"weekday.saturday.full" = "Samstag";
+"weekday.sunday.full" = "Sonntag";
+
+"weekday.monday.short" = "Mo";
+"weekday.tuesday.short" = "Di";
+"weekday.wednesday.short" = "Mi";
+"weekday.thursday.short" = "Do";
+"weekday.friday.short" = "Fr";
+"weekday.saturday.short" = "Sa";
+"weekday.sunday.short" = "So";
+
+// MARK: - Category
+"category.title" = "Kategorie";
+"category.addButton" = "Kategorie Hinzufügen";
+"category.stub.text" = "Gewohnheiten und Ereignisse können nach Bedeutung gruppiert werden";
+
+// MARK: - New Category
+"newCategory.title" = "Neue Kategorie";
+"newCategory.textField.placeholder" = "Kategorienamen eingeben";
+"newCategory.doneButton" = "Fertig";
+
+// MARK: - Emoji & Color Headers
+"emojiColor.emoji" = "Emoji";
+"emojiColor.color" = "Farbe";
+
+// MARK: - Placeholders
+"placeholder.empty" = "";

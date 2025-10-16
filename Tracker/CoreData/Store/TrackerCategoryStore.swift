@@ -128,7 +128,8 @@ extension TrackerCategoryStore: TrackerCategoryStoreProtocol {
             color: color,
             emoji: emoji,
             schedule: schedule,
-            isHabit: entity.isHabit
+            isHabit: entity.isHabit,
+            isPinned: entity.isPinned
         )
     }
 }

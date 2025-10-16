@@ -5,26 +5,39 @@ enum Weekday: Int, CaseIterable, Codable {
     
     var localizedName: String {
         switch self {
-        case .monday: return "Понедельник"
-        case .tuesday: return "Вторник"
-        case .wednesday: return "Среда"
-        case .thursday: return "Четверг"
-        case .friday: return "Пятница"
-        case .saturday: return "Суббота"
-        case .sunday: return "Воскресенье"
+        case .monday:
+            return R.string.localizable.weekdayMondayFull()
+        case .tuesday:
+            return R.string.localizable.weekdayTuesdayFull()
+        case .wednesday:
+            return R.string.localizable.weekdayWednesdayFull()
+        case .thursday:
+            return R.string.localizable.weekdayThursdayFull()
+        case .friday:
+            return R.string.localizable.weekdayFridayFull()
+        case .saturday:
+            return R.string.localizable.weekdaySaturdayFull()
+        case .sunday:
+            return R.string.localizable.weekdaySundayFull()
         }
     }
     
     var shortName: String {
         switch self {
-        case .monday: return "Пн"
-        case .tuesday: return "Вт"
-        case .wednesday: return "Ср"
-        case .thursday: return "Чт"
-        case .friday: return "Пт"
-        case .saturday: return "Сб"
-        case .sunday: return "Вс"
+        case .monday:
+            return R.string.localizable.weekdayMondayShort()
+        case .tuesday:
+            return R.string.localizable.weekdayTuesdayShort()
+        case .wednesday:
+            return R.string.localizable.weekdayWednesdayShort()
+        case .thursday:
+            return R.string.localizable.weekdayThursdayShort()
+        case .friday:
+            return R.string.localizable.weekdayFridayShort()
+        case .saturday:
+            return R.string.localizable.weekdaySaturdayShort()
+        case .sunday:
+            return R.string.localizable.weekdaySundayShort()
         }
-        
     }
 }

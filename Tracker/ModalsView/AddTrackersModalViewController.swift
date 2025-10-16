@@ -11,8 +11,9 @@ final class AddTrackersModalViewController: UIViewController {
     weak var delegate: AddTrackersModalDelegate?
     
     // MARK: - UI Elements
-    private let titleLabel = UILabel.ypTitle(AddTrackersConstants.Strings.titleText)
-    
+    private let titleLabel = UILabel.ypTitle(
+        R.string.localizable.addTrackersTitle()
+    )
     private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -24,13 +25,13 @@ final class AddTrackersModalViewController: UIViewController {
     }()
     
     private lazy var addHabitButton = UIButton.ypAddModalButton(
-        title: AddTrackersConstants.Strings.habitButtonTitle,
+        title: R.string.localizable.addTrackersHabitButton(),
         target: self,
         action: #selector(addHabitButtonTapped)
     )
     
     private lazy var addEventButton = UIButton.ypAddModalButton(
-        title: AddTrackersConstants.Strings.eventButtonTitle,
+        title: R.string.localizable.addTrackersEventButton(),
         target: self,
         action: #selector(addEventButtonTapped)
     )
@@ -89,6 +90,10 @@ final class AddTrackersModalViewController: UIViewController {
 
 // MARK: - NewHabitDelegate
 extension AddTrackersModalViewController: NewHabitDelegate, EventDelegate {
+    func didEditTracker(_ tracker: Tracker, categoryTitle: String) {
+        //
+    }
+    
     func didCreateTracker(_ tracker: Tracker, categoryTitle: String) {
         delegate?.didCreateTracker(tracker, categoryTitle: categoryTitle)
         

@@ -6,7 +6,7 @@ extension UITextField {
         action: Selector
     ) -> UITextField {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = R.string.localizable.commonTrackerNamePlaceholder()
         textField.backgroundColor = UIColor.ypBackground
         textField.layer.cornerRadius = 16
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))

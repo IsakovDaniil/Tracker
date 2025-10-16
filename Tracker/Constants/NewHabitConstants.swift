@@ -18,15 +18,7 @@ enum NewHabitConstants {
         static let stackSpacing: CGFloat = 8
     }
     
-    struct Strings {
-        static let titleLabel = "Новая привычка"
-        static let cancelButton = "Отменить"
-        static let createButton = "Создать"
-        static let categoryTitle = "Категория"
-        static let scheduleTitle = "Расписание"
-        static let scheduleEveryday = "Каждый день"
-        static let defaultCategory = "Важные дела"
-    }
+
     
     struct Limits {
         static let titleMaxLength = 38
